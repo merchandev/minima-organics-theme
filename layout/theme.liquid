@@ -386,6 +386,10 @@
           assign is_legacy_minima_path = true
         elsif normalized_path_key == 'tienda' or normalized_path_key == 'catalogo'
           assign is_legacy_minima_path = true
+        elsif normalized_path_key == 'blog'
+          assign is_legacy_minima_path = true
+        elsif normalized_path_key == 'blogs' and normalized_path_sub_key == 'news'
+          assign is_legacy_minima_path = true
         elsif normalized_path_key == 'sobre'
           assign is_legacy_minima_path = true
         elsif normalized_path_key == 'sobre-nosotras'
@@ -408,6 +412,10 @@
               assign fallback_route = 'home'
             elsif normalized_path_key == 'tienda' or normalized_path_key == 'catalogo'
               assign fallback_route = 'tienda'
+            elsif normalized_path_key == 'blog'
+              assign fallback_route = 'blog'
+            elsif normalized_path_key == 'blogs' and normalized_path_sub_key == 'news'
+              assign fallback_route = 'blog'
             elsif normalized_path_key == 'sobre'
               assign fallback_route = 'sobre'
             elsif normalized_path_key == 'sobre-nosotras'
@@ -415,7 +423,7 @@
             elsif normalized_path_key == 'ingredientes'
               assign fallback_route = 'sobre'
             elsif normalized_path_key == 'directorio-de-dentistas' or normalized_path_key == 'dentistas'
-              assign fallback_route = 'contacto'
+              assign fallback_route = 'sobre'
             elsif normalized_path_key == 'contacto' or normalized_path_key == 'contact'
               assign fallback_route = 'contacto'
             elsif normalized_path_key == 'pages'
@@ -423,6 +431,10 @@
                 assign fallback_route = 'home'
               elsif normalized_path_sub_key == 'tienda' or normalized_path_sub_key == 'catalogo'
                 assign fallback_route = 'tienda'
+              elsif normalized_path_sub_key == 'blog'
+                assign fallback_route = 'blog'
+              elsif normalized_path_sub_key == 'news'
+                assign fallback_route = 'blog'
               elsif normalized_path_sub_key == 'sobre'
                 assign fallback_route = 'sobre'
               elsif normalized_path_sub_key == 'sobre-nosotras'
@@ -430,7 +442,7 @@
               elsif normalized_path_sub_key == 'ingredientes'
                 assign fallback_route = 'sobre'
               elsif normalized_path_sub_key == 'directorio-de-dentistas' or normalized_path_sub_key == 'dentistas'
-                assign fallback_route = 'contacto'
+                assign fallback_route = 'sobre'
               elsif normalized_path_sub_key == 'contacto' or normalized_path_sub_key == 'contact'
                 assign fallback_route = 'contacto'
               endif
@@ -449,6 +461,8 @@
           {% section 'minima-newsletter-pro' %}
         {%- elsif fallback_route == 'tienda' -%}
           {% section 'minima-storefront' %}
+        {%- elsif fallback_route == 'blog' -%}
+          {% section 'featured-blog' %}
         {%- elsif fallback_route == 'sobre' -%}
           {% section 'minima-about-story' %}
         {%- elsif fallback_route == 'contacto' -%}

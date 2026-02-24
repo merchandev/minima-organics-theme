@@ -6,7 +6,7 @@
   endif
   assign tienda_link = section.settings.tienda_link
   if tienda_link == blank
-    assign tienda_link = '/collections/all'
+    assign tienda_link = '/tienda'
   endif
 
   assign sobre_link = section.settings.sobre_link
@@ -15,13 +15,13 @@
   endif
 
   assign more_link_1 = section.settings.more_link_1_url
-  if more_link_1 == blank or more_link_1 contains '/blogs/news'
-    assign more_link_1 = '/search?type=article'
+  if more_link_1 == blank or more_link_1 contains '/blogs/news' or more_link_1 contains '/search?type=article'
+    assign more_link_1 = '/blog'
   endif
 
   assign more_link_2 = section.settings.more_link_2_url
-  if more_link_2 == blank
-    assign more_link_2 = '/pages/sobre-nosotras'
+  if more_link_2 == blank or more_link_2 contains '/pages/sobre-nosotras'
+    assign more_link_2 = '/dentistas'
   endif
 
   assign more_link_3 = section.settings.more_link_3_url
