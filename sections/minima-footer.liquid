@@ -12,29 +12,54 @@
   }
 {%- endstyle -%}
 
-<footer class="minima-footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+<footer class="minima-footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding" role="contentinfo">
   <div class="page-width minima-footer__grid">
     <div class="minima-footer__column minima-footer__brand">
       <h2 class="minima-footer__title">{{ section.settings.brand_title }}</h2>
-      <p class="minima-footer__social-label">{{ section.settings.social_label }}</p>
+      {%- if section.settings.social_label != blank -%}
+        <p class="minima-footer__social-label">{{ section.settings.social_label }}</p>
+      {%- endif -%}
       <ul class="minima-footer__social list-unstyled" role="list">
         {%- if settings.social_facebook_link != blank -%}
           <li>
-            <a href="{{ settings.social_facebook_link }}" class="minima-footer__social-link" aria-label="Facebook">
+            <a href="{{ settings.social_facebook_link }}" class="minima-footer__social-link" aria-label="Facebook" rel="noopener noreferrer" target="_blank">
               <span class="svg-wrapper">{{ 'icon-facebook.svg' | inline_asset_content }}</span>
             </a>
           </li>
         {%- endif -%}
         {%- if settings.social_instagram_link != blank -%}
           <li>
-            <a href="{{ settings.social_instagram_link }}" class="minima-footer__social-link" aria-label="Instagram">
+            <a href="{{ settings.social_instagram_link }}" class="minima-footer__social-link" aria-label="Instagram" rel="noopener noreferrer" target="_blank">
               <span class="svg-wrapper">{{ 'icon-instagram.svg' | inline_asset_content }}</span>
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if settings.social_twitter_link != blank -%}
+          <li>
+            <a href="{{ settings.social_twitter_link }}" class="minima-footer__social-link" aria-label="X (Twitter)" rel="noopener noreferrer" target="_blank">
+              <span class="svg-wrapper">{{ 'icon-twitter.svg' | inline_asset_content }}</span>
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if settings.social_tiktok_link != blank -%}
+          <li>
+            <a href="{{ settings.social_tiktok_link }}" class="minima-footer__social-link" aria-label="TikTok" rel="noopener noreferrer" target="_blank">
+              <span class="svg-wrapper">{{ 'icon-tiktok.svg' | inline_asset_content }}</span>
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if settings.social_pinterest_link != blank -%}
+          <li>
+            <a href="{{ settings.social_pinterest_link }}" class="minima-footer__social-link" aria-label="Pinterest" rel="noopener noreferrer" target="_blank">
+              <span class="svg-wrapper">{{ 'icon-pinterest.svg' | inline_asset_content }}</span>
             </a>
           </li>
         {%- endif -%}
         {%- if section.settings.linkedin_url != blank -%}
           <li>
-            <a href="{{ section.settings.linkedin_url }}" class="minima-footer__social-link" aria-label="LinkedIn">in</a>
+            <a href="{{ section.settings.linkedin_url }}" class="minima-footer__social-link" aria-label="LinkedIn" rel="noopener noreferrer" target="_blank">
+              <span class="minima-footer__social-text">in</span>
+            </a>
           </li>
         {%- endif -%}
       </ul>
@@ -43,7 +68,7 @@
     <div class="minima-footer__column">
       <h3 class="minima-footer__column-title">{{ section.settings.info_title }}</h3>
       {%- if section.settings.info_menu != blank -%}
-        <ul class="minima-footer__links list-unstyled">
+        <ul class="minima-footer__links list-unstyled" role="list">
           {%- for link in section.settings.info_menu.links -%}
             <li><a href="{{ link.url }}" class="link link--text">{{ link.title }}</a></li>
           {%- endfor -%}
@@ -54,7 +79,7 @@
     <div class="minima-footer__column">
       <h3 class="minima-footer__column-title">{{ section.settings.store_title }}</h3>
       {%- if section.settings.store_menu != blank -%}
-        <ul class="minima-footer__links list-unstyled">
+        <ul class="minima-footer__links list-unstyled" role="list">
           {%- for link in section.settings.store_menu.links -%}
             <li><a href="{{ link.url }}" class="link link--text">{{ link.title }}</a></li>
           {%- endfor -%}
@@ -64,9 +89,26 @@
 
     <div class="minima-footer__column minima-footer__contact">
       <h3 class="minima-footer__column-title">{{ section.settings.contact_title }}</h3>
-      <p>{{ section.settings.contact_email_label }} <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a></p>
-      <p>{{ section.settings.contact_phone_label }} <a href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}">{{ section.settings.contact_phone }}</a></p>
-      <p class="minima-footer__support-title">{{ section.settings.support_title }}</p>
+      {%- if section.settings.contact_email != blank -%}
+        <p>
+          {%- if section.settings.contact_email_label != blank -%}
+            <span>{{ section.settings.contact_email_label }}</span>
+          {%- endif -%}
+          <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a>
+        </p>
+      {%- endif -%}
+      {%- if section.settings.contact_phone != blank -%}
+        <p>
+          {%- if section.settings.contact_phone_label != blank -%}
+            <span>{{ section.settings.contact_phone_label }}</span>
+          {%- endif -%}
+          <a href="tel:{{ section.settings.contact_phone | replace: ' ', '' | replace: '(', '' | replace: ')', '' }}">{{ section.settings.contact_phone }}</a>
+        </p>
+      {%- endif -%}
+
+      {%- if section.settings.support_title != blank -%}
+        <p class="minima-footer__support-title">{{ section.settings.support_title }}</p>
+      {%- endif -%}
 
       {%- if section.settings.support_image != blank -%}
         {%- assign support_image_height = section.settings.support_image.width | divided_by: section.settings.support_image.aspect_ratio -%}
@@ -79,31 +121,37 @@
             sizes: '(min-width: 990px) 220px, 62vw',
             class: 'minima-footer__support-image',
             height: support_image_height,
-            alt: section.settings.support_image.alt
+            alt: section.settings.support_image.alt | default: section.settings.support_title | escape
         }}
-      {%- elsif section.settings.support_image_external != blank -%}
-        {% comment %}theme-check-disable RemoteAsset{% endcomment %}
-        <img
-          src="{{ section.settings.support_image_external | escape }}"
-          alt="Colaboraciones Minima Organics"
-          loading="lazy"
-          class="minima-footer__support-image"
-          width="600"
-          height="260"
-        >
-        {% comment %}theme-check-enable RemoteAsset{% endcomment %}
       {%- endif -%}
     </div>
   </div>
 
   <div class="page-width minima-footer__bottom">
-    <a href="{{ section.settings.cookies_url }}" class="link link--text">{{ section.settings.cookies_label }}</a>
-    <p>
-      {{ section.settings.languages_label }}
-      <a href="{{ section.settings.language_primary_url }}">{{ section.settings.language_primary_label }}</a>
-      /
-      <a href="{{ section.settings.language_secondary_url }}">{{ section.settings.language_secondary_label }}</a>
-    </p>
+    <div class="minima-footer__bottom-legal">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {%- if section.settings.copyright_text != blank -%}{{ section.settings.copyright_text }}{%- else -%}{{ 'general.alt.powered_by_shopify' | t }}{%- endif -%}</p>
+      <ul class="minima-footer__legal-links list-unstyled" role="list">
+        {%- if shop.privacy_policy.url != blank -%}
+          <li><a href="{{ shop.privacy_policy.url }}" class="link link--text">{{ shop.privacy_policy.title }}</a></li>
+        {%- endif -%}
+        {%- if shop.terms_of_service.url != blank -%}
+          <li><a href="{{ shop.terms_of_service.url }}" class="link link--text">{{ shop.terms_of_service.title }}</a></li>
+        {%- endif -%}
+        {%- if shop.refund_policy.url != blank -%}
+          <li><a href="{{ shop.refund_policy.url }}" class="link link--text">{{ shop.refund_policy.title }}</a></li>
+        {%- endif -%}
+        {%- if section.settings.cookies_url != blank -%}
+          <li><a href="{{ section.settings.cookies_url }}" class="link link--text">{{ section.settings.cookies_label }}</a></li>
+        {%- endif -%}
+      </ul>
+    </div>
+
+    {%- if localization.available_languages.size > 1 or localization.available_countries.size > 1 -%}
+      <div class="minima-footer__localization">
+        {%- render 'language-localization', localPosition: 'FooterFull' -%}
+        {%- render 'country-localization', localPosition: 'FooterFull' -%}
+      </div>
+    {%- endif -%}
   </div>
 </footer>
 
@@ -118,6 +166,10 @@
       "default": "scheme-1"
     },
     {
+      "type": "header",
+      "content": "Marca"
+    },
+    {
       "type": "text",
       "id": "brand_title",
       "label": "Brand title",
@@ -127,7 +179,7 @@
       "type": "text",
       "id": "social_label",
       "label": "Social label",
-      "default": "Follow us:"
+      "default": "Siguenos:"
     },
     {
       "type": "url",
@@ -135,9 +187,13 @@
       "label": "LinkedIn URL"
     },
     {
+      "type": "header",
+      "content": "Columna Informacion"
+    },
+    {
       "type": "text",
       "id": "info_title",
-      "label": "Information title",
+      "label": "Information column title",
       "default": "Informacion"
     },
     {
@@ -147,9 +203,13 @@
       "default": "footer"
     },
     {
+      "type": "header",
+      "content": "Columna Tienda"
+    },
+    {
       "type": "text",
       "id": "store_title",
-      "label": "Store title",
+      "label": "Store column title",
       "default": "Tienda"
     },
     {
@@ -159,9 +219,13 @@
       "default": "main-menu"
     },
     {
+      "type": "header",
+      "content": "Columna Contacto"
+    },
+    {
       "type": "text",
       "id": "contact_title",
-      "label": "Contact title",
+      "label": "Contact column title",
       "default": "Contacto"
     },
     {
@@ -173,26 +237,26 @@
     {
       "type": "text",
       "id": "contact_email",
-      "label": "Email",
+      "label": "Email address",
       "default": "info@minimaorganics.com"
     },
     {
       "type": "text",
       "id": "contact_phone_label",
       "label": "Phone label",
-      "default": "Telefono:"
+      "default": "Tel:"
     },
     {
       "type": "text",
       "id": "contact_phone",
-      "label": "Phone",
+      "label": "Phone number",
       "default": "(+34) 604 889 699"
     },
     {
       "type": "text",
       "id": "support_title",
-      "label": "Support title",
-      "default": "Con la colaboracion y apoyo de:"
+      "label": "Support/collaboration title",
+      "default": "Con el apoyo de:"
     },
     {
       "type": "image_picker",
@@ -200,53 +264,29 @@
       "label": "Support image"
     },
     {
+      "type": "header",
+      "content": "Pie de pagina legal"
+    },
+    {
       "type": "text",
-      "id": "support_image_external",
-      "label": "Support image external URL",
-      "default": "https://296ff7227e.clvaw-cdnwnd.com/2e96f3f86bd821507b09a11886c84266/200000270-8b1a48b1a6/apoyo%20colaboracion%20minima%20organics.png?ph=296ff7227e"
+      "id": "copyright_text",
+      "label": "Copyright text (opcional)",
+      "info": "Si se deja vacio, se mostrara 'Powered by Shopify'. Las politicas de privacidad, terminos y devolucion se enlazan automaticamente desde Shopify."
     },
     {
       "type": "text",
       "id": "cookies_label",
-      "label": "Cookies label",
+      "label": "Cookies link label",
       "default": "Cookies"
     },
     {
       "type": "url",
       "id": "cookies_url",
-      "label": "Cookies URL"
-    },
-    {
-      "type": "text",
-      "id": "languages_label",
-      "label": "Languages label",
-      "default": "Idiomas:"
-    },
-    {
-      "type": "text",
-      "id": "language_primary_label",
-      "label": "Primary language label",
-      "default": "Espanol"
-    },
-    {
-      "type": "url",
-      "id": "language_primary_url",
-      "label": "Primary language URL"
-    },
-    {
-      "type": "text",
-      "id": "language_secondary_label",
-      "label": "Secondary language label",
-      "default": "English"
-    },
-    {
-      "type": "url",
-      "id": "language_secondary_url",
-      "label": "Secondary language URL"
+      "label": "Cookies page URL"
     },
     {
       "type": "header",
-      "content": "Padding"
+      "content": "Espaciado"
     },
     {
       "type": "range",

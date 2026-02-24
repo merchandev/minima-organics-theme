@@ -113,7 +113,7 @@
           <img
             src="{{ 'minima.png' | asset_url }}"
             class="minima-header__logo"
-            alt="{{ shop.name | escape }}"
+            alt="{{ section.settings.logo_text | default: shop.name | escape }}"
             width="2200"
             height="834"
             loading="eager"
