@@ -1,5 +1,13 @@
 {
   "sections": {
+    "about": {
+      "type": "minima-about-story",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    },
     "main": {
       "type": "main-page",
       "settings": {
@@ -19,6 +27,7 @@
     }
   },
   "order": [
+    "about",
     "main",
     "form"
   ]

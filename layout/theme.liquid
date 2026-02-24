@@ -315,70 +315,124 @@
       {%- liquid
         assign fallback_route = blank
         assign should_redirect_to_root = false
-
+        assign request_path = request.path | split: '?' | first | downcase
+        assign canonical_path = canonical_url | remove_first: request.origin | split: '?' | first | downcase
+        assign route_lookup_path = request_path
         if request.page_type == '404'
-          assign request_path = request.path | split: '?' | first | downcase
-          assign root_path = routes.root_url | split: '?' | first | downcase
-
-          assign segment_1 = blank
-          assign segment_2 = blank
-          assign segment_3 = blank
-          assign request_segments = request_path | split: '/'
-          for segment in request_segments
-            assign segment_clean = segment | strip
-            if segment_clean == blank
-              continue
+          if canonical_path != blank and canonical_path != '/404'
+            assign route_lookup_path = canonical_path
+          elsif request_path == '/404'
+            # theme-check-disable ContentForHeaderModification
+            assign page_url_path = content_for_header | split: '"pageurl":"' | last | split: '"' | first | replace: '\\/', '/' | remove_first: request.origin | split: '?' | first | downcase
+            # theme-check-enable ContentForHeaderModification
+            if page_url_path != blank and page_url_path != '/404'
+              assign route_lookup_path = page_url_path
             endif
+          endif
+        endif
+        assign root_path = routes.root_url | split: '?' | first | downcase
 
-            if segment_1 == blank
-              assign segment_1 = segment_clean
-            elsif segment_2 == blank
-              assign segment_2 = segment_clean
-            elsif segment_3 == blank
-              assign segment_3 = segment_clean
-            endif
-          endfor
-
-          assign locale_prefix = false
-          for language in localization.available_languages
-            assign locale_code = language.iso_code | downcase
-            assign locale_short = locale_code | split: '-' | first
-            if segment_1 == locale_code or segment_1 == locale_short
-              assign locale_prefix = true
-              break
-            endif
-          endfor
-
-          assign path_key = segment_1
-          assign path_sub_key = segment_2
-          if locale_prefix
-            assign path_key = segment_2
-            assign path_sub_key = segment_3
+        assign segment_1 = blank
+        assign segment_2 = blank
+        assign segment_3 = blank
+        assign request_segments = route_lookup_path | split: '/'
+        for segment in request_segments
+          assign segment_clean = segment | strip
+          if segment_clean == blank
+            continue
           endif
 
-          if request_path == blank or request_path == '/' or request_path == root_path
-            assign fallback_route = 'home'
-          elsif path_key == blank
-            assign fallback_route = 'home'
-          elsif path_key == 'home' or path_key == 'inicio'
-            assign fallback_route = 'home'
-          elsif path_key == 'tienda'
-            assign fallback_route = 'tienda'
-          elsif path_key == 'sobre-nosotras'
-            assign fallback_route = 'sobre'
-          elsif path_key == 'pages'
-            if path_sub_key == 'home' or path_sub_key == 'inicio'
+          if segment_1 == blank
+            assign segment_1 = segment_clean
+          elsif segment_2 == blank
+            assign segment_2 = segment_clean
+          elsif segment_3 == blank
+            assign segment_3 = segment_clean
+          endif
+        endfor
+
+        assign locale_prefix = false
+        for language in localization.available_languages
+          assign locale_code = language.iso_code | downcase
+          assign locale_short = locale_code | split: '-' | first
+          if segment_1 == locale_code or segment_1 == locale_short
+            assign locale_prefix = true
+            break
+          endif
+        endfor
+
+        assign path_key = segment_1
+        assign path_sub_key = segment_2
+        if locale_prefix
+          assign path_key = segment_2
+          assign path_sub_key = segment_3
+        endif
+        assign normalized_path_key = path_key | downcase | replace: '%c3%a1', 'a' | replace: '%c3%a9', 'e' | replace: '%c3%ad', 'i' | replace: '%c3%b3', 'o' | replace: '%c3%ba', 'u' | replace: '%c3%b1', 'n'
+        assign normalized_path_sub_key = path_sub_key | downcase | replace: '%c3%a1', 'a' | replace: '%c3%a9', 'e' | replace: '%c3%ad', 'i' | replace: '%c3%b3', 'o' | replace: '%c3%ba', 'u' | replace: '%c3%b1', 'n'
+
+        assign is_legacy_minima_path = false
+        if normalized_path_key == 'home' or normalized_path_key == 'inicio'
+          assign is_legacy_minima_path = true
+        elsif normalized_path_key == 'tienda' or normalized_path_key == 'catalogo'
+          assign is_legacy_minima_path = true
+        elsif normalized_path_key == 'sobre'
+          assign is_legacy_minima_path = true
+        elsif normalized_path_key == 'sobre-nosotras'
+          assign is_legacy_minima_path = true
+        elsif normalized_path_key == 'ingredientes'
+          assign is_legacy_minima_path = true
+        elsif normalized_path_key == 'directorio-de-dentistas' or normalized_path_key == 'dentistas'
+          assign is_legacy_minima_path = true
+        elsif normalized_path_key == 'contacto' or normalized_path_key == 'contact'
+          assign is_legacy_minima_path = true
+        endif
+
+        if fallback_route == blank
+          if request.page_type == '404' or is_legacy_minima_path
+            if route_lookup_path == blank or route_lookup_path == '/' or route_lookup_path == root_path
               assign fallback_route = 'home'
-            elsif path_sub_key == 'tienda'
+            elsif normalized_path_key == blank
+              assign fallback_route = 'home'
+            elsif normalized_path_key == 'home' or normalized_path_key == 'inicio'
+              assign fallback_route = 'home'
+            elsif normalized_path_key == 'tienda' or normalized_path_key == 'catalogo'
               assign fallback_route = 'tienda'
-            elsif path_sub_key == 'sobre-nosotras'
+            elsif normalized_path_key == 'sobre'
               assign fallback_route = 'sobre'
+            elsif normalized_path_key == 'sobre-nosotras'
+              assign fallback_route = 'sobre'
+            elsif normalized_path_key == 'ingredientes'
+              assign fallback_route = 'sobre'
+            elsif normalized_path_key == 'directorio-de-dentistas' or normalized_path_key == 'dentistas'
+              assign fallback_route = 'contacto'
+            elsif normalized_path_key == 'contacto' or normalized_path_key == 'contact'
+              assign fallback_route = 'contacto'
+            elsif normalized_path_key == 'pages'
+              if normalized_path_sub_key == 'home' or normalized_path_sub_key == 'inicio'
+                assign fallback_route = 'home'
+              elsif normalized_path_sub_key == 'tienda' or normalized_path_sub_key == 'catalogo'
+                assign fallback_route = 'tienda'
+              elsif normalized_path_sub_key == 'sobre'
+                assign fallback_route = 'sobre'
+              elsif normalized_path_sub_key == 'sobre-nosotras'
+                assign fallback_route = 'sobre'
+              elsif normalized_path_sub_key == 'ingredientes'
+                assign fallback_route = 'sobre'
+              elsif normalized_path_sub_key == 'directorio-de-dentistas' or normalized_path_sub_key == 'dentistas'
+                assign fallback_route = 'contacto'
+              elsif normalized_path_sub_key == 'contacto' or normalized_path_sub_key == 'contact'
+                assign fallback_route = 'contacto'
+              endif
+            endif
+
+            if fallback_route == 'home' and root_path != blank and route_lookup_path != root_path and route_lookup_path != '/'
+              assign should_redirect_to_root = true
             endif
           endif
+        endif
 
-          if fallback_route == 'home' and root_path != blank and request_path != root_path and request_path != '/'
-            assign should_redirect_to_root = true
-          endif
+        if fallback_route == blank and request.page_type == '404'
+          assign fallback_route = 'home'
         endif
       -%}
       {%- if fallback_route != blank -%}
@@ -400,8 +454,54 @@
           {% section 'minima-storefront' %}
         {%- elsif fallback_route == 'sobre' -%}
           {% section 'minima-about-story' %}
+        {%- elsif fallback_route == 'contacto' -%}
+          {% section 'contact-form' %}
         {%- endif -%}
       {%- else -%}
+        {%- if request.page_type == '404' -%}
+          <script>
+            (function () {
+              var pathname;
+              try {
+                pathname = decodeURIComponent(window.location.pathname || '/').toLowerCase();
+              } catch (e) {
+                pathname = (window.location.pathname || '/').toLowerCase();
+              }
+
+              pathname = pathname.replace(/\/+$/, '') || '/';
+              if (pathname.normalize) {
+                pathname = pathname.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+              }
+
+              var parts = pathname.split('/').filter(Boolean);
+              if (parts.length > 1) {
+                var maybeLocale = parts[0];
+                if (maybeLocale.length === 2 || maybeLocale.length === 5) {
+                  pathname = '/' + parts.slice(1).join('/');
+                  pathname = pathname.replace(/\/+$/, '') || '/';
+                }
+              }
+
+              var redirectMap = {
+                '/tienda': '/collections/all',
+                '/catalogo': '/collections/all',
+                '/sobre': '/pages/contact#sobre-nosotras',
+                '/sobre-nosotras': '/pages/contact#sobre-nosotras',
+                '/ingredientes': '/pages/contact#sobre-nosotras',
+                '/directorio-de-dentistas': '/pages/contact#sobre-nosotras',
+                '/dentistas': '/pages/contact#sobre-nosotras',
+                '/contacto': '/pages/contact',
+                '/contact': '/pages/contact',
+                '/inicio': '/'
+              };
+
+              var redirectTo = redirectMap[pathname];
+              if (redirectTo) {
+                window.location.replace(redirectTo);
+              }
+            })();
+          </script>
+        {%- endif -%}
         {{ content_for_layout }}
       {%- endif -%}
     </main>
@@ -467,3 +567,4 @@
     {%- endif -%}
   </body>
 </html>
+

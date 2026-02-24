@@ -2,12 +2,12 @@
   assign request_path = request.path | downcase
   assign tienda_link = section.settings.tienda_link
   if tienda_link == blank
-    assign tienda_link = '/tienda/'
+    assign tienda_link = '/collections/all'
   endif
 
   assign sobre_link = section.settings.sobre_link
   if sobre_link == blank
-    assign sobre_link = '/sobre-nosotras/'
+    assign sobre_link = '/pages/contact#sobre-nosotras'
   endif
 
   assign more_link_1 = section.settings.more_link_1_url
@@ -20,12 +20,12 @@
 
   assign more_link_2 = section.settings.more_link_2_url
   if more_link_2 == blank
-    assign more_link_2 = '/pages/directorio-de-dentistas'
+    assign more_link_2 = '/pages/contact#sobre-nosotras'
   endif
 
   assign more_link_3 = section.settings.more_link_3_url
   if more_link_3 == blank
-    assign more_link_3 = '/pages/contacto'
+    assign more_link_3 = '/pages/contact'
   endif
 -%}
 
@@ -71,6 +71,17 @@
               sizes: '(min-width: 990px) 120px, 74px'
           }}
         </span>
+      {%- else -%}
+        <span class="minima-header__logo-wrap">
+          <img
+            src="{{ 'minima.png' | asset_url }}"
+            class="minima-header__logo"
+            alt="{{ shop.name | escape }}"
+            width="32"
+            height="32"
+            loading="eager"
+          >
+        </span>
       {%- endif -%}
       <span class="minima-header__brand-text">{{ section.settings.logo_text }}</span>
     </a>
@@ -79,13 +90,13 @@
       <nav class="minima-header__nav" aria-label="Principal">
         <a
           href="{{ tienda_link }}"
-          class="minima-header__nav-link{% if request_path contains '/tienda' or request_path contains '/collections' %} is-active{% endif %}"
+          class="minima-header__nav-link{% if request_path contains '/tienda' or request_path contains '/catalogo' or request_path contains '/collections' %} is-active{% endif %}"
         >
           {{ section.settings.tienda_label }}
         </a>
         <a
           href="{{ sobre_link }}"
-          class="minima-header__nav-link{% if request_path contains '/sobre-nosotras' %} is-active{% endif %}"
+          class="minima-header__nav-link{% if request_path contains '/sobre-nosotras' or request_path contains '/sobre' or request_path contains '/pages/contact' %} is-active{% endif %}"
         >
           {{ section.settings.sobre_label }}
         </a>
