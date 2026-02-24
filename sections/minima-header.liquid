@@ -1,5 +1,9 @@
 {%- liquid
   assign request_path = request.path | downcase
+  assign has_custom_logo = false
+  if settings.logo != blank
+    assign has_custom_logo = true
+  endif
   assign tienda_link = section.settings.tienda_link
   if tienda_link == blank
     assign tienda_link = '/collections/all'
@@ -7,25 +11,22 @@
 
   assign sobre_link = section.settings.sobre_link
   if sobre_link == blank
-    assign sobre_link = '/pages/contact#sobre-nosotras'
+    assign sobre_link = '/pages/sobre-nosotras'
   endif
 
   assign more_link_1 = section.settings.more_link_1_url
-  if more_link_1 == blank
-    assign more_link_1 = blogs.news.url
-    if more_link_1 == blank
-      assign more_link_1 = '/blogs/news'
-    endif
+  if more_link_1 == blank or more_link_1 contains '/blogs/news'
+    assign more_link_1 = '/search?type=article'
   endif
 
   assign more_link_2 = section.settings.more_link_2_url
   if more_link_2 == blank
-    assign more_link_2 = '/pages/contact#sobre-nosotras'
+    assign more_link_2 = '/pages/sobre-nosotras'
   endif
 
   assign more_link_3 = section.settings.more_link_3_url
-  if more_link_3 == blank
-    assign more_link_3 = '/pages/contact'
+  if more_link_3 == blank or more_link_3 contains '/pages/contact'
+    assign more_link_3 = '/contacto'
   endif
 -%}
 
@@ -55,35 +56,35 @@
 
   <div class="page-width minima-header__main">
     <a href="{{ routes.root_url }}" class="minima-header__brand link link--text focus-inset">
-      {%- if settings.logo != blank -%}
-        <span class="minima-header__logo-wrap">
+      {%- if has_custom_logo -%}
+        <span class="minima-header__logo-wrap minima-header__logo-wrap--uploaded">
           {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-          {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+          {%- assign logo_width = settings.logo_width | at_least: 96 -%}
+          {%- assign logo_height = logo_width | divided_by: settings.logo.aspect_ratio -%}
           {{
             settings.logo
-            | image_url: width: 240
+            | image_url: width: 640
             | image_tag:
               class: 'minima-header__logo',
-              widths: '80, 120, 160, 240',
+              widths: '96, 140, 180, 240, 320, 420, 640',
               height: logo_height,
-              width: settings.logo_width,
+              width: logo_width,
               alt: logo_alt,
-              sizes: '(min-width: 990px) 120px, 74px'
+              sizes: '(min-width: 990px) min(28vw, 240px), 40vw'
           }}
         </span>
       {%- else -%}
-        <span class="minima-header__logo-wrap">
+        <span class="minima-header__logo-wrap minima-header__logo-wrap--fallback">
           <img
             src="{{ 'minima.png' | asset_url }}"
             class="minima-header__logo"
             alt="{{ shop.name | escape }}"
-            width="32"
-            height="32"
+            width="2200"
+            height="834"
             loading="eager"
           >
         </span>
       {%- endif -%}
-      <span class="minima-header__brand-text">{{ section.settings.logo_text }}</span>
     </a>
 
     <div class="minima-header__navigation-wrap">
@@ -96,7 +97,7 @@
         </a>
         <a
           href="{{ sobre_link }}"
-          class="minima-header__nav-link{% if request_path contains '/sobre-nosotras' or request_path contains '/sobre' or request_path contains '/pages/contact' %} is-active{% endif %}"
+          class="minima-header__nav-link{% if request_path contains '/sobre-nosotras' or request_path contains '/sobre' or request_path contains '/pages/sobre-nosotras' %} is-active{% endif %}"
         >
           {{ section.settings.sobre_label }}
         </a>

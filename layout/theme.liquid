@@ -314,7 +314,6 @@
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
       {%- liquid
         assign fallback_route = blank
-        assign should_redirect_to_root = false
         assign request_path = request.path | split: '?' | first | downcase
         assign canonical_path = canonical_url | remove_first: request.origin | split: '?' | first | downcase
         assign route_lookup_path = request_path
@@ -369,6 +368,18 @@
         endif
         assign normalized_path_key = path_key | downcase | replace: '%c3%a1', 'a' | replace: '%c3%a9', 'e' | replace: '%c3%ad', 'i' | replace: '%c3%b3', 'o' | replace: '%c3%ba', 'u' | replace: '%c3%b1', 'n'
         assign normalized_path_sub_key = path_sub_key | downcase | replace: '%c3%a1', 'a' | replace: '%c3%a9', 'e' | replace: '%c3%ad', 'i' | replace: '%c3%b3', 'o' | replace: '%c3%ba', 'u' | replace: '%c3%b1', 'n'
+
+        assign page_override_route = blank
+        if request.page_type == 'page' and page.handle != blank
+          assign normalized_page_handle = page.handle | downcase | replace: 'á', 'a' | replace: 'é', 'e' | replace: 'í', 'i' | replace: 'ó', 'o' | replace: 'ú', 'u' | replace: 'ñ', 'n'
+          if normalized_page_handle == 'sobre-nosotras' or normalized_page_handle == 'sobre' or normalized_page_handle == 'about' or normalized_page_handle == 'dentistas' or normalized_page_handle == 'directorio-de-dentistas'
+            assign page_override_route = 'sobre'
+          elsif normalized_page_handle == 'tienda' or normalized_page_handle == 'catalogo'
+            assign page_override_route = 'tienda'
+          elsif normalized_page_handle == 'contacto' or normalized_page_handle == 'contact'
+            assign page_override_route = 'contacto'
+          endif
+        endif
 
         assign is_legacy_minima_path = false
         if normalized_path_key == 'home' or normalized_path_key == 'inicio'
@@ -425,28 +436,14 @@
               endif
             endif
 
-            if fallback_route == 'home' and root_path != blank and route_lookup_path != root_path and route_lookup_path != '/'
-              assign should_redirect_to_root = true
-            endif
           endif
         endif
 
-        if fallback_route == blank and request.page_type == '404'
-          assign fallback_route = 'home'
-        endif
       -%}
       {%- if fallback_route != blank -%}
         {%- if fallback_route == 'home' -%}
-          {%- if should_redirect_to_root -%}
-            <script>
-              window.location.replace('{{ routes.root_url }}');
-            </script>
-            <noscript>
-              <meta http-equiv="refresh" content="0; url={{ routes.root_url }}">
-            </noscript>
-          {%- endif -%}
           {% section 'minima-hero-editorial' %}
-          {% section 'minima-product-carousel' %}
+          {% section 'featured-collection' %}
           {% section 'minima-feature-split' %}
           {% section 'featured-blog' %}
           {% section 'minima-newsletter-pro' %}
@@ -458,7 +455,13 @@
           {% section 'contact-form' %}
         {%- endif -%}
       {%- else -%}
-        {%- if request.page_type == '404' -%}
+        {%- if page_override_route == 'sobre' -%}
+          {% section 'minima-about-story' %}
+        {%- elsif page_override_route == 'tienda' -%}
+          {% section 'minima-storefront' %}
+        {%- elsif page_override_route == 'contacto' -%}
+          {% section 'contact-form' %}
+        {%- elsif request.page_type == '404' -%}
           <script>
             (function () {
               var pathname;
@@ -485,13 +488,15 @@
               var redirectMap = {
                 '/tienda': '/collections/all',
                 '/catalogo': '/collections/all',
-                '/sobre': '/pages/contact#sobre-nosotras',
-                '/sobre-nosotras': '/pages/contact#sobre-nosotras',
-                '/ingredientes': '/pages/contact#sobre-nosotras',
-                '/directorio-de-dentistas': '/pages/contact#sobre-nosotras',
-                '/dentistas': '/pages/contact#sobre-nosotras',
-                '/contacto': '/pages/contact',
-                '/contact': '/pages/contact',
+                '/blog': '/search?type=article',
+                '/blogs/news': '/search?type=article',
+                '/sobre': '/pages/sobre-nosotras',
+                '/sobre-nosotras': '/pages/sobre-nosotras',
+                '/ingredientes': '/pages/sobre-nosotras',
+                '/directorio-de-dentistas': '/pages/sobre-nosotras',
+                '/dentistas': '/pages/sobre-nosotras',
+                '/contacto': '/contacto',
+                '/contact': '/contacto',
                 '/inicio': '/'
               };
 
@@ -502,7 +507,9 @@
             })();
           </script>
         {%- endif -%}
-        {{ content_for_layout }}
+        {%- if page_override_route == blank -%}
+          {{ content_for_layout }}
+        {%- endif -%}
       {%- endif -%}
     </main>
 
