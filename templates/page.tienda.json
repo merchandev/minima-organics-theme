@@ -1,0 +1,81 @@
+{
+  "sections": {
+    "minima_storefront": {
+      "type": "minima-storefront",
+      "blocks": {
+        "category_1": {
+          "type": "category",
+          "settings": {
+            "label": "Todos los productos",
+            "link": "/collections/all"
+          }
+        },
+        "category_2": {
+          "type": "category",
+          "settings": {
+            "label": "Pasta de dientes natural y ecologica",
+            "link": "/collections/pasta-de-dientes-natural-y-ecologica"
+          }
+        },
+        "category_3": {
+          "type": "category",
+          "settings": {
+            "label": "Cepillos de bambu",
+            "link": "/collections/cepillos-de-bambu"
+          }
+        },
+        "category_4": {
+          "type": "category",
+          "settings": {
+            "label": "Hilo dental",
+            "link": "/collections/hilo-dental"
+          }
+        },
+        "category_5": {
+          "type": "category",
+          "settings": {
+            "label": "Accesorios",
+            "link": "/collections/accesorios"
+          }
+        },
+        "category_6": {
+          "type": "category",
+          "settings": {
+            "label": "Packs con descuento",
+            "link": "/collections/packs-con-descuento"
+          }
+        }
+      },
+      "block_order": [
+        "category_1",
+        "category_2",
+        "category_3",
+        "category_4",
+        "category_5",
+        "category_6"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "collection": "all",
+        "products_per_page": 18,
+        "shipping_text": "Envios GRATIS: pedidos superiores a 35 euros",
+        "newsletter_line": "Registrate en la newsletter para conseguir 5% de descuento!",
+        "newsletter_title": "Se el/la primero/a en leer nuestras novedades y recibe un 5% de descuento para suscriptores/as",
+        "newsletter_email_placeholder": "Email *",
+        "newsletter_consent": "Acepto el uso de mis datos personales con fines comerciales *",
+        "newsletter_button_label": "Enviar",
+        "categories_title": "Categorias",
+        "badge_tag_prefix": "badge:",
+        "use_first_tag_as_badge": true,
+        "show_sold_out_badge": true,
+        "sold_out_badge_text": "Agotado",
+        "empty_text": "No hay productos disponibles por ahora.",
+        "padding_top": 24,
+        "padding_bottom": 72
+      }
+    }
+  },
+  "order": [
+    "minima_storefront"
+  ]
+}

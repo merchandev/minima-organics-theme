@@ -1,0 +1,570 @@
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-carousel {
+    --mpc-gap: 1.8rem;
+    --mpc-radius: 0.8rem;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-carousel__track {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--mpc-gap);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-carousel__track::after {
+    content: '';
+    flex: 0 0 0.2rem;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-carousel__slide {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    width: 86%;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card {
+    height: 100%;
+    border: 1px solid #cfd3d9;
+    border-radius: var(--mpc-radius);
+    background: #f3f4f6;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card__link {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+    height: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card__media {
+    position: relative;
+    padding: 0.9rem;
+    background: #f3f4f6;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card__image-wrap {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: #f8f8f8;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card__image {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: {% case section.settings.image_ratio %}{% when 'portrait' %}3 / 4{% when 'square' %}1 / 1{% when 'landscape' %}4 / 3{% else %}4 / 3{% endcase %};
+    object-fit: cover;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card__badge {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 1;
+    background: #2b2f36;
+    color: #fff;
+    font-size: 1.15rem;
+    line-height: 1;
+    font-weight: 500;
+    padding: 0.7rem 1rem;
+    border-radius: 0;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card__content {
+    padding: 1.4rem 1.6rem 2rem;
+    text-align: {{ section.settings.text_alignment }};
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card__title {
+    margin: 0;
+    font-size: 1.45rem;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    font-weight: 500;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card__title a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card__price {
+    margin-top: 0.8rem;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card__price .price {
+    justify-content: {% if section.settings.text_alignment == 'center' %}center{% elsif section.settings.text_alignment == 'right' %}flex-end{% else %}flex-start{% endif %};
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card__price .price-item {
+    font-size: 2rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-card__price .price-item--regular {
+    color: rgba(var(--color-foreground), 0.4);
+    font-size: 1.6rem;
+    font-weight: 400;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-carousel__controls {
+    margin-top: 2rem;
+    position: relative;
+    min-height: 4rem;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-carousel__controls .slider-counter {
+    margin: 0 auto;
+    min-width: 5.6rem;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-carousel__controls .caption {
+    font-size: 1.3rem;
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-carousel__arrow {
+    width: 4.8rem;
+    height: 4.8rem;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--color-foreground), 0.12);
+    background: rgba(var(--color-background), 0.92);
+    box-shadow: 0 0.6rem 1.4rem rgba(var(--color-shadow), 0.08);
+  }
+
+  #shopify-section-{{ section.id }} .minima-product-carousel__arrow .svg-wrapper {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section.id }} .minima-product-carousel__slide {
+      width: {% if section.settings.cards_per_tablet == 2 %}calc((100% - var(--mpc-gap)) / 2.16){% else %}calc((100% - var(--mpc-gap)) / 1.16){% endif %};
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    #shopify-section-{{ section.id }} .minima-product-carousel__slide {
+      width: calc((100% - ({{ section.settings.cards_per_desktop | minus: 1 }} * var(--mpc-gap))) / {{ section.settings.cards_per_desktop }});
+    }
+
+    #shopify-section-{{ section.id }} .minima-product-carousel__controls .slider-counter {
+      margin-top: 1.4rem;
+    }
+
+    #shopify-section-{{ section.id }} .minima-product-carousel__arrow {
+      position: absolute;
+      top: -26.4rem;
+      z-index: 3;
+    }
+
+    #shopify-section-{{ section.id }} .minima-product-carousel__arrow.slider-button--prev {
+      left: 1.4rem;
+    }
+
+    #shopify-section-{{ section.id }} .minima-product-carousel__arrow.slider-button--next {
+      right: 1.4rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .minima-product-carousel__slide {
+      width: {% if section.settings.cards_per_mobile == '2' %}calc((100% - var(--mpc-gap)) / 2.1){% else %}84%{% endif %};
+    }
+
+    #shopify-section-{{ section.id }} .minima-product-card__title {
+      font-size: 1.35rem;
+    }
+
+    #shopify-section-{{ section.id }} .minima-product-card__price .price-item {
+      font-size: 1.8rem;
+    }
+
+    #shopify-section-{{ section.id }} .minima-product-card__price .price-item--regular {
+      font-size: 1.5rem;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign products_to_display = section.settings.collection.all_products_count
+  if section.settings.collection.all_products_count > section.settings.products_to_show
+    assign products_to_display = section.settings.products_to_show
+  endif
+
+  assign cards_mobile_int = section.settings.cards_per_mobile | plus: 0
+  assign cards_desktop_int = section.settings.cards_per_desktop | plus: 0
+
+  assign show_mobile_slider = false
+  if products_to_display > cards_mobile_int
+    assign show_mobile_slider = true
+  endif
+
+  assign show_desktop_slider = false
+  if products_to_display > cards_desktop_int
+    assign show_desktop_slider = true
+  endif
+-%}
+
+<section class="minima-product-carousel color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <div class="title-wrapper title-wrapper--no-top-margin">
+        <h2 class="title inline-richtext {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+      </div>
+    {%- endif -%}
+
+    <slider-component class="minima-product-carousel__slider">
+      <ul
+        id="Slider-{{ section.id }}"
+        class="minima-product-carousel__track slider"
+        role="list"
+        aria-label="{{ 'general.slider.name' | t }}"
+      >
+        {%- if section.settings.collection != blank and section.settings.collection.products.size > 0 -%}
+          {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
+            {%- liquid
+              assign badge_text = blank
+              if section.settings.show_sold_out_badge and product.available == false
+                assign badge_text = section.settings.sold_out_badge_text
+              endif
+
+              if badge_text == blank and section.settings.badge_tag_prefix != blank
+                for tag in product.tags
+                  assign prefix = tag | slice: 0, section.settings.badge_tag_prefix.size
+                  if prefix == section.settings.badge_tag_prefix
+                    assign badge_text = tag | remove_first: section.settings.badge_tag_prefix | strip
+                    break
+                  endif
+                endfor
+              endif
+
+              if badge_text == blank and section.settings.use_first_tag_as_badge and product.tags.size > 0
+                assign badge_text = product.tags.first
+              endif
+
+              if badge_text == blank and section.settings.show_sale_badge and product.compare_at_price > product.price and product.available
+                assign badge_text = section.settings.sale_badge_text
+              endif
+            -%}
+
+            <li id="Slide-{{ section.id }}-{{ forloop.index }}" class="minima-product-carousel__slide slider__slide">
+              <article class="minima-product-card">
+                <a href="{{ product.url }}" class="minima-product-card__link">
+                  <div class="minima-product-card__media">
+                    {%- if badge_text != blank -%}
+                      <span class="minima-product-card__badge">{{ badge_text | escape }}</span>
+                    {%- endif -%}
+                    <div class="minima-product-card__image-wrap">
+                      {%- if product.featured_media -%}
+                        {{
+                          product.featured_media
+                          | image_url: width: 1200
+                          | image_tag:
+                            loading: 'lazy',
+                            widths: '320, 480, 640, 840, 1200',
+                            sizes: '(min-width: 990px) 33vw, (min-width: 750px) 46vw, 84vw',
+                            class: 'minima-product-card__image',
+                            alt: product.featured_media.alt
+                        }}
+                      {%- else -%}
+                        {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg minima-product-card__image' }}
+                      {%- endif -%}
+                    </div>
+                  </div>
+                  <div class="minima-product-card__content">
+                    <h3 class="minima-product-card__title">{{ product.title | escape }}</h3>
+                    <div class="minima-product-card__price">
+                      {% render 'price', product: product, show_compare_at_price: section.settings.show_compare_at_price %}
+                    </div>
+                  </div>
+                </a>
+              </article>
+            </li>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..section.settings.products_to_show) -%}
+            <li id="Slide-{{ section.id }}-{{ forloop.index }}" class="minima-product-carousel__slide slider__slide">
+              <article class="minima-product-card">
+                <div class="minima-product-card__media">
+                  <div class="minima-product-card__image-wrap">
+                    {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg minima-product-card__image' }}
+                  </div>
+                </div>
+                <div class="minima-product-card__content">
+                  <h3 class="minima-product-card__title">{{ 'onboarding.product_title' | t }}</h3>
+                  <div class="minima-product-card__price">{% render 'price', placeholder: true %}</div>
+                </div>
+              </article>
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+
+      {%- if show_mobile_slider or show_desktop_slider -%}
+        <div class="slider-buttons minima-product-carousel__controls">
+          <button
+            type="button"
+            class="slider-button slider-button--prev minima-product-carousel__arrow"
+            name="previous"
+            aria-label="{{ 'general.slider.previous_slide' | t }}"
+            aria-controls="Slider-{{ section.id }}"
+          >
+            <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+          </button>
+          <div class="slider-counter caption">
+            <span class="slider-counter--current">1</span>
+            <span aria-hidden="true"> / </span>
+            <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+            <span class="slider-counter--total">{{ products_to_display }}</span>
+          </div>
+          <button
+            type="button"
+            class="slider-button slider-button--next minima-product-carousel__arrow"
+            name="next"
+            aria-label="{{ 'general.slider.next_slide' | t }}"
+            aria-controls="Slider-{{ section.id }}"
+          >
+            <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+          </button>
+        </div>
+      {%- endif -%}
+    </slider-component>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Minima product carousel",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 3,
+      "max": 30,
+      "step": 1,
+      "default": 12,
+      "label": "Products to show"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "range",
+      "id": "cards_per_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Cards per view on desktop"
+    },
+    {
+      "type": "select",
+      "id": "cards_per_tablet",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2",
+      "label": "Cards per view on tablet"
+    },
+    {
+      "type": "select",
+      "id": "cards_per_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1",
+      "label": "Cards per view on mobile"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "landscape",
+          "label": "Landscape"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        }
+      ],
+      "default": "landscape",
+      "label": "Image ratio"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Text alignment"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare_at_price",
+      "default": true,
+      "label": "Show compare-at price"
+    },
+    {
+      "type": "header",
+      "content": "Badge rules"
+    },
+    {
+      "type": "text",
+      "id": "badge_tag_prefix",
+      "label": "Tag prefix for badge",
+      "default": "badge:"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_first_tag_as_badge",
+      "default": true,
+      "label": "Use first product tag if no prefixed tag is found"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sale_badge",
+      "default": false,
+      "label": "Show sale badge when compare-at price exists"
+    },
+    {
+      "type": "text",
+      "id": "sale_badge_text",
+      "label": "Sale badge text",
+      "default": "Oferta"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sold_out_badge",
+      "default": true,
+      "label": "Show sold-out badge"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_badge_text",
+      "label": "Sold-out badge text",
+      "default": "Agotado"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Minima product carousel"
+    }
+  ]
+}
+{% endschema %}

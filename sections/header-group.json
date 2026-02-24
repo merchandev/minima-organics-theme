@@ -1,0 +1,34 @@
+{
+  "name": "Header",
+  "type": "header",
+  "sections": {
+    "minima_header": {
+      "type": "minima-header",
+      "settings": {
+        "sticky_header": true,
+        "show_announcement": true,
+        "announcement_text": "Envios GRATIS: pedidos superiores a 35 euros",
+        "announcement_subtext": "Registrate en la newsletter para conseguir 5% de descuento!",
+        "logo_text": "Minima Organics",
+        "tienda_label": "Tienda",
+        "tienda_link": "/tienda/",
+        "sobre_label": "Sobre nosotras",
+        "sobre_link": "/sobre-nosotras/",
+        "mas_label": "Mas",
+        "more_link_1_label": "Blog",
+        "more_link_1_url": "/blogs/news",
+        "more_link_2_label": "Dentistas",
+        "more_link_2_url": "/pages/directorio-de-dentistas",
+        "more_link_3_label": "Contacto",
+        "more_link_3_url": "/pages/contacto",
+        "search_placeholder": "Estoy buscando...",
+        "cart_label": "Cesta",
+        "color_scheme": "scheme-1",
+        "margin_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "minima_header"
+  ]
+}

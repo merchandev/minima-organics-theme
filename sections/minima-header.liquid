@@ -1,0 +1,271 @@
+{%- liquid
+  assign request_path = request.path | downcase
+  assign tienda_link = section.settings.tienda_link
+  if tienda_link == blank
+    assign tienda_link = '/tienda/'
+  endif
+
+  assign sobre_link = section.settings.sobre_link
+  if sobre_link == blank
+    assign sobre_link = '/sobre-nosotras/'
+  endif
+
+  assign more_link_1 = section.settings.more_link_1_url
+  if more_link_1 == blank
+    assign more_link_1 = blogs.news.url
+    if more_link_1 == blank
+      assign more_link_1 = '/blogs/news'
+    endif
+  endif
+
+  assign more_link_2 = section.settings.more_link_2_url
+  if more_link_2 == blank
+    assign more_link_2 = '/pages/directorio-de-dentistas'
+  endif
+
+  assign more_link_3 = section.settings.more_link_3_url
+  if more_link_3 == blank
+    assign more_link_3 = '/pages/contacto'
+  endif
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-spacing {
+    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-spacing {
+      margin-bottom: {{ section.settings.margin_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<header class="minima-header section-{{ section.id }}-spacing color-{{ section.settings.color_scheme }} gradient{% if section.settings.sticky_header %} minima-header--sticky{% endif %}">
+  {%- if section.settings.show_announcement and section.settings.announcement_text != blank -%}
+    <div class="minima-header__announcement">
+      <div class="page-width">
+        <p class="minima-header__announcement-line">{{ section.settings.announcement_text }}</p>
+        {%- if section.settings.announcement_subtext != blank -%}
+          <p class="minima-header__announcement-subline">{{ section.settings.announcement_subtext }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="page-width minima-header__main">
+    <a href="{{ routes.root_url }}" class="minima-header__brand link link--text focus-inset">
+      {%- if settings.logo != blank -%}
+        <span class="minima-header__logo-wrap">
+          {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+          {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+          {{
+            settings.logo
+            | image_url: width: 240
+            | image_tag:
+              class: 'minima-header__logo',
+              widths: '80, 120, 160, 240',
+              height: logo_height,
+              width: settings.logo_width,
+              alt: logo_alt,
+              sizes: '(min-width: 990px) 120px, 74px'
+          }}
+        </span>
+      {%- endif -%}
+      <span class="minima-header__brand-text">{{ section.settings.logo_text }}</span>
+    </a>
+
+    <div class="minima-header__navigation-wrap">
+      <nav class="minima-header__nav" aria-label="Principal">
+        <a
+          href="{{ tienda_link }}"
+          class="minima-header__nav-link{% if request_path contains '/tienda' or request_path contains '/collections' %} is-active{% endif %}"
+        >
+          {{ section.settings.tienda_label }}
+        </a>
+        <a
+          href="{{ sobre_link }}"
+          class="minima-header__nav-link{% if request_path contains '/sobre-nosotras' %} is-active{% endif %}"
+        >
+          {{ section.settings.sobre_label }}
+        </a>
+        <details class="minima-header__more-menu">
+          <summary class="minima-header__nav-link minima-header__nav-link--summary">
+            {{ section.settings.mas_label }}
+            <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+          </summary>
+          <div class="minima-header__more-dropdown">
+            <a href="{{ more_link_1 }}" class="minima-header__dropdown-link">{{ section.settings.more_link_1_label }}</a>
+            <a href="{{ more_link_2 }}" class="minima-header__dropdown-link">{{ section.settings.more_link_2_label }}</a>
+            <a href="{{ more_link_3 }}" class="minima-header__dropdown-link">{{ section.settings.more_link_3_label }}</a>
+          </div>
+        </details>
+      </nav>
+
+      <div class="minima-header__utilities">
+        <form action="{{ routes.search_url }}" method="get" role="search" class="minima-header__search-form">
+          <input type="hidden" name="options[prefix]" value="last">
+          <label class="visually-hidden" for="MinimaHeaderSearch-{{ section.id }}">{{ 'general.search.search' | t }}</label>
+          <input
+            id="MinimaHeaderSearch-{{ section.id }}"
+            class="minima-header__search-input"
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ section.settings.search_placeholder }}"
+            autocorrect="off"
+            autocapitalize="off"
+            autocomplete="off"
+          >
+          <button type="submit" class="minima-header__search-button" aria-label="{{ 'general.search.search' | t }}">
+            <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
+          </button>
+        </form>
+
+        <a href="{{ routes.cart_url }}" class="minima-header__cart-link link link--text focus-inset" id="minima-header-cart">
+          <span class="minima-header__cart-label">{{ section.settings.cart_label }}</span>
+          {%- if cart == empty -%}
+            <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
+          {%- else -%}
+            <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+          {%- endif -%}
+          {%- if cart.item_count > 0 -%}
+            <span class="minima-header__cart-badge">{{ cart.item_count }}</span>
+          {%- endif -%}
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Minima header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show announcement",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Envios GRATIS: pedidos superiores a 35 euros"
+    },
+    {
+      "type": "text",
+      "id": "announcement_subtext",
+      "label": "Announcement subtext",
+      "default": "Registrate en la newsletter para conseguir 5% de descuento!"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "Minima Organics"
+    },
+    {
+      "type": "text",
+      "id": "tienda_label",
+      "label": "Store label",
+      "default": "Tienda"
+    },
+    {
+      "type": "url",
+      "id": "tienda_link",
+      "label": "Store link"
+    },
+    {
+      "type": "text",
+      "id": "sobre_label",
+      "label": "About label",
+      "default": "Sobre nosotras"
+    },
+    {
+      "type": "url",
+      "id": "sobre_link",
+      "label": "About link"
+    },
+    {
+      "type": "text",
+      "id": "mas_label",
+      "label": "More label",
+      "default": "Mas"
+    },
+    {
+      "type": "text",
+      "id": "more_link_1_label",
+      "label": "More link 1 label",
+      "default": "Blog"
+    },
+    {
+      "type": "url",
+      "id": "more_link_1_url",
+      "label": "More link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "more_link_2_label",
+      "label": "More link 2 label",
+      "default": "Dentistas"
+    },
+    {
+      "type": "url",
+      "id": "more_link_2_url",
+      "label": "More link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "more_link_3_label",
+      "label": "More link 3 label",
+      "default": "Contacto"
+    },
+    {
+      "type": "url",
+      "id": "more_link_3_url",
+      "label": "More link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Estoy buscando..."
+    },
+    {
+      "type": "text",
+      "id": "cart_label",
+      "label": "Cart label",
+      "default": "Cesta"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom margin",
+      "default": 0
+    }
+  ]
+}
+{% endschema %}

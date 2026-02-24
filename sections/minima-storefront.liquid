@@ -1,0 +1,339 @@
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-rating.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign storefront_collection = section.settings.collection
+  if storefront_collection == blank
+    assign storefront_collection = collections['all']
+  endif
+-%}
+
+<section class="minima-storefront color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width minima-storefront__intro">
+    <p class="minima-storefront__shipping">{{ section.settings.shipping_text }}</p>
+    <p class="minima-storefront__newsletter-line">{{ section.settings.newsletter_line }}</p>
+
+    <div class="minima-storefront__newsletter-grid">
+      <div class="minima-storefront__newsletter-content">
+        <h2 class="minima-storefront__newsletter-title">{{ section.settings.newsletter_title }}</h2>
+      </div>
+      <div class="minima-storefront__newsletter-form-wrap">
+        {% form 'customer', class: 'minima-storefront__newsletter-form' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+
+          <div class="field">
+            <input
+              id="StoreNewsletter-{{ section.id }}"
+              type="email"
+              name="contact[email]"
+              class="field__input"
+              value="{{ form.email }}"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="email"
+              placeholder="{{ section.settings.newsletter_email_placeholder }}"
+              required
+            >
+            <label class="field__label" for="StoreNewsletter-{{ section.id }}">{{ section.settings.newsletter_email_placeholder }}</label>
+          </div>
+
+          <label class="minima-storefront__consent" for="StoreNewsletterConsent-{{ section.id }}">
+            <input id="StoreNewsletterConsent-{{ section.id }}" type="checkbox" required>
+            <span>{{ section.settings.newsletter_consent }}</span>
+          </label>
+
+          <button type="submit" class="button button--primary minima-storefront__newsletter-button">
+            {{ section.settings.newsletter_button_label }}
+          </button>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+
+  <div class="page-width minima-storefront__layout">
+    <aside class="minima-storefront__sidebar">
+      <h3 class="minima-storefront__sidebar-title">{{ section.settings.categories_title }}</h3>
+      <ul class="minima-storefront__categories list-unstyled">
+        {%- for block in section.blocks -%}
+          <li {{ block.shopify_attributes }}>
+            <a href="{{ block.settings.link }}" class="link link--text">{{ block.settings.label }}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </aside>
+
+    <div class="minima-storefront__products">
+      {%- if storefront_collection != blank and storefront_collection.products.size > 0 -%}
+        {% paginate storefront_collection.products by section.settings.products_per_page %}
+          <ul class="minima-storefront__product-grid list-unstyled" role="list">
+            {%- for product in paginate.items -%}
+              {%- liquid
+                assign badge_text = blank
+                if section.settings.badge_tag_prefix != blank
+                  for tag in product.tags
+                    assign prefix = tag | slice: 0, section.settings.badge_tag_prefix.size
+                    if prefix == section.settings.badge_tag_prefix
+                      assign badge_text = tag | remove_first: section.settings.badge_tag_prefix | strip
+                      break
+                    endif
+                  endfor
+                endif
+                if badge_text == blank and section.settings.use_first_tag_as_badge and product.tags.size > 0
+                  assign badge_text = product.tags.first
+                endif
+                if badge_text == blank and section.settings.show_sold_out_badge and product.available == false
+                  assign badge_text = section.settings.sold_out_badge_text
+                endif
+              -%}
+
+              <li class="minima-storefront__product-item">
+                <article class="minima-storefront-card">
+                  <a href="{{ product.url }}" class="minima-storefront-card__link">
+                    <div class="minima-storefront-card__media">
+                      {%- if badge_text != blank -%}
+                        <span class="minima-storefront-card__badge">{{ badge_text }}</span>
+                      {%- endif -%}
+                      {%- if product.featured_media != blank -%}
+                        {{
+                          product.featured_media
+                          | image_url: width: 900
+                          | image_tag:
+                            loading: 'lazy',
+                            widths: '240, 360, 540, 720, 900',
+                            sizes: '(min-width: 1200px) 23vw, (min-width: 750px) 30vw, 100vw',
+                            class: 'minima-storefront-card__image',
+                            alt: product.featured_media.alt
+                        }}
+                      {%- else -%}
+                        {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg minima-storefront-card__image' }}
+                      {%- endif -%}
+                    </div>
+
+                    <div class="minima-storefront-card__content">
+                      <h3 class="minima-storefront-card__title">{{ product.title }}</h3>
+                      <div class="minima-storefront-card__price">
+                        {% render 'price', product: product %}
+                      </div>
+                    </div>
+                  </a>
+                </article>
+              </li>
+            {%- endfor -%}
+          </ul>
+
+          {%- if paginate.pages > 1 -%}
+            <div class="minima-storefront__pagination">
+              {% render 'pagination', paginate: paginate %}
+            </div>
+          {%- endif -%}
+        {% endpaginate %}
+      {%- else -%}
+        <div class="minima-storefront__empty">
+          <p>{{ section.settings.empty_text }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Minima storefront",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 6,
+      "max": 36,
+      "step": 3,
+      "default": 18,
+      "label": "Products per page"
+    },
+    {
+      "type": "text",
+      "id": "shipping_text",
+      "label": "Shipping text",
+      "default": "Envios GRATIS: pedidos superiores a 35 euros"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_line",
+      "label": "Newsletter line",
+      "default": "Registrate en la newsletter para conseguir 5% de descuento!"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "newsletter_title",
+      "label": "Newsletter title",
+      "default": "Se el/la primero/a en leer nuestras novedades y recibe un 5% de descuento para suscriptores/as"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_email_placeholder",
+      "label": "Email placeholder",
+      "default": "Email *"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_consent",
+      "label": "Consent text",
+      "default": "Acepto el uso de mis datos personales con fines comerciales *"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button_label",
+      "label": "Newsletter button label",
+      "default": "Enviar"
+    },
+    {
+      "type": "text",
+      "id": "categories_title",
+      "label": "Categories title",
+      "default": "Categorias"
+    },
+    {
+      "type": "text",
+      "id": "badge_tag_prefix",
+      "label": "Badge tag prefix",
+      "default": "badge:"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_first_tag_as_badge",
+      "label": "Use first product tag as badge",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sold_out_badge",
+      "label": "Show sold out badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "sold_out_badge_text",
+      "label": "Sold out badge text",
+      "default": "Agotado"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty text",
+      "default": "No hay productos disponibles por ahora."
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Todos los productos"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Minima storefront",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "label": "Todos los productos"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "Pasta de dientes natural y ecologica"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "Cepillos de bambu"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "Hilo dental"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "Accesorios"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "Packs con descuento"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

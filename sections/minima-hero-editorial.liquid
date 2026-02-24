@@ -1,0 +1,252 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section class="minima-hero-editorial color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width minima-hero-editorial__container">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="minima-hero-editorial__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.sub_eyebrow != blank -%}
+      <p class="minima-hero-editorial__sub-eyebrow">{{ section.settings.sub_eyebrow }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h1 class="minima-hero-editorial__heading inline-richtext {{ section.settings.heading_size }}">
+        {{ section.settings.heading }}
+      </h1>
+    {%- endif -%}
+
+    {%- if section.settings.badge_1 != blank or section.settings.badge_2 != blank or section.settings.badge_3 != blank -%}
+      <div class="minima-hero-editorial__badges" role="list" aria-label="Sellos destacados">
+        {%- if section.settings.badge_1 != blank -%}
+          <span class="minima-hero-editorial__badge" role="listitem">{{ section.settings.badge_1 }}</span>
+        {%- endif -%}
+        {%- if section.settings.badge_2 != blank -%}
+          <span class="minima-hero-editorial__badge" role="listitem">{{ section.settings.badge_2 }}</span>
+        {%- endif -%}
+        {%- if section.settings.badge_3 != blank -%}
+          <span class="minima-hero-editorial__badge" role="listitem">{{ section.settings.badge_3 }}</span>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="minima-hero-editorial__media">
+      {%- if section.settings.image != blank -%}
+        {%- assign image_height = section.settings.image.width | divided_by: section.settings.image.aspect_ratio -%}
+        {{
+          section.settings.image
+          | image_url: width: 2200
+          | image_tag:
+            loading: 'lazy',
+            widths: '750, 1100, 1500, 2200',
+            sizes: '(min-width: 1200px) 1000px, (min-width: 750px) 90vw, 100vw',
+            height: image_height,
+            class: 'minima-hero-editorial__image',
+            alt: section.settings.image.alt
+        }}
+      {%- elsif section.settings.external_image_url != blank -%}
+        {% comment %}theme-check-disable RemoteAsset{% endcomment %}
+        <img
+          src="{{ section.settings.external_image_url | escape }}"
+          alt="{{ section.settings.heading | strip_html | escape }}"
+          loading="lazy"
+          class="minima-hero-editorial__image"
+          width="1200"
+          height="800"
+        >
+        {% comment %}theme-check-enable RemoteAsset{% endcomment %}
+      {%- else -%}
+        <div class="minima-hero-editorial__image minima-hero-editorial__image--placeholder">
+          {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.body != blank -%}
+      <div class="minima-hero-editorial__body rte">
+        {{ section.settings.body }}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.features_line != blank -%}
+      <p class="minima-hero-editorial__features">{{ section.settings.features_line }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank -%}
+      <a
+        {% if section.settings.button_link == blank %}
+          role="link" aria-disabled="true"
+        {% else %}
+          href="{{ section.settings.button_link }}"
+        {% endif %}
+        class="button{% if section.settings.button_style_secondary %} button--secondary{% else %} button--primary{% endif %} minima-hero-editorial__button"
+      >
+        {{ section.settings.button_label | escape }}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Minima hero editorial",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Envios GRATIS: pedidos superiores a 35 euros"
+    },
+    {
+      "type": "text",
+      "id": "sub_eyebrow",
+      "label": "Sub eyebrow",
+      "default": "Registrate en la newsletter para conseguir un 5% de descuento"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "La solucion definitiva para eliminar el plastico de la higiene dental"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Small"
+        },
+        {
+          "value": "h1",
+          "label": "Medium"
+        },
+        {
+          "value": "h0",
+          "label": "Large"
+        },
+        {
+          "value": "hxl",
+          "label": "Extra large"
+        },
+        {
+          "value": "hxxl",
+          "label": "Huge"
+        }
+      ],
+      "default": "h0",
+      "label": "Heading size"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "external_image_url",
+      "label": "External image URL",
+      "default": "https://296ff7227e.clvaw-cdnwnd.com/2e96f3f86bd821507b09a11886c84266/200000362-adbc3adbc6/higiene%20dental%20minima%20organics.png?ph=296ff7227e"
+    },
+    {
+      "type": "text",
+      "id": "badge_1",
+      "label": "Badge 1",
+      "default": "NAT ACENE"
+    },
+    {
+      "type": "text",
+      "id": "badge_2",
+      "label": "Badge 2",
+      "default": "BIO ACENE"
+    },
+    {
+      "type": "text",
+      "id": "badge_3",
+      "label": "Badge 3",
+      "default": "VEGANO ACENE"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body text",
+      "default": "<p>Minima Organics es la manera sostenible, natural, sin toxicos y libre de plastico para modernizar la pasta dental que has usado toda la vida.</p><p>El proyecto surge del cuestionamiento de como, que y por que consumimos, y busca reducir el impacto en cada paso de la rutina diaria.</p>"
+    },
+    {
+      "type": "text",
+      "id": "features_line",
+      "label": "Features line",
+      "default": "Natural - Vegano - Zero waste - Hecho en Espana - Opcion con y sin fluor - Empaque compostable - Disponible a granel"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Descubre Minima Organics"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_style_secondary",
+      "label": "Use secondary button style",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Minima hero editorial"
+    }
+  ]
+}
+{% endschema %}

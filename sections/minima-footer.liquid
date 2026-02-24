@@ -1,0 +1,273 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<footer class="minima-footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width minima-footer__grid">
+    <div class="minima-footer__column minima-footer__brand">
+      <h2 class="minima-footer__title">{{ section.settings.brand_title }}</h2>
+      <p class="minima-footer__social-label">{{ section.settings.social_label }}</p>
+      <ul class="minima-footer__social list-unstyled" role="list">
+        {%- if settings.social_facebook_link != blank -%}
+          <li>
+            <a href="{{ settings.social_facebook_link }}" class="minima-footer__social-link" aria-label="Facebook">
+              <span class="svg-wrapper">{{ 'icon-facebook.svg' | inline_asset_content }}</span>
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if settings.social_instagram_link != blank -%}
+          <li>
+            <a href="{{ settings.social_instagram_link }}" class="minima-footer__social-link" aria-label="Instagram">
+              <span class="svg-wrapper">{{ 'icon-instagram.svg' | inline_asset_content }}</span>
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if section.settings.linkedin_url != blank -%}
+          <li>
+            <a href="{{ section.settings.linkedin_url }}" class="minima-footer__social-link" aria-label="LinkedIn">in</a>
+          </li>
+        {%- endif -%}
+      </ul>
+    </div>
+
+    <div class="minima-footer__column">
+      <h3 class="minima-footer__column-title">{{ section.settings.info_title }}</h3>
+      {%- if section.settings.info_menu != blank -%}
+        <ul class="minima-footer__links list-unstyled">
+          {%- for link in section.settings.info_menu.links -%}
+            <li><a href="{{ link.url }}" class="link link--text">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <div class="minima-footer__column">
+      <h3 class="minima-footer__column-title">{{ section.settings.store_title }}</h3>
+      {%- if section.settings.store_menu != blank -%}
+        <ul class="minima-footer__links list-unstyled">
+          {%- for link in section.settings.store_menu.links -%}
+            <li><a href="{{ link.url }}" class="link link--text">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <div class="minima-footer__column minima-footer__contact">
+      <h3 class="minima-footer__column-title">{{ section.settings.contact_title }}</h3>
+      <p>{{ section.settings.contact_email_label }} <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a></p>
+      <p>{{ section.settings.contact_phone_label }} <a href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}">{{ section.settings.contact_phone }}</a></p>
+      <p class="minima-footer__support-title">{{ section.settings.support_title }}</p>
+
+      {%- if section.settings.support_image != blank -%}
+        {%- assign support_image_height = section.settings.support_image.width | divided_by: section.settings.support_image.aspect_ratio -%}
+        {{
+          section.settings.support_image
+          | image_url: width: 720
+          | image_tag:
+            loading: 'lazy',
+            widths: '240, 360, 480, 720',
+            sizes: '(min-width: 990px) 220px, 62vw',
+            class: 'minima-footer__support-image',
+            height: support_image_height,
+            alt: section.settings.support_image.alt
+        }}
+      {%- elsif section.settings.support_image_external != blank -%}
+        {% comment %}theme-check-disable RemoteAsset{% endcomment %}
+        <img
+          src="{{ section.settings.support_image_external | escape }}"
+          alt="Colaboraciones Minima Organics"
+          loading="lazy"
+          class="minima-footer__support-image"
+          width="600"
+          height="260"
+        >
+        {% comment %}theme-check-enable RemoteAsset{% endcomment %}
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="page-width minima-footer__bottom">
+    <a href="{{ section.settings.cookies_url }}" class="link link--text">{{ section.settings.cookies_label }}</a>
+    <p>
+      {{ section.settings.languages_label }}
+      <a href="{{ section.settings.language_primary_url }}">{{ section.settings.language_primary_label }}</a>
+      /
+      <a href="{{ section.settings.language_secondary_url }}">{{ section.settings.language_secondary_label }}</a>
+    </p>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Minima footer",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "brand_title",
+      "label": "Brand title",
+      "default": "MINIMA ORGANICS"
+    },
+    {
+      "type": "text",
+      "id": "social_label",
+      "label": "Social label",
+      "default": "Follow us:"
+    },
+    {
+      "type": "url",
+      "id": "linkedin_url",
+      "label": "LinkedIn URL"
+    },
+    {
+      "type": "text",
+      "id": "info_title",
+      "label": "Information title",
+      "default": "Informacion"
+    },
+    {
+      "type": "link_list",
+      "id": "info_menu",
+      "label": "Information menu",
+      "default": "footer"
+    },
+    {
+      "type": "text",
+      "id": "store_title",
+      "label": "Store title",
+      "default": "Tienda"
+    },
+    {
+      "type": "link_list",
+      "id": "store_menu",
+      "label": "Store menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "text",
+      "id": "contact_title",
+      "label": "Contact title",
+      "default": "Contacto"
+    },
+    {
+      "type": "text",
+      "id": "contact_email_label",
+      "label": "Email label",
+      "default": "Email:"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Email",
+      "default": "info@minimaorganics.com"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone_label",
+      "label": "Phone label",
+      "default": "Telefono:"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "Phone",
+      "default": "(+34) 604 889 699"
+    },
+    {
+      "type": "text",
+      "id": "support_title",
+      "label": "Support title",
+      "default": "Con la colaboracion y apoyo de:"
+    },
+    {
+      "type": "image_picker",
+      "id": "support_image",
+      "label": "Support image"
+    },
+    {
+      "type": "text",
+      "id": "support_image_external",
+      "label": "Support image external URL",
+      "default": "https://296ff7227e.clvaw-cdnwnd.com/2e96f3f86bd821507b09a11886c84266/200000270-8b1a48b1a6/apoyo%20colaboracion%20minima%20organics.png?ph=296ff7227e"
+    },
+    {
+      "type": "text",
+      "id": "cookies_label",
+      "label": "Cookies label",
+      "default": "Cookies"
+    },
+    {
+      "type": "url",
+      "id": "cookies_url",
+      "label": "Cookies URL"
+    },
+    {
+      "type": "text",
+      "id": "languages_label",
+      "label": "Languages label",
+      "default": "Idiomas:"
+    },
+    {
+      "type": "text",
+      "id": "language_primary_label",
+      "label": "Primary language label",
+      "default": "Espanol"
+    },
+    {
+      "type": "url",
+      "id": "language_primary_url",
+      "label": "Primary language URL"
+    },
+    {
+      "type": "text",
+      "id": "language_secondary_label",
+      "label": "Secondary language label",
+      "default": "English"
+    },
+    {
+      "type": "url",
+      "id": "language_secondary_url",
+      "label": "Secondary language URL"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 28
+    }
+  ]
+}
+{% endschema %}

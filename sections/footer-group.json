@@ -1,0 +1,39 @@
+{
+  "name": "Footer",
+  "type": "footer",
+  "sections": {
+    "minima_footer": {
+      "type": "minima-footer",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "brand_title": "MINIMA ORGANICS",
+        "social_label": "Follow us:",
+        "linkedin_url": "https://www.linkedin.com/company/minima-organics",
+        "info_title": "Informacion",
+        "info_menu": "footer",
+        "store_title": "Tienda",
+        "store_menu": "main-menu",
+        "contact_title": "Contacto",
+        "contact_email_label": "Email:",
+        "contact_email": "info@minimaorganics.com",
+        "contact_phone_label": "Telefono:",
+        "contact_phone": "(+34) 604 889 699",
+        "support_title": "Con la colaboracion y apoyo de:",
+        "support_image": "",
+        "support_image_external": "https://296ff7227e.clvaw-cdnwnd.com/2e96f3f86bd821507b09a11886c84266/200000270-8b1a48b1a6/apoyo%20colaboracion%20minima%20organics.png?ph=296ff7227e",
+        "cookies_label": "Cookies",
+        "cookies_url": "/policies/privacy-policy",
+        "languages_label": "Idiomas:",
+        "language_primary_label": "Espanol",
+        "language_primary_url": "/",
+        "language_secondary_label": "English",
+        "language_secondary_url": "/en",
+        "padding_top": 44,
+        "padding_bottom": 28
+      }
+    }
+  },
+  "order": [
+    "minima_footer"
+  ]
+}
