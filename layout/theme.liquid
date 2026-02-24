@@ -369,6 +369,31 @@
         assign normalized_path_key = path_key | downcase | replace: '%c3%a1', 'a' | replace: '%c3%a9', 'e' | replace: '%c3%ad', 'i' | replace: '%c3%b3', 'o' | replace: '%c3%ba', 'u' | replace: '%c3%b1', 'n'
         assign normalized_path_sub_key = path_sub_key | downcase | replace: '%c3%a1', 'a' | replace: '%c3%a9', 'e' | replace: '%c3%ad', 'i' | replace: '%c3%b3', 'o' | replace: '%c3%ba', 'u' | replace: '%c3%b1', 'n'
 
+        assign forced_route = blank
+        if route_lookup_path == blank or route_lookup_path == '/' or route_lookup_path == root_path
+          assign forced_route = 'home'
+        elsif normalized_path_key == 'tienda' or normalized_path_key == 'catalogo'
+          assign forced_route = 'tienda'
+        elsif normalized_path_key == 'blog' or normalized_path_key == 'blogs'
+          assign forced_route = 'blog'
+        elsif normalized_path_key == 'sobre' or normalized_path_key == 'sobre-nosotras' or normalized_path_key == 'ingredientes'
+          assign forced_route = 'sobre'
+        elsif normalized_path_key == 'directorio-de-dentistas' or normalized_path_key == 'dentistas'
+          assign forced_route = 'sobre'
+        elsif normalized_path_key == 'contacto' or normalized_path_key == 'contact'
+          assign forced_route = 'contacto'
+        elsif normalized_path_key == 'pages'
+          if normalized_path_sub_key == 'sobre-nosotras' or normalized_path_sub_key == 'sobre' or normalized_path_sub_key == 'about' or normalized_path_sub_key == 'ingredientes' or normalized_path_sub_key == 'dentistas' or normalized_path_sub_key == 'directorio-de-dentistas'
+            assign forced_route = 'sobre'
+          elsif normalized_path_sub_key == 'tienda' or normalized_path_sub_key == 'catalogo'
+            assign forced_route = 'tienda'
+          elsif normalized_path_sub_key == 'blog' or normalized_path_sub_key == 'news'
+            assign forced_route = 'blog'
+          elsif normalized_path_sub_key == 'contacto' or normalized_path_sub_key == 'contact'
+            assign forced_route = 'contacto'
+          endif
+        endif
+
         assign page_override_route = blank
         if request.page_type == 'page' and page.handle != blank
           assign normalized_page_handle = page.handle | downcase | replace: 'á', 'a' | replace: 'é', 'e' | replace: 'í', 'i' | replace: 'ó', 'o' | replace: 'ú', 'u' | replace: 'ñ', 'n'
@@ -400,6 +425,10 @@
           assign is_legacy_minima_path = true
         elsif normalized_path_key == 'contacto' or normalized_path_key == 'contact'
           assign is_legacy_minima_path = true
+        endif
+
+        if fallback_route == blank and forced_route != blank
+          assign fallback_route = forced_route
         endif
 
         if fallback_route == blank
