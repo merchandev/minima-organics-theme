@@ -1,12 +1,13 @@
 {%- liquid
-  assign request_path = request.path | downcase
+  assign request_path = request.path | split: '?' | first | downcase
   assign has_custom_logo = false
   if settings.logo != blank
     assign has_custom_logo = true
   endif
+
   assign tienda_link = section.settings.tienda_link
   if tienda_link == blank
-    assign tienda_link = '/tienda'
+    assign tienda_link = routes.all_products_collection_url
   endif
 
   assign sobre_link = section.settings.sobre_link
@@ -15,18 +16,52 @@
   endif
 
   assign more_link_1 = section.settings.more_link_1_url
-  if more_link_1 == blank or more_link_1 contains '/blogs/news' or more_link_1 contains '/search?type=article'
-    assign more_link_1 = '/blog'
+  if more_link_1 == blank
+    assign more_link_1 = '/blogs/news'
   endif
 
   assign more_link_2 = section.settings.more_link_2_url
-  if more_link_2 == blank or more_link_2 contains '/pages/sobre-nosotras'
-    assign more_link_2 = '/dentistas'
+  if more_link_2 == blank
+    assign more_link_2 = '/pages/dentistas'
   endif
 
   assign more_link_3 = section.settings.more_link_3_url
-  if more_link_3 == blank or more_link_3 contains '/pages/contact'
-    assign more_link_3 = '/contacto'
+  if more_link_3 == blank
+    assign more_link_3 = '/pages/contacto'
+  endif
+
+  assign is_tienda_active = false
+  if request.page_type == 'collection' or request_path contains '/collections'
+    assign is_tienda_active = true
+  endif
+
+  assign is_sobre_active = false
+  if request.page_type == 'page' and page.handle != blank
+    if page.handle == 'sobre-nosotras' or page.handle == 'about'
+      assign is_sobre_active = true
+    endif
+  endif
+
+  assign is_blog_active = false
+  if request.page_type == 'blog' or request.page_type == 'article' or request_path contains '/blogs/'
+    assign is_blog_active = true
+  endif
+
+  assign is_dentistas_active = false
+  if request.page_type == 'page' and page.handle == 'dentistas'
+    assign is_dentistas_active = true
+  endif
+
+  assign is_contact_active = false
+  if request.page_type == 'page' and page.handle != blank
+    if page.handle == 'contacto' or page.handle == 'contact'
+      assign is_contact_active = true
+    endif
+  endif
+
+  assign is_more_active = false
+  if is_blog_active or is_dentistas_active or is_contact_active
+    assign is_more_active = true
   endif
 -%}
 
@@ -91,25 +126,25 @@
       <nav class="minima-header__nav" aria-label="Principal">
         <a
           href="{{ tienda_link }}"
-          class="minima-header__nav-link{% if request_path contains '/tienda' or request_path contains '/catalogo' or request_path contains '/collections' %} is-active{% endif %}"
+          class="minima-header__nav-link{% if is_tienda_active %} is-active{% endif %}"
         >
           {{ section.settings.tienda_label }}
         </a>
         <a
           href="{{ sobre_link }}"
-          class="minima-header__nav-link{% if request_path contains '/sobre-nosotras' or request_path contains '/sobre' or request_path contains '/pages/sobre-nosotras' %} is-active{% endif %}"
+          class="minima-header__nav-link{% if is_sobre_active %} is-active{% endif %}"
         >
           {{ section.settings.sobre_label }}
         </a>
         <details class="minima-header__more-menu">
-          <summary class="minima-header__nav-link minima-header__nav-link--summary">
+          <summary class="minima-header__nav-link minima-header__nav-link--summary{% if is_more_active %} is-active{% endif %}">
             {{ section.settings.mas_label }}
             <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
           </summary>
           <div class="minima-header__more-dropdown">
-            <a href="{{ more_link_1 }}" class="minima-header__dropdown-link">{{ section.settings.more_link_1_label }}</a>
-            <a href="{{ more_link_2 }}" class="minima-header__dropdown-link">{{ section.settings.more_link_2_label }}</a>
-            <a href="{{ more_link_3 }}" class="minima-header__dropdown-link">{{ section.settings.more_link_3_label }}</a>
+            <a href="{{ more_link_1 }}" class="minima-header__dropdown-link{% if is_blog_active %} is-active{% endif %}">{{ section.settings.more_link_1_label }}</a>
+            <a href="{{ more_link_2 }}" class="minima-header__dropdown-link{% if is_dentistas_active %} is-active{% endif %}">{{ section.settings.more_link_2_label }}</a>
+            <a href="{{ more_link_3 }}" class="minima-header__dropdown-link{% if is_contact_active %} is-active{% endif %}">{{ section.settings.more_link_3_label }}</a>
           </div>
         </details>
       </nav>
