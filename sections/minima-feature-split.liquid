@@ -61,7 +61,7 @@
                 sizes: '(min-width: 990px) 26vw, (min-width: 750px) 42vw, 88vw',
                 height: image_height,
                 class: 'minima-feature-split__image',
-                alt: image.alt
+                alt: image.alt | default: section.settings.heading | strip_html | escape
             }}
           {%- elsif external_image != blank -%}
             {% comment %}theme-check-disable RemoteAsset{% endcomment %}

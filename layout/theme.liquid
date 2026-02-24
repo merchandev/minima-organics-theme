@@ -328,6 +328,12 @@
               assign route_lookup_path = page_url_path
             endif
           endif
+
+          # Shopify can internally rewrite unknown requests to /404.
+          # When that happens on the storefront root, force home rendering.
+          if route_lookup_path == '/404' or route_lookup_path == blank
+            assign route_lookup_path = '/'
+          endif
         endif
         assign root_path = routes.root_url | split: '?' | first | downcase
 
@@ -366,8 +372,8 @@
           assign path_key = segment_2
           assign path_sub_key = segment_3
         endif
-        assign normalized_path_key = path_key | downcase | replace: '%c3%a1', 'a' | replace: '%c3%a9', 'e' | replace: '%c3%ad', 'i' | replace: '%c3%b3', 'o' | replace: '%c3%ba', 'u' | replace: '%c3%b1', 'n'
-        assign normalized_path_sub_key = path_sub_key | downcase | replace: '%c3%a1', 'a' | replace: '%c3%a9', 'e' | replace: '%c3%ad', 'i' | replace: '%c3%b3', 'o' | replace: '%c3%ba', 'u' | replace: '%c3%b1', 'n'
+        assign normalized_path_key = path_key | downcase | replace: '%c3%a1', 'a' | replace: '%c3%a9', 'e' | replace: '%c3%ad', 'i' | replace: '%c3%b3', 'o' | replace: '%c3%ba', 'u' | replace: '%c3%b1', 'n' | replace: 'á', 'a' | replace: 'é', 'e' | replace: 'í', 'i' | replace: 'ó', 'o' | replace: 'ú', 'u' | replace: 'ñ', 'n'
+        assign normalized_path_sub_key = path_sub_key | downcase | replace: '%c3%a1', 'a' | replace: '%c3%a9', 'e' | replace: '%c3%ad', 'i' | replace: '%c3%b3', 'o' | replace: '%c3%ba', 'u' | replace: '%c3%b1', 'n' | replace: 'á', 'a' | replace: 'é', 'e' | replace: 'í', 'i' | replace: 'ó', 'o' | replace: 'ú', 'u' | replace: 'ñ', 'n'
 
         assign forced_route = blank
         if route_lookup_path == blank or route_lookup_path == '/' or route_lookup_path == root_path
@@ -617,4 +623,3 @@
     {%- endif -%}
   </body>
 </html>
-
