@@ -8,6 +8,7 @@
   .minima-header__nav { display: flex; gap: 32px; list-style: none; margin: 0; padding: 0; }
   .minima-header__nav a { font-size: 13px; font-weight: 500; text-transform: uppercase; text-decoration: none; color: #1A2E1A; opacity: 0.8; transition: opacity 0.2s; }
   .minima-header__nav a:hover { opacity: 1; border-bottom: 1px solid #1A2E1A; }
+  .minima-header__center { display: flex; align-items: center; gap: 24px; }
   .minima-header__actions { display: flex; gap: 20px; align-items: center; }
   .minima-header__cart { 
     display: flex;
@@ -94,10 +95,123 @@
   .btn-checkout:hover { background: #2D4D2D; }
   .empty-msg { text-align: center; margin-top: 50px; font-family: 'Cormorant Garamond', serif; font-size: 2rem; opacity: 0.7; }
 
+  /* ── AJAX Search ── */
+  .mh-search-wrap {
+    position: relative;
+  }
+  .mh-search-form {
+    display: flex;
+    align-items: center;
+    background: rgba(26,46,26,0.06);
+    border: 1px solid rgba(26,46,26,0.15);
+    border-radius: 30px;
+    padding: 0 14px 0 18px;
+    gap: 8px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .mh-search-form:focus-within {
+    background: #fff;
+    border-color: rgba(26,46,26,0.35);
+  }
+  .mh-search-input {
+    border: none;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem;
+    color: #1A2E1A;
+    width: 180px;
+    outline: none;
+    padding: 9px 0;
+  }
+  .mh-search-input::placeholder { color: rgba(26,46,26,0.45); }
+  .mh-search-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    opacity: 0.55;
+    transition: opacity 0.2s;
+  }
+  .mh-search-btn:hover { opacity: 1; }
+  .mh-search-btn svg { width: 16px; height: 16px; stroke: #1A2E1A; fill: none; stroke-width: 2; }
+
+  /* Dropdown */
+  .mh-search-results {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    width: 320px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    overflow: hidden;
+    z-index: 500;
+    display: none;
+  }
+  .mh-search-results.is-open { display: block; }
+  .mh-result-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #1A2E1A;
+    transition: background 0.15s;
+    border-bottom: 1px solid rgba(26,46,26,0.05);
+  }
+  .mh-result-item:last-child { border-bottom: none; }
+  .mh-result-item:hover { background: #F8F5F0; }
+  .mh-result-img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #EEE9E1;
+    flex-shrink: 0;
+  }
+  .mh-result-info { flex: 1; min-width: 0; }
+  .mh-result-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .mh-result-price {
+    font-size: 1.15rem;
+    opacity: 0.6;
+  }
+  .mh-result-empty {
+    padding: 20px 16px;
+    font-size: 1.25rem;
+    opacity: 0.5;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+  }
+  .mh-result-all {
+    display: block;
+    padding: 12px 16px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #4a7c59;
+    text-align: center;
+    text-decoration: none;
+    background: rgba(74,124,89,0.07);
+    transition: background 0.15s;
+  }
+  .mh-result-all:hover { background: rgba(74,124,89,0.14); }
+
   @media (max-width: 768px) { 
-    .minima-header__nav { display: none; } 
+    .minima-header__nav { display: none; }
     .minima-header__logo-img { height: 35px; }
     .minima-cart-drawer { width: 100%; right: -100%; }
+    .mh-search-input { width: 120px; }
+    .mh-search-results { width: 280px; }
   }
 {%- endstyle -%}
 
@@ -108,15 +222,38 @@
       <a href="/" class="minima-header__logo-link">
         <img src="{{ 'minima.png' | asset_url }}" class="minima-header__logo-img" alt="Minima Organics" width="180" height="45">
       </a>
-      <nav role="navigation">
-        <ul class="minima-header__nav">
-          <li><a href="/collections/all">Tienda</a></li>
-          <li><a href="/pages/sobre-nosotras">Sobre nosotras</a></li>
-          <li><a href="/blogs/news">Blog</a></li>
-          <li><a href="/pages/contacto">Contacto</a></li>
-        </ul>
-      </nav>
+      <div class="minima-header__center">
+        <nav role="navigation">
+          <ul class="minima-header__nav">
+            <li><a href="/collections/all">Tienda</a></li>
+            <li><a href="/pages/sobre-nosotras">Sobre nosotras</a></li>
+            <li><a href="/blogs/noticias">Blog</a></li>
+            <li><a href="/pages/contact">Contacto</a></li>
+          </ul>
+        </nav>
+        <!-- AJAX Search -->
+        <div class="mh-search-wrap" id="mh-search-wrap">
+          <form class="mh-search-form" action="/search" method="get" role="search" autocomplete="off">
+            <input
+              type="search"
+              name="q"
+              id="mh-search-input"
+              class="mh-search-input"
+              placeholder="Estoy buscando..."
+              aria-label="Buscar productos"
+              aria-autocomplete="list"
+              aria-controls="mh-search-results">
+            <input type="hidden" name="type" value="product">
+            <button type="submit" class="mh-search-btn" aria-label="Buscar">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </button>
+          </form>
+          <div id="mh-search-results" class="mh-search-results" role="listbox"></div>
+        </div>
+      </div>
+
       <div class="minima-header__actions">
+        <!-- Cart -->
         <div class="minima-header__cart" onclick="toggleCartDrawer()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
@@ -153,6 +290,70 @@
 </div>
 
 <script>
+  /* === AJAX Search === */
+  (function() {
+    var input   = document.getElementById('mh-search-input');
+    var results = document.getElementById('mh-search-results');
+    var wrap    = document.getElementById('mh-search-wrap');
+    if (!input || !results) return;
+
+    var timer = null;
+    var currentQuery = '';
+
+    function formatMoney(cents) {
+      return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(cents / 100);
+    }
+
+    function close() {
+      results.classList.remove('is-open');
+      results.innerHTML = '';
+    }
+
+    function open(html) {
+      results.innerHTML = html;
+      results.classList.add('is-open');
+    }
+
+    input.addEventListener('input', function() {
+      var q = this.value.trim();
+      clearTimeout(timer);
+      if (q.length < 2) { close(); return; }
+      if (q === currentQuery) return;
+      currentQuery = q;
+
+      timer = setTimeout(function() {
+        fetch('/search/suggest.json?q=' + encodeURIComponent(q) + '&resources[type]=product&resources[limit]=5')
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            var products = (data.resources && data.resources.results && data.resources.results.products) || [];
+            if (products.length === 0) {
+              open('<p class="mh-result-empty">Sin resultados para "' + q + '"</p>');
+              return;
+            }
+            var html = '';
+            products.forEach(function(p) {
+              var img = p.featured_image ? p.featured_image.url : '';
+              var price = p.price ? formatMoney(p.price) : '';
+              html += '<a class="mh-result-item" href="' + p.url + '" role="option">' +
+                (img ? '<img class="mh-result-img" src="' + img + '" alt="' + p.title.replace(/"/g,'') + '" loading="lazy">' : '<div class="mh-result-img"></div>') +
+                '<div class="mh-result-info"><span class="mh-result-title">' + p.title + '</span>' +
+                (price ? '<span class="mh-result-price">' + price + '</span>' : '') +
+                '</div></a>';
+            });
+            html += '<a class="mh-result-all" href="/search?type=product&q=' + encodeURIComponent(q) + '">Ver todos los resultados →</a>';
+            open(html);
+          })
+          .catch(function() { close(); });
+      }, 300);
+    });
+
+    /* Close on Escape */
+    document.addEventListener('keydown', function(e) { if(e.key === 'Escape') close(); });
+    /* Close on click outside */
+    document.addEventListener('click', function(e) { if (!wrap.contains(e.target)) close(); });
+  })();
+
+  /* === Cart === */
   function toggleCartDrawer() {
     const drawer = document.getElementById('minima-drawer');
     const overlay = document.getElementById('minima-overlay');

@@ -3,19 +3,43 @@
     "hero": {
       "type": "minima-hero-editorial",
       "settings": {
-        "eyebrow": "100% Natural · Vegano · Zero Waste",
-        "heading": "La revolución de la <em>higiene dental</em>",
-        "text": "<p>En Minima Organics creemos en una limpieza profunda sin plásticos ni tóxicos. Cuidamos de tu sonrisa y del planeta.</p>",
-        "button_label": "Descubre la gama"
+        "headline": "La solución definitiva para eliminar el plástico de la higiene dental",
+        "slide_1_image": "https://cdn.shopify.com/s/files/1/0979/1635/4944/files/minima_organics_cepillos_de_dientes.webp?v=1771681283",
+        "slide_1_alt": "Cepillos de dientes Mínima Organics",
+        "slide_2_image": "https://cdn.shopify.com/s/files/1/0979/1635/4944/files/minima_organics_pasta_de_dientes_menta_bio.webp?v=1771681283",
+        "slide_2_alt": "Pasta de dientes menta bio Mínima Organics",
+        "slide_3_image": "https://cdn.shopify.com/s/files/1/0979/1635/4944/files/minima_organics_higiene_bucal.webp?v=1771681283",
+        "slide_3_alt": "Higiene bucal Mínima Organics",
+        "description": "Mínima Organics es la manera sostenible, natural, sin tóxicos y libre plástico para remplazar la pasta dental que has usado toda la vida. El proyecto surge del cuestionamiento de como, que y porque consumimos. Tenemos el sueño de apoyar la transición a una vida más sostenible, apoyar la reforestación y generar trabajo justo.",
+        "pills": "Natural • Vegana • Zero waste • Hecha en España • Opciones con y sin flúor • Recambio en bolsa compostable • Disponible a granel",
+        "button_label": "Descubre Mínima Organics",
+        "button_url": "/collections/all"
+      }
+    },
+    "products": {
+      "type": "minima-product-carousel",
+      "settings": {
+        "heading": "Nuestros productos",
+        "max_products": 12
       }
     },
     "feature": {
       "type": "minima-feature-split",
       "settings": {
         "image_position": "right",
-        "heading": "Higiene dental <em>sin plástico</em>",
-        "text": "<p>Nuestra misión es eliminar el plástico de tu rutina diaria con alternativas sostenibles y efectivas.</p>",
-        "button_label": "Nuestra historia"
+        "image_url": "https://cdn.shopify.com/s/files/1/0979/1635/4944/files/higiene_dental_minima_organics.webp?v=1772025390",
+        "image_alt": "Dentífrico en polvo natural Mínima Organics",
+        "tag": "100% Natural · Orgánico · Sin plástico",
+        "heading": "Queremos que tu higiene dental sea libre de <em>tóxicos y plástico</em>",
+        "text": "<p>Nuestro primer producto es un dentífrico en polvo 100% natural y orgánico. Su envase de aluminio (30g) se puede reutilizar infinitas veces. El producto también está disponible en bolsas de papel compostable, disminuyendo la huella de carbono y simplificando su distribución.</p><p>Además del aliento fresco, tus encías estarán sanas, tus dientes limpios, blancos y sin caries.</p><p>Si prefieres el formato crema dental, puedes elegir entre opciones con o sin flúor.</p>",
+        "button_label": "Ir a la tienda",
+        "button_link": "/collections/all"
+      }
+    },
+    "blog": {
+      "type": "minima-blog-preview",
+      "settings": {
+        "heading": "Últimas noticias"
       }
     },
     "newsletter": {
@@ -28,7 +52,9 @@
   },
   "order": [
     "hero",
+    "products",
     "feature",
+    "blog",
     "newsletter"
   ]
 }

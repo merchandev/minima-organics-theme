@@ -1,306 +1,327 @@
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  .mpc-section {
+    background: #F8F5F0;
+    padding: 80px 0 100px;
   }
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-
-  .mpc-section { overflow: hidden; }
-
-  .mpc-heading-wrap {
+  .mpc-header {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 0 32px 40px;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 32px;
     gap: 16px;
   }
-  .mpc-heading {
-    font-family: var(--font-heading-family, 'Cormorant Garamond', serif);
-    font-size: clamp(24px, 3vw, 40px);
-    font-weight: 600;
+  @media (max-width: 640px) {
+    .mpc-header { padding: 0 16px 28px; flex-direction: column; align-items: flex-start; }
+  }
+  .mpc-header__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 400;
+    color: #1A2E1A;
     margin: 0;
-    color: var(--color-foreground, #1a2e1a);
     letter-spacing: -0.01em;
+    line-height: 1.15;
   }
-  .mpc-view-all {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-foreground, #1a2e1a);
+  .mpc-header__link {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #1A2E1A;
     text-decoration: none;
-    border-bottom: 1px solid var(--color-foreground, #1a2e1a);
+    border-bottom: 1px solid rgba(26,46,26,0.3);
     white-space: nowrap;
-    flex-shrink: 0;
+    padding-bottom: 2px;
+    transition: border-color 0.2s;
   }
+  .mpc-header__link:hover { border-color: #1A2E1A; }
 
-  .mpc-grid {
-    display: grid;
-    grid-template-columns: repeat({{ section.settings.cards_per_desktop }}, 1fr);
-    gap: 24px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .mpc-card {
-    background: transparent;
-    text-decoration: none;
-    display: block;
-    color: inherit;
-    transition: transform 0.3s ease;
-  }
-  .mpc-card:hover { transform: translateY(-4px); }
-
-  .mpc-card__media {
+  /* Carousel wrapper */
+  .mpc-carousel-outer {
     position: relative;
-    overflow: hidden;
-    border-radius: 4px;
-    background: rgba(26,46,26,0.04);
-    margin-bottom: 14px;
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 0 32px;
   }
-  .mpc-card__image-wrap {
-    aspect-ratio: 4/5;
+  @media (max-width: 640px) {
+    .mpc-carousel-outer { padding: 0 16px; }
+  }
+
+  /* Track + mask */
+  .mpc-track-mask {
     overflow: hidden;
   }
-  .mpc-card__img {
+  .mpc-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+  /* Each card: 1/4 on desktop, 1/3 on tablet, 1/2 on mobile */
+  .mpc-card {
+    flex: 0 0 calc(25% - 15px);
+    min-width: 0;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  @media (max-width: 1024px) {
+    .mpc-card { flex: 0 0 calc(33.333% - 14px); }
+  }
+  @media (max-width: 640px) {
+    .mpc-card { flex: 0 0 100%; scroll-snap-align: start; }
+    .mpc-track {
+      gap: 0;
+      overflow-x: scroll;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .mpc-track::-webkit-scrollbar { display: none; }
+    .mpc-track-mask { overflow: visible; }
+  }
+
+  /* Card inner */
+  .mpc-card__img-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* square */
+    overflow: hidden;
+    background: #fff;
+    border-radius: 8px;
+    transition: box-shadow 0.25s;
+  }
+  .mpc-card:hover .mpc-card__img-wrap {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+  }
+  .mpc-card__img-wrap img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-    transition: transform 0.4s ease;
-    display: block;
+    transition: transform 0.3s ease;
   }
-  .mpc-card:hover .mpc-card__img { transform: scale(1.04); }
-
-  .mpc-card__badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: var(--color-foreground, #1a2e1a);
-    color: var(--color-background, #f8f5f0);
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 2px;
-    z-index: 1;
+  .mpc-card:hover .mpc-card__img-wrap img {
+    transform: scale(1.03);
   }
-
+  .mpc-card__info {
+    padding: 14px 4px 0;
+    text-align: center;
+  }
   .mpc-card__title {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--color-foreground, #1a2e1a);
+    font-family: 'Inter', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: #1A2E1A;
     margin: 0 0 6px;
-    letter-spacing: 0.01em;
     line-height: 1.4;
   }
   .mpc-card__price {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-foreground, #1a2e1a);
-  }
-  .mpc-card__price s {
-    font-weight: 400;
-    opacity: 0.4;
-    margin-right: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    color: #1A2E1A;
+    opacity: 0.65;
+    margin: 0;
   }
 
-  @media screen and (max-width: 989px) {
-    .mpc-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  /* Arrows — white circle, light border, like minimaorganics.com */
+  .mpc-arrow {
+    position: absolute;
+    top: calc(50% - 30px);
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(26,46,26,0.15);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
   }
-  @media screen and (max-width: 549px) {
-    .mpc-grid { grid-template-columns: 1fr; }
+  .mpc-arrow:hover {
+    background: #fff;
+    border-color: rgba(26,46,26,0.4);
+    transform: translateY(-50%) scale(1.06);
+  }
+  .mpc-arrow[disabled] {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+  }
+  .mpc-arrow--prev { left: -4px; }
+  .mpc-arrow--next { right: -4px; }
+  .mpc-arrow svg {
+    width: 18px; height: 18px;
+    stroke: #1A2E1A;
+    fill: none;
+    stroke-width: 2;
+  }
+  @media (max-width: 640px) {
+    .mpc-arrow { width: 36px; height: 36px; }
+    .mpc-arrow svg { width: 15px; height: 15px; }
+    .mpc-arrow--prev { left: 0; }
+    .mpc-arrow--next { right: 0; }
   }
 {%- endstyle -%}
 
-{%- liquid
-  assign products_source = section.settings.collection.products
-  assign limit = section.settings.products_to_show
--%}
+{%- assign col = section.settings.collection -%}
+{%- assign source = collections[col].products -%}
+{%- if source == blank -%}
+  {%- assign source = collections.all.products -%}
+{%- endif -%}
 
-<section class="mpc-section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
-  <div class="page-width">
+<section class="mpc-section" id="mpc-{{ section.id }}">
+  <div class="mpc-header">
+    <h2 class="mpc-header__title">{{ section.settings.heading }}</h2>
+    <a href="/collections/{{ col | default: 'all' }}" class="mpc-header__link">Ver todos los productos →</a>
+  </div>
 
-    {%- if section.settings.heading != blank -%}
-      <div class="mpc-heading-wrap">
-        <h2 class="mpc-heading">{{ section.settings.heading }}</h2>
-        {%- if section.settings.collection != blank -%}
-          <a href="{{ section.settings.collection.url }}" class="mpc-view-all">Ver todos</a>
-        {%- endif -%}
-      </div>
-    {%- endif -%}
+  <div class="mpc-carousel-outer">
+    <button class="mpc-arrow mpc-arrow--prev" id="mpc-prev-{{ section.id }}" aria-label="Anterior" disabled>
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
 
-    <ul class="mpc-grid" role="list">
-      {%- if section.settings.collection != blank and section.settings.collection.products.size > 0 -%}
-        {%- for product in products_source limit: limit -%}
-          {%- liquid
-            assign badge_text = ''
-            if product.available == false and section.settings.show_sold_out_badge
-              assign badge_text = section.settings.sold_out_badge_text
-            elsif product.compare_at_price > product.price and product.available and section.settings.show_sale_badge
-              assign badge_text = section.settings.sale_badge_text
-            endif
-          -%}
-          <li>
-            <a href="{{ product.url }}" class="mpc-card">
-              <div class="mpc-card__media">
-                {%- if badge_text != '' -%}
-                  <span class="mpc-card__badge">{{ badge_text | escape }}</span>
-                {%- endif -%}
-                <div class="mpc-card__image-wrap">
-                  {%- if product.featured_media -%}
-                    {{
-                      product.featured_media
-                      | image_url: width: 800
-                      | image_tag:
-                        class: 'mpc-card__img',
-                        loading: 'lazy',
-                        widths: '300, 400, 600, 800',
-                        sizes: '(min-width: 990px) 25vw, (min-width: 550px) 45vw, 90vw',
-                        alt: product.featured_media.alt | default: product.title
-                    }}
-                  {%- else -%}
-                    {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg mpc-card__img' }}
-                  {%- endif -%}
+    <div class="mpc-track-mask">
+      <div class="mpc-track" id="mpc-track-{{ section.id }}">
+        {%- for product in source limit: section.settings.max_products -%}
+          <a class="mpc-card" href="{{ product.url }}" data-mpc-card>
+            <div class="mpc-card__img-wrap">
+              {%- if product.featured_image -%}
+                <img
+                  src="{{ product.featured_image | image_url: width: 600 }}"
+                  alt="{{ product.featured_image.alt | escape | default: product.title }}"
+                  loading="lazy"
+                  width="600"
+                  height="600">
+              {%- else -%}
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.15;">
+                  {{- 'product-1' | placeholder_svg_tag: 'placeholder-svg' -}}
                 </div>
-              </div>
-              <h3 class="mpc-card__title">{{ product.title | escape }}</h3>
-              <div class="mpc-card__price">
-                {%- if product.compare_at_price > product.price and section.settings.show_compare_at_price -%}
-                  <s>{{ product.compare_at_price | money }}</s>
-                {%- endif -%}
-                {{ product.price | money }}
-              </div>
-            </a>
-          </li>
-        {%- endfor -%}
-      {%- else -%}
-        {%- for i in (1..limit) -%}
-          {%- if forloop.index > 4 -%}{%- break -%}{%- endif -%}
-          <li>
-            <div class="mpc-card">
-              <div class="mpc-card__media">
-                <div class="mpc-card__image-wrap">
-                  {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg mpc-card__img' }}
-                </div>
-              </div>
-              <h3 class="mpc-card__title">Producto de ejemplo</h3>
-              <div class="mpc-card__price">{{ 2900 | money }}</div>
+              {%- endif -%}
             </div>
-          </li>
+            <div class="mpc-card__info">
+              <p class="mpc-card__title">{{ product.title }}</p>
+              <p class="mpc-card__price">{{ product.price | money }}</p>
+            </div>
+          </a>
         {%- endfor -%}
-      {%- endif -%}
-    </ul>
+      </div>
+    </div>
 
+    <button class="mpc-arrow mpc-arrow--next" id="mpc-next-{{ section.id }}" aria-label="Siguiente">
+      <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+    </button>
   </div>
 </section>
 
+<script>
+(function() {
+  var sectionId = '{{ section.id }}';
+  var track   = document.getElementById('mpc-track-' + sectionId);
+  var prevBtn = document.getElementById('mpc-prev-' + sectionId);
+  var nextBtn = document.getElementById('mpc-next-' + sectionId);
+  if (!track) return;
+
+  /* Fisher-Yates shuffle */
+  var cards = Array.from(track.querySelectorAll('[data-mpc-card]'));
+  for (var i = cards.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    track.appendChild(cards[j]);
+    var tmp = cards[i]; cards[i] = cards[j]; cards[j] = tmp;
+  }
+  /* Re-query in new order */
+  cards = Array.from(track.querySelectorAll('[data-mpc-card]'));
+
+  var current = 0;
+
+  function visibleCount() {
+    var w = window.innerWidth;
+    if (w <= 640)  return 1;
+    if (w <= 1024) return 3;
+    return 4;
+  }
+
+  function totalSteps() {
+    return Math.max(0, cards.length - visibleCount());
+  }
+
+  function cardWidth() {
+    if (!cards[0]) return 0;
+    var gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+    return cards[0].getBoundingClientRect().width + gap;
+  }
+
+  function render() {
+    track.style.transform = 'translateX(-' + (current * cardWidth()) + 'px)';
+    prevBtn.disabled = current <= 0;
+    nextBtn.disabled = current >= totalSteps();
+  }
+
+  prevBtn.addEventListener('click', function() {
+    if (window.innerWidth <= 640) {
+      /* Mobile: use native scroll */
+      var mask = track.parentElement;
+      var w = track.querySelector('[data-mpc-card]').getBoundingClientRect().width;
+      track.scrollBy({ left: -w, behavior: 'smooth' });
+    } else {
+      current = Math.max(0, current - 1);
+      render();
+    }
+  });
+  nextBtn.addEventListener('click', function() {
+    if (window.innerWidth <= 640) {
+      var w = track.querySelector('[data-mpc-card]').getBoundingClientRect().width;
+      track.scrollBy({ left: w, behavior: 'smooth' });
+    } else {
+      current = Math.min(totalSteps(), current + 1);
+      render();
+    }
+  });
+
+  window.addEventListener('resize', function() {
+    current = Math.min(current, totalSteps());
+    render();
+  });
+
+  render();
+})();
+</script>
+
 {% schema %}
 {
-  "name": "Product Carousel",
+  "name": "Productos destacados",
   "tag": "section",
   "class": "section",
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
   "settings": [
-    {
-      "type": "collection",
-      "id": "collection",
-      "label": "Collection"
-    },
-    {
-      "type": "range",
-      "id": "products_to_show",
-      "min": 2,
-      "max": 12,
-      "step": 1,
-      "default": 4,
-      "label": "Products to show"
-    },
     {
       "type": "text",
       "id": "heading",
-      "label": "Heading",
-      "default": "Productos destacados"
+      "label": "Título",
+      "default": "Nuestros productos"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Colección"
     },
     {
       "type": "range",
-      "id": "cards_per_desktop",
-      "min": 2,
-      "max": 4,
+      "id": "max_products",
+      "label": "Número máximo de productos",
+      "min": 4,
+      "max": 24,
       "step": 1,
-      "default": 4,
-      "label": "Columns on desktop"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_compare_at_price",
-      "default": true,
-      "label": "Show compare-at price"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_sale_badge",
-      "default": true,
-      "label": "Show sale badge"
-    },
-    {
-      "type": "text",
-      "id": "sale_badge_text",
-      "label": "Sale badge text",
-      "default": "Oferta"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_sold_out_badge",
-      "default": true,
-      "label": "Show sold-out badge"
-    },
-    {
-      "type": "text",
-      "id": "sold_out_badge_text",
-      "label": "Sold-out badge text",
-      "default": "Agotado"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding top",
-      "default": 48
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding bottom",
-      "default": 64
+      "default": 12
     }
   ],
   "presets": [
-    {
-      "name": "Product Carousel"
-    }
+    { "name": "Productos destacados" }
   ]
 }
 {% endschema %}

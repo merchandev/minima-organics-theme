@@ -112,18 +112,37 @@
     display: block;
     opacity: 0.5;
   }
+  .min-footer__info-contact {
+    margin-top: 24px;
+    font-size: 14px;
+    border-top: 1px solid rgba(26,46,26,0.05);
+    padding-top: 20px;
+  }
+  .min-footer__info-contact-item {
+    display: block;
+    margin-bottom: 12px;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.8;
+  }
+  .min-footer__info-contact-item strong {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    opacity: 0.6;
+    margin-bottom: 4px;
+  }
   .min-footer__bottom {
     border-top: 1px solid rgba(26,46,26,0.08);
     padding-top: 32px;
+    margin-top: 64px; /* Added margin-top */
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Centered content */
     align-items: center;
     font-size: 12px;
     opacity: 0.6;
   }
-  .min-footer__legal {
-    display: flex;
-    gap: 24px;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -176,35 +195,49 @@
         </a>
         <p class="min-footer__brand-text">{{ section.settings.brand_text }}</p>
         <ul class="min-footer__social-list">
-          {%- if settings.social_instagram_link != blank -%}
-            <li>
-              <a href="{{ settings.social_instagram_link }}" class="min-footer__social-link" aria-label="Instagram">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
-              </a>
-            </li>
-          {%- endif -%}
-          {%- if settings.social_facebook_link != blank -%}
-            <li>
-              <a href="{{ settings.social_facebook_link }}" class="min-footer__social-link" aria-label="Facebook">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-              </a>
-            </li>
-          {%- endif -%}
+          <li>
+            <a href="https://www.instagram.com/minimaorganics" class="min-footer__social-link" aria-label="Instagram" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.facebook.com/minimaorganics.espana#" class="min-footer__social-link" aria-label="Facebook" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/company/minimaorganics/" class="min-footer__social-link" aria-label="LinkedIn" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+          </li>
         </ul>
       </div>
 
       <!-- Quick Links -->
       <div>
-        <h3 class="min-footer__col-title">{{ section.settings.info_title }}</h3>
-        {%- if section.settings.info_menu != blank -%}
-          <ul class="min-footer__menu">
-            {%- for link in section.settings.info_menu.links -%}
-              <li class="min-footer__menu-item">
-                <a href="{{ link.url }}" class="min-footer__menu-link">{{ link.title }}</a>
-              </li>
-            {%- endfor -%}
-          </ul>
-        {%- endif -%}
+        <h3 class="min-footer__col-title">Información</h3>
+        <ul class="min-footer__menu">
+          <li class="min-footer__menu-item">
+            <a href="/pages/politica-de-privacidad" class="min-footer__menu-link">Política de Privacidad</a>
+          </li>
+          <li class="min-footer__menu-item">
+            <a href="/pages/terminos-y-condiciones" class="min-footer__menu-link">Términos y Condiciones</a>
+          </li>
+        </ul>
+        <div class="min-footer__info-contact">
+          {%- if section.settings.contact_email != blank -%}
+            <a href="mailto:{{ section.settings.contact_email }}" class="min-footer__info-contact-item">
+              <strong>{{ section.settings.contact_email_label }}</strong>
+              {{ section.settings.contact_email }}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.contact_phone != blank -%}
+            <a href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}" class="min-footer__info-contact-item">
+              <strong>{{ section.settings.contact_phone_label }}</strong>
+              {{ section.settings.contact_phone }}
+            </a>
+          {%- endif -%}
+        </div>
       </div>
 
       <!-- Shop Menu -->
@@ -213,30 +246,22 @@
         {%- if section.settings.store_menu != blank -%}
           <ul class="min-footer__menu">
             {%- for link in section.settings.store_menu.links -%}
-              <li class="min-footer__menu-item">
-                <a href="{{ link.url }}" class="min-footer__menu-link">{{ link.title }}</a>
-              </li>
+              {%- assign link_title = link.title | downcase -%}
+              {%- unless link_title == 'contacto' or link_title == 'contact' -%}
+                <li class="min-footer__menu-item">
+                  <a href="{{ link.url }}" class="min-footer__menu-link">{{ link.title }}</a>
+                </li>
+              {%- endunless -%}
             {%- endfor -%}
           </ul>
         {%- endif -%}
       </div>
 
-      <!-- Contact -->
+      <!-- Collaboration -->
       <div>
-        <h3 class="min-footer__col-title">{{ section.settings.contact_title }}</h3>
-        <div class="min-footer__contact-info">
-          {%- if section.settings.contact_email != blank -%}
-            <a href="mailto:{{ section.settings.contact_email }}" class="min-footer__contact-item">
-              <strong>{{ section.settings.contact_email_label }}</strong>
-              {{ section.settings.contact_email }}
-            </a>
-          {%- endif -%}
-          {%- if section.settings.contact_phone != blank -%}
-            <a href="tel:{{ section.settings.contact_phone | replace: ' ', '' }}" class="min-footer__contact-item">
-              <strong>{{ section.settings.contact_phone_label }}</strong>
-              {{ section.settings.contact_phone }}
-            </a>
-          {%- endif -%}
+        <h3 class="min-footer__col-title">Con la colaboración y apoyo de:</h3>
+        <div class="min-footer__collaboration">
+          <img src="https://cdn.shopify.com/s/files/1/0979/1635/4944/files/apoyo_colaboracion_minima_organics.webp?v=1772029429" alt="Colaboración y Apoyo" style="max-width: 100%; height: auto; margin-top: 10px;">
         </div>
       </div>
 
@@ -245,14 +270,8 @@
     <!-- Bottom Bar -->
     <div class="min-footer__bottom">
       <div class="min-footer__copyright">
-        &copy; {{ 'now' | date: "%Y" }} {{ shop.name }}. {{ section.settings.copyright_text }}
+        &copy; {{ 'now' | date: "%Y" }} Minima organics. {{ section.settings.copyright_text }}
       </div>
-      <ul class="min-footer__legal">
-        {%- if shop.privacy_policy.url != blank -%}
-          <li><a href="{{ shop.privacy_policy.url }}" class="min-footer__legal-link">{{ shop.privacy_policy.title }}</a></li>
-        {%- endif -%}
-        <li><a href="{{ section.settings.cookies_url }}" class="min-footer__legal-link">{{ section.settings.cookies_label }}</a></li>
-      </ul>
     </div>
   </div>
 </footer>

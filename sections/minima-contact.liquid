@@ -1,0 +1,212 @@
+{%- style -%}
+  .mc-wrap {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 0 32px 120px;
+    font-family: 'Inter', sans-serif;
+    color: #1A2E1A;
+  }
+  .mc-hero { text-align: center; margin-bottom: 80px; }
+  .mc-hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 400;
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+    color: #1A2E1A;
+  }
+  .mc-hero p {
+    font-size: 1.5rem;
+    opacity: 0.7;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+  .mc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  @media (max-width: 768px) {
+    .mc-grid { grid-template-columns: 1fr; gap: 40px; }
+    .mc-wrap { padding: 60px 20px 80px; }
+  }
+  .mc-info-block { margin-bottom: 40px; }
+  .mc-info-block h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 10px;
+    opacity: 0.6;
+  }
+  .mc-info-block p, .mc-info-block a {
+    font-size: 1.5rem;
+    line-height: 1.7;
+    margin: 0;
+    color: #1A2E1A;
+    text-decoration: none;
+  }
+  .mc-info-block a:hover { text-decoration: underline; }
+
+  .mc-form { display: flex; flex-direction: column; gap: 20px; }
+  .mc-field { display: flex; flex-direction: column; gap: 8px; }
+  .mc-field label { font-size: 1.2rem; font-weight: 500; opacity: 0.7; }
+  .mc-field input,
+  .mc-field textarea {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+    padding: 14px 18px;
+    border: 1px solid rgba(26,46,26,0.2);
+    border-radius: 6px;
+    background: #fff;
+    color: #1A2E1A;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .mc-field input:focus,
+  .mc-field textarea:focus { border-color: #1A2E1A; }
+  .mc-field textarea { min-height: 160px; resize: vertical; }
+  .mc-btn {
+    background: #1A2E1A;
+    color: #F8F5F0;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    align-self: flex-start;
+  }
+  .mc-btn:hover { background: #2D4D2D; }
+  .mc-success {
+    background: #E8F5E9;
+    color: #2D4D2D;
+    padding: 16px 24px;
+    border-radius: 6px;
+    font-size: 1.4rem;
+    border: 1px solid rgba(26,46,26,0.15);
+  }
+{%- endstyle -%}
+
+{% if page.handle == 'contact' or page.handle == 'contacto' %}
+<div class="mc-wrap">
+  <div class="mc-hero">
+    <h1>Contáctanos</h1>
+    <p>{{ section.settings.subheading }}</p>
+  </div>
+
+  <div class="mc-grid">
+    <!-- Info Column -->
+    <div class="mc-info">
+      <div class="mc-info-block">
+        <h3>Email</h3>
+        <p><a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a></p>
+      </div>
+      {%- if section.settings.phone != blank -%}
+      <div class="mc-info-block">
+        <h3>Teléfono</h3>
+        <p><a href="tel:{{ section.settings.phone }}">{{ section.settings.phone }}</a></p>
+      </div>
+      {%- endif -%}
+      {%- if section.settings.address != blank -%}
+      <div class="mc-info-block">
+        <h3>Dirección</h3>
+        <p>{{ section.settings.address }}</p>
+      </div>
+      {%- endif -%}
+      <div class="mc-info-block">
+        <h3>Horario</h3>
+        <p>{{ section.settings.hours }}</p>
+      </div>
+    </div>
+
+    <!-- Form Column -->
+    <div>
+      {%- if form.posted_successfully? -%}
+        <div class="mc-success">
+          ¡Gracias por tu mensaje! Te responderemos en los próximos días.
+        </div>
+      {%- else -%}
+        {%- form 'contact', id: 'ContactForm' -%}
+          <div class="mc-form">
+            <div class="mc-field">
+              <label for="ContactForm-name">Nombre</label>
+              <input type="text" name="contact[name]" id="ContactForm-name" autocomplete="name"
+                value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+                placeholder="Tu nombre completo">
+            </div>
+            <div class="mc-field">
+              <label for="ContactForm-email">Email <span aria-hidden="true">*</span></label>
+              <input type="email" name="contact[email]" id="ContactForm-email" autocomplete="email"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                required placeholder="tu@email.com">
+            </div>
+            <div class="mc-field">
+              <label for="ContactForm-message">Mensaje <span aria-hidden="true">*</span></label>
+              <textarea name="contact[body]" id="ContactForm-message" rows="6"
+                required placeholder="¿En qué podemos ayudarte?">
+                {{- form.body -}}
+              </textarea>
+            </div>
+            <button type="submit" class="mc-btn">Enviar Mensaje</button>
+          </div>
+        {%- endform -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Minima Contact",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Contacto"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Escríbenos y te responderemos lo antes posible."
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "info@minimaorganics.com"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Teléfono"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "Dirección"
+    },
+    {
+      "type": "text",
+      "id": "hours",
+      "label": "Horario de atención",
+      "default": "Lunes a viernes, 9:00 – 18:00"
+    }
+  ],
+  "presets": [{ "name": "Minima Contact" }]
+}
+{% endschema %}

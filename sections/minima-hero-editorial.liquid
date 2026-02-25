@@ -1,45 +1,312 @@
 {%- style -%}
-  .minima-hero { background: #F8F5F0; padding: 60px 0; overflow: hidden; }
-  .minima-hero__inner { display: flex; align-items: center; max-width: 1260px; margin: 0 auto; padding: 0 32px; gap: 40px; }
-  .minima-hero__content { flex: 1; }
-  .minima-hero__eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; color: #4a7c59; letter-spacing: 0.15em; display: block; margin-bottom: 20px; }
-  .minima-hero__heading { font-family: 'Cormorant Garamond', serif; font-size: 52px; font-weight: 600; line-height: 1.1; color: #1A2E1A; margin: 0 0 24px; }
-  .minima-hero__heading em { font-style: italic; color: #4a7c59; }
-  .minima-hero__text { font-size: 16px; line-height: 1.7; color: #1A2E1A; opacity: 0.8; margin-bottom: 30px; }
-  .minima-hero__button { display: inline-block; background: #1A2E1A; color: #F8F5F0; padding: 15px 35px; text-decoration: none; font-size: 12px; font-weight: 600; text-transform: uppercase; border-radius: 4px; letter-spacing: 0.1em; }
-  .minima-hero__image-wrap { flex: 1; min-height: 400px; background: #F0ECE4; border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-  .minima-hero__image-wrap svg { width: 50%; opacity: 0.1; }
-  @media (max-width: 989px) {
-    .minima-hero__inner { flex-direction: column; text-align: center; }
-    .minima-hero__heading { font-size: 36px; }
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
+  /* ── Hero ── */
+  .mhe-section {
+    background: #F8F5F0;
+    padding: 72px 24px 0;
+    text-align: center;
+    overflow: hidden;
   }
+  .mhe-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 5.5vw, 5.2rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #1A2E1A;
+    max-width: 800px;
+    margin: 0 auto 56px;
+  }
+
+  /* ── Slider ── */
+  .mhe-slider-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 16px 16px 0 0;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: #F0EBE3;
+  }
+  @media (min-width: 860px) {
+    .mhe-slider-wrap { aspect-ratio: 3 / 2; }
+  }
+  .mhe-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+  }
+  .mhe-slide.active { opacity: 1; }
+  .mhe-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+  /* Arrow buttons */
+  .mhe-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(26,46,26,0.55);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+    backdrop-filter: blur(4px);
+  }
+  .mhe-arrow:hover {
+    background: rgba(26,46,26,0.9);
+    transform: translateY(-50%) scale(1.08);
+  }
+  .mhe-arrow--prev { left: 16px; }
+  .mhe-arrow--next { right: 16px; }
+  .mhe-arrow svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 2.2; }
+
+  /* Dots */
+  .mhe-dots {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+  .mhe-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+    border: none;
+    padding: 0;
+  }
+  .mhe-dot.active {
+    background: #fff;
+    transform: scale(1.3);
+  }
+
+  /* ── Brand description ── */
+  .mhe-desc {
+    background: #F8F5F0;
+    padding: 80px 24px 100px;
+    text-align: center;
+  }
+  .mhe-desc__inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .mhe-desc__text {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.4rem, 1.8vw, 1.7rem);
+    line-height: 1.85;
+    color: #1A2E1A;
+    opacity: 0.85;
+    margin: 0 0 32px;
+    white-space: pre-line;
+  }
+  .mhe-desc__pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 28px 0 44px;
+  }
+  .mhe-desc__pill {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #4a7c59;
+    background: rgba(74,124,89,0.1);
+    border-radius: 100px;
+    padding: 6px 16px;
+  }
+  .mhe-desc__btn {
+    display: inline-block;
+    background: #1A2E1A;
+    color: #F8F5F0;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 18px 44px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .mhe-desc__btn:hover { background: #2D4D2D; }
 {%- endstyle -%}
 
-<section class="minima-hero">
-  <div class="minima-hero__inner">
-    <div class="minima-hero__content">
-      <span class="minima-hero__eyebrow">{{ section.settings.eyebrow }}</span>
-      <h1 class="minima-hero__heading">{{ section.settings.heading }}</h1>
-      <div class="minima-hero__text">{{ section.settings.text }}</div>
-      <a href="/collections/all" class="minima-hero__button">{{ section.settings.button_label }}</a>
+{%- assign slides = section.settings.slide_1_image | append: '||' | append: section.settings.slide_2_image | append: '||' | append: section.settings.slide_3_image | split: '||' -%}
+
+<section class="mhe-section">
+  <h1 class="mhe-headline">{{ section.settings.headline }}</h1>
+
+  <div class="mhe-slider-wrap" id="mhe-slider">
+    {%- assign slide_images = "" -%}
+
+    {%- comment %} Slide 1 {%- endcomment -%}
+    <div class="mhe-slide active" data-index="0">
+      <img src="{{ section.settings.slide_1_image }}" alt="{{ section.settings.slide_1_alt | default: 'Cepillos de dientes Mínima Organics' }}" loading="eager" fetchpriority="high">
     </div>
-    <div class="minima-hero__image-wrap">
-      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- comment %} Slide 2 {%- endcomment -%}
+    <div class="mhe-slide" data-index="1">
+      <img src="{{ section.settings.slide_2_image }}" alt="{{ section.settings.slide_2_alt | default: 'Pasta de dientes menta bio Mínima Organics' }}" loading="lazy">
+    </div>
+    {%- comment %} Slide 3 {%- endcomment -%}
+    <div class="mhe-slide" data-index="2">
+      <img src="{{ section.settings.slide_3_image }}" alt="{{ section.settings.slide_3_alt | default: 'Higiene bucal Mínima Organics' }}" loading="lazy">
+    </div>
+
+    <button class="mhe-arrow mhe-arrow--prev" id="mhe-prev" aria-label="Anterior">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="mhe-arrow mhe-arrow--next" id="mhe-next" aria-label="Siguiente">
+      <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+    </button>
+
+    <div class="mhe-dots">
+      <button class="mhe-dot active" data-target="0" aria-label="Slide 1"></button>
+      <button class="mhe-dot" data-target="1" aria-label="Slide 2"></button>
+      <button class="mhe-dot" data-target="2" aria-label="Slide 3"></button>
     </div>
   </div>
 </section>
 
+<!-- Brand description block -->
+<div class="mhe-desc">
+  <div class="mhe-desc__inner">
+    <p class="mhe-desc__text">{{ section.settings.description }}</p>
+    <div class="mhe-desc__pills">
+      {%- assign pills = section.settings.pills | split: ' • ' -%}
+      {%- for pill in pills -%}
+        {%- if pill != blank -%}
+          <span class="mhe-desc__pill">{{ pill | strip }}</span>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <a href="{{ section.settings.button_url }}" class="mhe-desc__btn">{{ section.settings.button_label }}</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var slides = document.querySelectorAll('#mhe-slider .mhe-slide');
+  var dots   = document.querySelectorAll('#mhe-slider .mhe-dot');
+  var current = 0;
+  var total   = slides.length;
+  var timer;
+
+  function goTo(idx) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (idx + total) % total;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function next() { goTo(current + 1); }
+
+  function start() { timer = setInterval(next, 4000); }
+  function stop()  { clearInterval(timer); }
+
+  dots.forEach(function(dot) {
+    dot.addEventListener('click', function() {
+      stop();
+      goTo(parseInt(dot.dataset.target));
+      start();
+    });
+  });
+
+  var prevBtn = document.getElementById('mhe-prev');
+  var nextBtn = document.getElementById('mhe-next');
+  if (prevBtn) prevBtn.addEventListener('click', function() { stop(); goTo(current - 1); start(); });
+  if (nextBtn) nextBtn.addEventListener('click', function() { stop(); goTo(current + 1); start(); });
+
+  start();
+})();
+</script>
+
 {% schema %}
 {
-  "name": "Hero Editorial",
+  "name": "Hero + Slider",
+  "tag": "section",
+  "class": "section",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "100% Natural · Vegano · Zero Waste" },
-    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "La revolución de la <em>higiene dental</em>" },
-    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>En Minima Organics creemos en una limpieza profunda sin plásticos ni tóxicos. Cuidamos de tu sonrisa y del planeta.</p>" },
-    { "type": "text", "id": "button_label", "label": "Button Label", "default": "Descubre la gama" }
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Titular principal",
+      "default": "La solución definitiva para eliminar el plástico de la higiene dental"
+    },
+    {
+      "type": "url",
+      "id": "slide_1_image",
+      "label": "Imagen slide 1 (URL)"
+    },
+    {
+      "type": "text",
+      "id": "slide_1_alt",
+      "label": "Alt slide 1"
+    },
+    {
+      "type": "url",
+      "id": "slide_2_image",
+      "label": "Imagen slide 2 (URL)"
+    },
+    {
+      "type": "text",
+      "id": "slide_2_alt",
+      "label": "Alt slide 2"
+    },
+    {
+      "type": "url",
+      "id": "slide_3_image",
+      "label": "Imagen slide 3 (URL)"
+    },
+    {
+      "type": "text",
+      "id": "slide_3_alt",
+      "label": "Alt slide 3"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Texto descripción marca",
+      "default": "Mínima Organics es la manera sostenible, natural, sin tóxicos y libre plástico para remplazar la pasta dental que has usado toda la vida. El proyecto surge del cuestionamiento de como, que y porque consumimos. Tenemos el sueño de apoyar la transición a una vida más sostenible, apoyar la reforestación y generar trabajo justo."
+    },
+    {
+      "type": "text",
+      "id": "pills",
+      "label": "Etiquetas (separadas por •)",
+      "default": "Natural • Vegana • Zero waste • Hecha en España • Opciones con y sin flúor • Recambio en bolsa compostable • Disponible a granel"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto botón",
+      "default": "Descubre Mínima Organics"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "URL botón",
+      "default": "/collections/all"
+    }
   ],
-  "presets": [
-    { "name": "Hero Editorial" }
-  ]
+  "presets": [{ "name": "Hero + Slider" }]
 }
 {% endschema %}

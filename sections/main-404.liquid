@@ -38,7 +38,6 @@
       '/catalogo': '/collections/all',
       '/blog': '/blogs/news',
       '/dentistas': '/pages/dentistas',
-      '/contacto': '/pages/contacto',
       '/contact': '/pages/contacto',
       '/sobre': '/pages/sobre-nosotras',
       '/sobre-nosotras': '/pages/sobre-nosotras',
@@ -49,7 +48,8 @@
     };
 
     var redirectTo = redirectMap[pathname];
-    if (redirectTo && redirectTo !== pathname) {
+    // Safeguard: Do not redirect if we are already on the target path or if target is known to fail
+    if (redirectTo && redirectTo !== pathname && !window.location.href.includes(redirectTo)) {
       window.location.replace(redirectTo);
     }
   })();

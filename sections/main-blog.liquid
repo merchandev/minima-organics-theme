@@ -1,123 +1,295 @@
-{{ 'component-article-card.css' | asset_url | stylesheet_tag }}
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
-{{ 'section-main-blog.css' | asset_url | stylesheet_tag }}
-
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  .mb-wrap {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 60px 24px 120px;
+    font-family: 'Inter', sans-serif;
+  }
+  .mb-header {
+    margin-bottom: 48px;
+  }
+  .mb-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: #1A2E1A;
+    margin: 0 0 8px;
+  }
+  .mb-header p {
+    font-size: 1.4rem;
+    color: #1A2E1A;
+    opacity: 0.55;
+    margin: 0;
   }
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
+  /* 4-column square grid */
+  .mb-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
   }
+  @media (max-width: 1024px) {
+    .mb-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .mb-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .mb-wrap { padding: 40px 16px 80px; }
+  }
+
+  /* Square card */
+  .mb-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+  }
+  .mb-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+    text-decoration: none;
+    color: inherit;
+  }
+  .mb-card__image-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* 1:1 square */
+    overflow: hidden;
+    background: #EEE9E1;
+  }
+  .mb-card__image-wrap img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+  }
+  .mb-card:hover .mb-card__image-wrap img {
+    transform: scale(1.04);
+  }
+  .mb-card__no-image {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #EEE9E1 0%, #D8D0C4 100%);
+  }
+  .mb-card__no-image svg {
+    width: 40px; height: 40px;
+    opacity: 0.3;
+  }
+  .mb-card__body {
+    padding: 16px 18px 20px;
+  }
+  .mb-card__date {
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #1A2E1A;
+    opacity: 0.45;
+    margin: 0 0 8px;
+  }
+  .mb-card__leer-mas {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #1A2E1A;
+    border-bottom: 1.5px solid rgba(26,46,26,0.35);
+    padding-bottom: 1px;
+    transition: border-color 0.2s, opacity 0.2s;
+    opacity: 0.75;
+  }
+  .mb-card:hover .mb-card__leer-mas {
+    opacity: 1;
+    border-color: #1A2E1A;
+  }
+  .mb-card__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #1A2E1A;
+    margin: 0 0 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .mb-card__excerpt {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #1A2E1A;
+    opacity: 0.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+  }
+
+  /* Loader */
+  .mb-loader {
+    display: flex;
+    justify-content: center;
+    padding: 48px 0;
+    display: none;
+  }
+  .mb-loader.visible { display: flex; }
+  .mb-spinner {
+    width: 32px; height: 32px;
+    border: 3px solid rgba(26,46,26,0.15);
+    border-top-color: #1A2E1A;
+    border-radius: 50%;
+    animation: mbSpin 0.75s linear infinite;
+  }
+  @keyframes mbSpin { to { transform: rotate(360deg); } }
+
+  /* Sentinel (intersection observer target) */
+  .mb-sentinel { height: 1px; }
+
+  /* End message */
+  .mb-end {
+    text-align: center;
+    padding: 40px 0;
+    font-size: 1.2rem;
+    color: #1A2E1A;
+    opacity: 0.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: none;
+  }
+  .mb-end.visible { display: block; }
 {%- endstyle -%}
 
-{%- paginate blog.articles by 6 -%}
-  <div class="main-blog page-width section-{{ section.id }}-padding">
-    <h1 class="title--primary{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-      {{ blog.title | escape }}
-    </h1>
-
-    <div class="blog-articles {% if section.settings.layout == 'collage' %}blog-articles--collage{% endif %}">
-      {%- for article in blog.articles -%}
-        <div
-          class="blog-articles__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-          {% if settings.animations_reveal_on_scroll %}
-            data-cascade
-            style="--animation-order: {{ forloop.index }};"
-          {% endif %}
-        >
-          {%- render 'article-card',
-            article: article,
-            media_height: section.settings.image_height,
-            media_aspect_ratio: article.image.aspect_ratio,
-            show_image: section.settings.show_image,
-            show_date: section.settings.show_date,
-            show_author: section.settings.show_author,
-            show_excerpt: true
-          -%}
-        </div>
-      {%- endfor -%}
-    </div>
-
-    {%- if paginate.pages > 1 -%}
-      {%- render 'pagination', paginate: paginate -%}
-    {%- endif -%}
+{%- paginate blog.articles by 16 -%}
+<div class="mb-wrap">
+  <div class="mb-header">
+    <h1>{{ blog.title | escape }}</h1>
+    <p>{{ blog.articles_count }} artículos publicados</p>
   </div>
+
+  <div class="mb-grid" id="mb-grid">
+    {%- for article in blog.articles -%}
+      <a class="mb-card" href="{{ article.url }}">
+        <div class="mb-card__image-wrap">
+          {%- if article.image -%}
+            <img
+              srcset="{{ article.image | image_url: width: 400 }} 400w, {{ article.image | image_url: width: 600 }} 600w, {{ article.image | image_url: width: 800 }} 800w"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              src="{{ article.image | image_url: width: 600 }}"
+              alt="{{ article.image.alt | escape | default: article.title }}"
+              loading="lazy"
+              width="600"
+              height="600"
+            >
+          {%- else -%}
+            <div class="mb-card__no-image">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 16 5-5 4 4 3-3 6 6"/>
+              </svg>
+            </div>
+          {%- endif -%}
+        </div>
+        <div class="mb-card__body">
+          <p class="mb-card__date">{{ article.published_at | date: '%d %b %Y' }}</p>
+          <h2 class="mb-card__title">{{ article.title | escape }}</h2>
+          {%- if article.excerpt != blank -%}
+            <p class="mb-card__excerpt">{{ article.excerpt | strip_html }}</p>
+          {%- endif -%}
+          <span class="mb-card__leer-mas">Leer más →</span>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+
+  <div class="mb-loader" id="mb-loader"><div class="mb-spinner"></div></div>
+  <div class="mb-end" id="mb-end">— Fin del blog —</div>
+  <div class="mb-sentinel" id="mb-sentinel"></div>
+
+  {%- if paginate.next -%}
+    <span id="mb-next-url" data-url="{{ paginate.next.url }}" style="display:none"></span>
+  {%- endif -%}
+</div>
 {%- endpaginate -%}
+
+<script>
+(function() {
+  var grid = document.getElementById('mb-grid');
+  var loader = document.getElementById('mb-loader');
+  var sentinel = document.getElementById('mb-sentinel');
+  var endMsg = document.getElementById('mb-end');
+  var nextUrlEl = document.getElementById('mb-next-url');
+
+  if (!grid || !sentinel) return;
+
+  var nextUrl = nextUrlEl ? nextUrlEl.dataset.url : null;
+  var loading = false;
+
+  function loadMore() {
+    if (!nextUrl || loading) return;
+    loading = true;
+    loader.classList.add('visible');
+
+    fetch(nextUrl)
+      .then(function(r) { return r.text(); })
+      .then(function(html) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+        var newCards = doc.querySelectorAll('.mb-grid .mb-card');
+        newCards.forEach(function(card) {
+          grid.appendChild(card.cloneNode(true));
+        });
+
+        // Update next URL
+        var newNextEl = doc.getElementById('mb-next-url');
+        nextUrl = newNextEl ? newNextEl.dataset.url : null;
+
+        loading = false;
+        loader.classList.remove('visible');
+
+        if (!nextUrl) {
+          endMsg.classList.add('visible');
+          observer.disconnect();
+        }
+      })
+      .catch(function() {
+        loading = false;
+        loader.classList.remove('visible');
+      });
+  }
+
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      loadMore();
+    }
+  }, { rootMargin: '200px' });
+
+  if (nextUrl) {
+    observer.observe(sentinel);
+  } else {
+    if (grid.children.length > 0) {
+      endMsg.classList.add('visible');
+    }
+  }
+})();
+</script>
 
 {% schema %}
 {
-  "name": "t:sections.main-blog.name",
+  "name": "Blog",
   "tag": "section",
   "class": "section",
   "settings": [
-    {
-      "type": "select",
-      "id": "layout",
-      "options": [
-        {
-          "value": "grid",
-          "label": "t:sections.main-blog.settings.layout.options__1.label"
-        },
-        {
-          "value": "collage",
-          "label": "t:sections.main-blog.settings.layout.options__2.label"
-        }
-      ],
-      "default": "collage",
-      "label": "t:sections.main-blog.settings.layout.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_image",
-      "default": true,
-      "label": "t:sections.main-blog.settings.show_image.label"
-    },
-    {
-      "type": "select",
-      "id": "image_height",
-      "options": [
-        {
-          "value": "adapt",
-          "label": "t:sections.main-blog.settings.image_height.options__1.label"
-        },
-        {
-          "value": "small",
-          "label": "t:sections.main-blog.settings.image_height.options__2.label"
-        },
-        {
-          "value": "medium",
-          "label": "t:sections.main-blog.settings.image_height.options__3.label"
-        },
-        {
-          "value": "large",
-          "label": "t:sections.main-blog.settings.image_height.options__4.label"
-        }
-      ],
-      "default": "medium",
-      "label": "t:sections.main-blog.settings.image_height.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_date",
-      "default": true,
-      "label": "t:sections.main-blog.settings.show_date.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_author",
-      "default": false,
-      "label": "t:sections.main-blog.settings.show_author.label"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
-    },
     {
       "type": "range",
       "id": "padding_top",
@@ -125,7 +297,7 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
+      "label": "Padding superior",
       "default": 36
     },
     {
@@ -135,7 +307,7 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
+      "label": "Padding inferior",
       "default": 36
     }
   ]

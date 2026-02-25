@@ -247,9 +247,11 @@
           <div class="flourist-thumbs small-hide">
             {%- for media in product.media -%}
               <div class="flourist-thumb-item">
-                <img src="{{ media.preview_image | image_url: width: 150 }}" 
+                <img src="{{ media.preview_image | image_url: width: 150 }}"
+                     data-src="{{ media.preview_image | image_url: width: 1200 }}"
                      class="{% if forloop.first %}is-active{% endif %}"
-                     alt="{{ media.alt | escape }}">
+                     alt="{{ media.alt | escape }}"
+                     data-thumb-index="{{ forloop.index0 }}">
               </div>
             {%- endfor -%}
           </div>
@@ -262,11 +264,11 @@
 
     <div class="flourist-info-col">
       <div class="method-badges">
-        <span class="method-badge">Store Pickup</span>
-        <span class="method-badge">Local Delivery</span>
-        <span class="method-badge">Shipping</span>
+        <span class="method-badge">Recogida en tienda</span>
+        <span class="method-badge">Entrega local</span>
+        <span class="method-badge">Envío</span>
       </div>
-      <div class="stars-row">★★★★★ <span>111 reviews</span></div>
+      <div class="stars-row">★★★★★ <span>111 reseñas</span></div>
 
       <div class="flourist-title"><h1>{{ product.title }}</h1></div>
       <div class="flourist-price-wrap" style="margin-bottom: 20px;">
@@ -276,8 +278,9 @@
       {%- form 'product', product, id: 'product-form', class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
         
+        {%- unless product.variants.size == 1 and product.variants.first.title == 'Default Title' -%}
         <div class="flourist-variants">
-          <label class="flourist-qty-label">Size: {{ product.selected_or_first_available_variant.title }}</label>
+          <label class="flourist-qty-label">Talla: {{ product.selected_or_first_available_variant.title }}</label>
           <div class="variant-boxes">
             {%- for variant in product.variants -%}
               <div class="v-box {% if variant == product.selected_or_first_available_variant %}active{% endif %}" data-variant-id="{{ variant.id }}">
@@ -286,9 +289,10 @@
             {%- endfor -%}
           </div>
         </div>
+        {%- endunless -%}
 
         <div class="flourist-qty-wrap">
-          <label class="flourist-qty-label" for="Quantity-{{ section.id }}">Quantity</label>
+          <label class="flourist-qty-label" for="Quantity-{{ section.id }}">Cantidad</label>
           <div class="flourist-qty">
             <button type="button" onclick="this.parentNode.querySelector('input').stepDown()">-</button>
             <input type="number" name="quantity" id="Quantity-{{ section.id }}" value="1" min="1">
@@ -297,15 +301,15 @@
         </div>
 
         <button type="submit" name="add" class="flourist-cta">
-          <span>Add to Cart</span>
+          <span>Añadir al carro</span>
           <span>• {{ product.selected_or_first_available_variant.price | money }}</span>
         </button>
       {%- endform -%}
 
       <div class="flourist-tabs">
-        <div class="flourist-tab active">Description</div>
-        <div class="flourist-tab">Source</div>
-        <div class="flourist-tab">Details</div>
+        <div class="flourist-tab active">Descripción</div>
+        <div class="flourist-tab">Ingredientes</div>
+        <div class="flourist-tab">Detalles</div>
       </div>
       <div class="rte" style="margin-top: 30px; font-size: 14px; line-height: 1.7;">
         {{ product.description }}
@@ -315,14 +319,27 @@
 </product-info>
 
 <script>
-  // Simple variant switching logic for this custom section
-  document.querySelectorAll('.v-box').forEach(box => {
+  // Thumbnail gallery switcher
+  (function() {
+    var thumbImgs = document.querySelectorAll('.flourist-thumb-item img');
+    var mainImg   = document.querySelector('.flourist-main-img img');
+    thumbImgs.forEach(function(thumb) {
+      thumb.addEventListener('click', function() {
+        if (!mainImg || !this.dataset.src) return;
+        mainImg.src = this.dataset.src;
+        thumbImgs.forEach(function(t) { t.classList.remove('is-active'); });
+        this.classList.add('is-active');
+      });
+    });
+  })();
+
+  // Variant switching
+  document.querySelectorAll('.v-box').forEach(function(box) {
     box.addEventListener('click', function() {
-      const variantId = this.dataset.variantId;
+      var variantId = this.dataset.variantId;
       document.querySelector('input[name="id"]').value = variantId;
-      document.querySelectorAll('.v-box').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.v-box').forEach(function(b) { b.classList.remove('active'); });
       this.classList.add('active');
-      // Update price text in button if needed (simplified for this recovery task)
     });
   });
 </script>
