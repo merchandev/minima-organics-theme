@@ -1,0 +1,515 @@
+{%- style -%}
+  .dentistas-page {
+    background-color: #F8F5F0;
+    color: #1A2E1A;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.7;
+  }
+
+  /* ─── Hero ────────────────────────────────────── */
+  .dentistas-hero {
+    position: relative;
+    height: 42vh;
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #1A2E1A;
+  }
+  .dentistas-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(26,46,26,0.92) 0%, rgba(74,124,89,0.75) 100%);
+    z-index: 1;
+  }
+  .dentistas-hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 24px;
+    max-width: 800px;
+  }
+  .dentistas-hero__eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(248,245,240,0.65);
+    margin-bottom: 16px;
+  }
+  .dentistas-hero__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(44px, 7vw, 90px);
+    font-weight: 500;
+    color: #F8F5F0;
+    margin: 0 0 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+    animation: fadeInUp 1s ease forwards;
+  }
+  .dentistas-hero__desc {
+    font-size: clamp(14px, 1.8vw, 17px);
+    color: rgba(248,245,240,0.82);
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.75;
+    animation: fadeInUp 1.2s ease forwards;
+  }
+
+  /* ─── Layout ──────────────────────────────────── */
+  .dentistas-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 72px 32px 96px;
+  }
+
+  /* ─── City Section ────────────────────────────── */
+  .dentistas-city {
+    margin-bottom: 72px;
+  }
+  .dentistas-city:last-child {
+    margin-bottom: 0;
+  }
+  .dentistas-city__header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+  .dentistas-city__line {
+    flex: 1;
+    height: 1px;
+    background: rgba(26,46,26,0.15);
+  }
+  .dentistas-city__name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #1A2E1A;
+    white-space: nowrap;
+    margin: 0;
+  }
+  .dentistas-city__icon {
+    width: 28px;
+    height: 28px;
+    color: #4a7c59;
+    flex-shrink: 0;
+  }
+
+  /* ─── Card Grid ───────────────────────────────── */
+  .dentistas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 28px;
+  }
+
+  /* ─── Clinic Card ─────────────────────────────── */
+  .dentista-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px 28px 28px;
+    box-shadow: 0 4px 20px rgba(26,46,26,0.06);
+    border: 1px solid rgba(26,46,26,0.07);
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .dentista-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(26,46,26,0.12);
+  }
+
+  .dentista-card__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(74,124,89,0.1);
+    color: #4a7c59;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    width: fit-content;
+  }
+  .dentista-card__badge svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .dentista-card__name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1A2E1A;
+    margin: 0 0 4px;
+    line-height: 1.25;
+  }
+  .dentista-card__specialty {
+    font-size: 13px;
+    color: #4a7c59;
+    font-style: italic;
+    margin: 0 0 20px;
+  }
+
+  .dentista-card__divider {
+    height: 1px;
+    background: rgba(26,46,26,0.08);
+    margin-bottom: 20px;
+  }
+
+  .dentista-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+  .dentista-card__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13.5px;
+    color: rgba(26,46,26,0.75);
+  }
+  .dentista-card__row svg {
+    width: 15px;
+    height: 15px;
+    color: #4a7c59;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .dentista-card__actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .dentista-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    border: none;
+  }
+  .dentista-btn--primary {
+    background: #1A2E1A;
+    color: #F8F5F0;
+  }
+  .dentista-btn--primary:hover {
+    background: #4a7c59;
+    color: #fff;
+  }
+  .dentista-btn--outline {
+    background: transparent;
+    color: #1A2E1A;
+    border: 1.5px solid rgba(26,46,26,0.2);
+  }
+  .dentista-btn--outline:hover {
+    border-color: #4a7c59;
+    color: #4a7c59;
+  }
+  .dentista-btn svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  /* ─── Intro Text ──────────────────────────────── */
+  .dentistas-intro {
+    max-width: 700px;
+    margin: 0 auto 64px;
+    text-align: center;
+  }
+  .dentistas-intro p {
+    font-size: 16px;
+    color: rgba(26,46,26,0.75);
+    line-height: 1.85;
+  }
+  .dentistas-intro__label {
+    display: inline-block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #4a7c59;
+    margin-bottom: 12px;
+  }
+
+  /* ─── Animations ──────────────────────────────── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── Responsive ──────────────────────────────── */
+  @media (max-width: 749px) {
+    .dentistas-container { padding: 48px 20px 72px; }
+    .dentistas-grid { grid-template-columns: 1fr; }
+    .dentistas-city__header { gap: 14px; }
+  }
+{%- endstyle -%}
+
+<div class="dentistas-page">
+
+  <!-- Hero -->
+  <section class="dentistas-hero">
+    <div class="dentistas-hero__overlay"></div>
+    <div class="dentistas-hero__content">
+      <span class="dentistas-hero__eyebrow">Salud &amp; Sostenibilidad</span>
+      <h1 class="dentistas-hero__title">Directorio de Dentistas</h1>
+      <p class="dentistas-hero__desc">
+        En un mundo cada vez más consciente de los desafíos del medioambiente, los profesionales de la salud dental también adoptan prácticas más sostenibles.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="dentistas-container">
+
+    <!-- Intro -->
+    <div class="dentistas-intro">
+      <span class="dentistas-intro__label">Profesionales recomendados</span>
+      <p>
+        Aquí os presentamos clínicas y dentistas interesados en ofrecer opciones más sostenibles a sus pacientes. Una higiene bucodental consciente, para cuidar de ti y del planeta.
+      </p>
+    </div>
+
+    <!-- ── MADRID ─────────────────────────────────── -->
+    <div class="dentistas-city">
+      <div class="dentistas-city__header">
+        <div class="dentistas-city__line"></div>
+        <svg class="dentistas-city__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+        <h2 class="dentistas-city__name">Madrid</h2>
+        <div class="dentistas-city__line"></div>
+      </div>
+
+      <div class="dentistas-grid">
+
+        <!-- CREA Valdemoro -->
+        <article class="dentista-card">
+          <span class="dentista-card__badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Dentista Infantil
+          </span>
+          <h3 class="dentista-card__name">CREA Valdemoro</h3>
+          <p class="dentista-card__specialty">Dentista infantil en Valdemoro</p>
+          <div class="dentista-card__divider"></div>
+          <div class="dentista-card__info">
+            <div class="dentista-card__row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/>
+              </svg>
+              <span>C. Ana Frank, 9, 28342 Valdemoro, Madrid</span>
+            </div>
+            <div class="dentista-card__row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.9 19.9 0 0 1 3.08 5.18 2 2 0 0 1 5.09 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L9.18 10.7a16 16 0 0 0 6.1 6.1l1.06-1.06a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              <span>911 74 47 20</span>
+            </div>
+          </div>
+          <div class="dentista-card__actions">
+            <a href="tel:911744720" class="dentista-btn dentista-btn--primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.9 19.9 0 0 1 3.08 5.18 2 2 0 0 1 5.09 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L9.18 10.7a16 16 0 0 0 6.1 6.1l1.06-1.06a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/></svg>
+              Llamar
+            </a>
+            <a href="https://www.instagram.com/creavaldemoro" target="_blank" rel="noopener" class="dentista-btn dentista-btn--outline">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              Instagram
+            </a>
+          </div>
+        </article>
+
+        <!-- Clínica Smile Las Rosas -->
+        <article class="dentista-card">
+          <span class="dentista-card__badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Odontopediatría
+          </span>
+          <h3 class="dentista-card__name">Clínica Dental Smile Las Rosas</h3>
+          <p class="dentista-card__specialty">Dra. Mercedes Viñas</p>
+          <div class="dentista-card__divider"></div>
+          <div class="dentista-card__info">
+            <div class="dentista-card__row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/>
+              </svg>
+              <span>Calle de Nuremberg, n.3, 28032, Madrid</span>
+            </div>
+            <div class="dentista-card__row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.9 19.9 0 0 1 3.08 5.18 2 2 0 0 1 5.09 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L9.18 10.7a16 16 0 0 0 6.1 6.1l1.06-1.06a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              <span>91 313 34 85</span>
+            </div>
+          </div>
+          <div class="dentista-card__actions">
+            <a href="tel:913133485" class="dentista-btn dentista-btn--primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.9 19.9 0 0 1 3.08 5.18 2 2 0 0 1 5.09 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L9.18 10.7a16 16 0 0 0 6.1 6.1l1.06-1.06a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/></svg>
+              Llamar
+            </a>
+            <a href="https://www.instagram.com/diario_de_odontopediatria" target="_blank" rel="noopener" class="dentista-btn dentista-btn--outline">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              Instagram
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- ── SEVILLA ─────────────────────────────────── -->
+    <div class="dentistas-city">
+      <div class="dentistas-city__header">
+        <div class="dentistas-city__line"></div>
+        <svg class="dentistas-city__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+        <h2 class="dentistas-city__name">Sevilla</h2>
+        <div class="dentistas-city__line"></div>
+      </div>
+
+      <div class="dentistas-grid">
+
+        <!-- Instituto Dental Lebrón -->
+        <article class="dentista-card">
+          <span class="dentista-card__badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Clínica Dental
+          </span>
+          <h3 class="dentista-card__name">Instituto Dental Lebrón</h3>
+          <p class="dentista-card__specialty">Dr. Carlos Gómez Lebrón</p>
+          <div class="dentista-card__divider"></div>
+          <div class="dentista-card__info">
+            <div class="dentista-card__row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/>
+              </svg>
+              <span>Avenida Kansas City 32B, 1 A, 41007 Sevilla</span>
+            </div>
+            <div class="dentista-card__row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.9 19.9 0 0 1 3.08 5.18 2 2 0 0 1 5.09 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L9.18 10.7a16 16 0 0 0 6.1 6.1l1.06-1.06a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              <span>954 98 00 48</span>
+            </div>
+          </div>
+          <div class="dentista-card__actions">
+            <a href="tel:954980048" class="dentista-btn dentista-btn--primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.9 19.9 0 0 1 3.08 5.18 2 2 0 0 1 5.09 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L9.18 10.7a16 16 0 0 0 6.1 6.1l1.06-1.06a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/></svg>
+              Llamar
+            </a>
+            <a href="https://www.instagram.com/institutodentallebron" target="_blank" rel="noopener" class="dentista-btn dentista-btn--outline">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              Instagram
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- ── VALENCIA ─────────────────────────────────── -->
+    <div class="dentistas-city">
+      <div class="dentistas-city__header">
+        <div class="dentistas-city__line"></div>
+        <svg class="dentistas-city__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+        <h2 class="dentistas-city__name">Valencia</h2>
+        <div class="dentistas-city__line"></div>
+      </div>
+
+      <div class="dentistas-grid">
+
+        <!-- Dra. Isabel Catalán -->
+        <article class="dentista-card">
+          <span class="dentista-card__badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Odontopediatra
+          </span>
+          <h3 class="dentista-card__name">Dra. Isabel Catalán Campos</h3>
+          <p class="dentista-card__specialty">Odontopediatra</p>
+          <div class="dentista-card__divider"></div>
+          <div class="dentista-card__info">
+            <div class="dentista-card__row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              <span>@odontopediatra_isa</span>
+            </div>
+          </div>
+          <div class="dentista-card__actions">
+            <a href="https://www.instagram.com/odontopediatra_isa" target="_blank" rel="noopener" class="dentista-btn dentista-btn--primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              Instagram
+            </a>
+          </div>
+        </article>
+
+        <!-- Clínica Modest Revert -->
+        <article class="dentista-card">
+          <span class="dentista-card__badge">
+            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+            Clínica Dental
+          </span>
+          <h3 class="dentista-card__name">Clínica Modest Revert i Bravo</h3>
+          <p class="dentista-card__specialty">Clínica dental en Valencia</p>
+          <div class="dentista-card__divider"></div>
+          <div class="dentista-card__info">
+            <div class="dentista-card__row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/>
+              </svg>
+              <span>Calle en Guillem Ferrer 12 bajo, Valencia, 46009</span>
+            </div>
+            <div class="dentista-card__row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.9 19.9 0 0 1 3.08 5.18 2 2 0 0 1 5.09 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L9.18 10.7a16 16 0 0 0 6.1 6.1l1.06-1.06a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              <span>944 02 87 69</span>
+            </div>
+          </div>
+          <div class="dentista-card__actions">
+            <a href="tel:944028769" class="dentista-btn dentista-btn--primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.9 19.9 0 0 1 3.08 5.18 2 2 0 0 1 5.09 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L9.18 10.7a16 16 0 0 0 6.1 6.1l1.06-1.06a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/></svg>
+              Llamar
+            </a>
+            <a href="https://www.instagram.com/clinicarevertibravo" target="_blank" rel="noopener" class="dentista-btn dentista-btn--outline">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              Instagram
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Directorio Dentistas",
+  "settings": [],
+  "presets": [{ "name": "Directorio Dentistas" }]
+}
+{% endschema %}
