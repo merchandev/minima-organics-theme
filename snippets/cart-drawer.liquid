@@ -15,6 +15,43 @@
   .drawer {
     visibility: hidden;
   }
+  .cart-drawer .drawer__inner {
+    background: #F8F5F0 !important;
+    border-left: 1px solid rgba(26,46,26,0.1) !important;
+  }
+  .cart-drawer .drawer__heading {
+    font-family: 'Cormorant Garamond', serif !important;
+    font-size: 2.8rem !important;
+    color: #1A2E1A !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.02em !important;
+  }
+  .cart-drawer .cart-item__name {
+    font-family: 'Cormorant Garamond', serif !important;
+    font-size: 1.8rem !important;
+    color: #1A2E1A !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+  }
+  .cart-drawer .product-option, 
+  .cart-drawer .totals__total,
+  .cart-drawer .totals__total-value,
+  .cart-drawer .tax-note {
+    font-family: 'Inter', sans-serif !important;
+    color: #1A2E1A !important;
+    opacity: 0.9 !important;
+  }
+  .cart-drawer .cart__checkout-button {
+    background: #1A2E1A !important;
+    color: #F8F5F0 !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 1.2rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    border-radius: 4px !important;
+    padding: 1.5rem !important;
+    width: 100% !important;
+  }
 </style>
 
 <cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}">

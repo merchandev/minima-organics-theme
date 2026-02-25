@@ -1,272 +1,350 @@
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  .about-story {
+    background-color: #F8F5F0;
+    color: #1A2E1A;
+    line-height: 1.8;
+    font-family: 'Inter', sans-serif;
+    padding-bottom: 80px;
   }
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
+  /* Modern Hero Section */
+  .about-hero {
+    position: relative;
+    height: 50vh;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #000;
+  }
+  .about-hero__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .about-hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(26, 46, 26, 0.3);
+    transition: background 0.5s ease;
+    z-index: 1;
+  }
+  .about-hero:hover .about-hero__overlay {
+    background: rgba(26, 46, 26, 0.6);
+  }
+  .about-hero:hover .about-hero__bg {
+    transform: scale(1.05);
+  }
+  .about-hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #FFFFFF;
+    max-width: 800px;
+    padding: 0 20px;
+  }
+  .about-hero__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(48px, 8vw, 100px);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    margin: 0;
+    text-transform: uppercase;
+    line-height: 1;
+    color: #FFFFFF !important;
+    text-shadow: 6px 6px 15px rgba(26, 46, 26, 0.9);
+    animation: fadeInUp 1.2s ease forwards;
+  }
+
+  /* Layout Sections */
+  .about-story__section {
+    padding: 100px 0;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  .about-story__video-box {
+    max-width: 1000px;
+    margin: -60px auto 100px;
+    position: relative;
+    z-index: 3;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    background: #000;
+  }
+  .about-story__video-wrap {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+  }
+  .about-story__video-wrap iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* High-Fidelity Editorial Grid */
+  .editorial-brand-intro {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .editorial-brand-intro h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 64px);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #1A2E1A;
+    margin: 0;
+  }
+
+  /* Centered Problem Block */
+  .block-problem-centered {
+    max-width: 700px;
+    margin: 0 auto 100px;
+    text-align: center;
+  }
+  .block-problem-centered .editorial-label {
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Side-by-Side Solution and Image Grid */
+  .solution-image-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* The Solution Block - Highlighted focal point */
+  .block-solution-highlight {
+    background: rgba(26, 46, 26, 0.03);
+    padding: 60px;
+    border-left: 2px solid rgba(26, 46, 26, 0.1);
+    border-radius: 0 12px 12px 0;
+    box-shadow: 10px 10px 30px rgba(26, 46, 26, 0.02);
+  }
+
+  .editorial-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: #1A2E1A;
+    font-style: italic;
+    margin-bottom: 24px;
+    display: block;
+  }
+
+  .editorial-label--highlight {
+    font-size: 42px;
+    font-weight: 500;
+    color: #1A2E1A;
+    margin-bottom: 32px;
+    text-align: left;
+  }
+
+  .editorial-text p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #1A2E1A;
+    opacity: 0.85;
+    margin-bottom: 24px;
+  }
+
+  .block-solution-highlight p {
+    font-size: 19px;
+    font-weight: 400;
+    opacity: 1;
+    text-align: left;
+  }
+
+  .editorial-portrait-tall {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 30px 30px 60px rgba(0,0,0,0.1);
+    background: #EEE;
+  }
+  .editorial-portrait-tall img {
+    width: 100%;
+    display: block;
+    height: auto;
+    object-fit: cover;
+  }
+
+  /* Founders/Nosotras Section */
+  .section-nosotras {
+    background-color: #F3F0EB;
+    padding: 120px 0;
+  }
+  .nosotras-grid {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .nosotras-media {
+    flex: 0 0 45%;
+  }
+  .nosotras-content {
+    flex: 1;
+  }
+  .nosotras-image {
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  }
+  .nosotras-image img { width: 100%; display: block; }
+
+  /* Purpose Section */
+  .values-section {
+    background-color: #1A2E1A;
+    color: #F8F5F0;
+    padding: 120px 32px;
+  }
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 60px;
+    max-width: 1200px;
+    margin: 60px auto 0;
+  }
+  .value-card h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: #4a7c59;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .value-card p {
+    opacity: 0.8;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 989px) {
+    .solution-image-grid { grid-template-columns: 1fr; }
+    .editorial-media { order: -1; margin-bottom: 60px; }
+    .nosotras-grid { flex-direction: column; text-align: center; }
+    .nosotras-media { flex: 0 0 100%; }
+    .about-story__section { padding: 60px 24px; }
+    .block-solution-highlight { padding: 40px; }
   }
 {%- endstyle -%}
 
-<section id="sobre-nosotras" class="minima-about-page color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
-  <div class="page-width">
-    <div class="minima-about-page__hero">
-      <div class="minima-about-page__hero-media">
-        {%- if section.settings.hero_image != blank -%}
-          {%- assign hero_height = section.settings.hero_image.width | divided_by: section.settings.hero_image.aspect_ratio -%}
-          {{
-            section.settings.hero_image
-            | image_url: width: 1200
-            | image_tag:
-              loading: 'lazy',
-              widths: '400, 700, 900, 1200',
-              sizes: '(min-width: 990px) 46vw, 100vw',
-              class: 'minima-about-page__image',
-              height: hero_height,
-              alt: section.settings.hero_image.alt
-          }}
-        {%- elsif section.settings.hero_image_external != blank -%}
-          {% comment %}theme-check-disable RemoteAsset{% endcomment %}
-          <img
-            src="{{ section.settings.hero_image_external | escape }}"
-            alt="{{ section.settings.hero_heading | escape }}"
-            loading="lazy"
-            class="minima-about-page__image"
-          >
-          {% comment %}theme-check-enable RemoteAsset{% endcomment %}
-        {%- endif -%}
-
-        {%- if section.settings.video_url != blank -%}
-          <div class="minima-about-page__video-wrap">
-            {%- if section.settings.video_url.type == 'youtube' -%}
-              <iframe
-                src="https://www.youtube-nocookie.com/embed/{{ section.settings.video_url.id }}"
-                title="{{ section.settings.video_title | escape }}"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-              ></iframe>
-            {%- elsif section.settings.video_url.type == 'vimeo' -%}
-              <iframe
-                src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}"
-                title="{{ section.settings.video_title | escape }}"
-                loading="lazy"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowfullscreen
-              ></iframe>
-            {%- endif -%}
-          </div>
-        {%- endif -%}
-      </div>
-
-      <div class="minima-about-page__hero-content">
-        <h1 class="minima-about-page__heading">{{ section.settings.hero_heading }}</h1>
-        <div class="minima-about-page__text rte">
-          {{ section.settings.hero_text }}
-        </div>
-      </div>
+<div class="about-story">
+  <!-- Hero -->
+  <section class="about-hero">
+    <img src="https://cdn.shopify.com/s/files/1/0979/1635/4944/files/minima_organics_higiene_oral.webp?v=1771975798" class="about-hero__bg" alt="Higiene Oral" loading="eager">
+    <div class="about-hero__overlay"></div>
+    <div class="about-hero__content">
+      <h1 class="about-hero__title">Sobre nosotras</h1>
     </div>
+  </section>
 
-    <div class="minima-about-page__split">
-      <div class="minima-about-page__split-content">
-        <h2 class="minima-about-page__split-title">{{ section.settings.story_heading }}</h2>
-        <div class="minima-about-page__text rte">
-          {{ section.settings.story_text }}
-        </div>
-      </div>
-      <div class="minima-about-page__split-media">
-        {%- if section.settings.story_image != blank -%}
-          {%- assign story_height = section.settings.story_image.width | divided_by: section.settings.story_image.aspect_ratio -%}
-          {{
-            section.settings.story_image
-            | image_url: width: 1100
-            | image_tag:
-              loading: 'lazy',
-              widths: '400, 700, 900, 1100',
-              sizes: '(min-width: 990px) 42vw, 100vw',
-              class: 'minima-about-page__image',
-              height: story_height,
-              alt: section.settings.story_image.alt
-          }}
-        {%- elsif section.settings.story_image_external != blank -%}
-          {% comment %}theme-check-disable RemoteAsset{% endcomment %}
-          <img
-            src="{{ section.settings.story_image_external | escape }}"
-            alt="{{ section.settings.story_heading | escape }}"
-            loading="lazy"
-            class="minima-about-page__image"
-          >
-          {% comment %}theme-check-enable RemoteAsset{% endcomment %}
-        {%- endif -%}
-      </div>
-    </div>
-
-    <div class="minima-about-page__split">
-      <div class="minima-about-page__split-content">
-        <h2 class="minima-about-page__split-title">{{ section.settings.values_heading }}</h2>
-        <div class="minima-about-page__text rte">
-          {{ section.settings.values_text }}
-        </div>
-      </div>
-      <div class="minima-about-page__split-media">
-        {%- if section.settings.values_image != blank -%}
-          {%- assign values_height = section.settings.values_image.width | divided_by: section.settings.values_image.aspect_ratio -%}
-          {{
-            section.settings.values_image
-            | image_url: width: 1100
-            | image_tag:
-              loading: 'lazy',
-              widths: '400, 700, 900, 1100',
-              sizes: '(min-width: 990px) 42vw, 100vw',
-              class: 'minima-about-page__image',
-              height: values_height,
-              alt: section.settings.values_image.alt
-          }}
-        {%- elsif section.settings.values_image_external != blank -%}
-          {% comment %}theme-check-disable RemoteAsset{% endcomment %}
-          <img
-            src="{{ section.settings.values_image_external | escape }}"
-            alt="{{ section.settings.values_heading | escape }}"
-            loading="lazy"
-            class="minima-about-page__image"
-          >
-          {% comment %}theme-check-enable RemoteAsset{% endcomment %}
-        {%- endif -%}
-      </div>
+  <!-- Video -->
+  <div class="about-story__video-box">
+    <div class="about-story__video-wrap">
+      <iframe src="https://www.youtube.com/embed/Qei6e5e2b0k?autoplay=0&rel=0" title="Minima Organics Brand Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
   </div>
-</section>
+
+  <section class="about-story__section">
+    <div class="editorial-brand-intro">
+      <h2>HOLA, SOMOS MÍNIMA ORGANICS</h2>
+    </div>
+
+    <!-- Centered Problem Block -->
+    <div class="block-problem-centered editorial-text">
+      <span class="editorial-label">El problema</span>
+      <p>Millones de tubos de pasta de dientes y de cepillos acaban en basureros y tardan hasta 400 años en descomponerse.</p>
+      <p>Nuestra conciencia nos invita a apostar ecológico y sin plástico en la cosmética y en la cocina, pero cuando se trata de la higiene bucodental, seguimos comprando el mismo tubo de dentífrico de toda la vida sin cuestionarnos.</p>
+    </div>
+
+    <!-- Solution and Image side by side -->
+    <div class="solution-image-grid">
+      <div class="block-solution-highlight editorial-text">
+        <span class="editorial-label editorial-label--highlight">La solución</span>
+        <p>El dentífrico en polvo de Mínima Organics es 100% natural y orgánico. Su envase de aluminio se puede reutilizar infinitas veces y podrás comprar el producto en bolsas de papel compostable, disminuyendo la huella de carbono al simplificar su distribución. La pasta de dientes bio, el más nuevo lanzamiento de Mínima Organics, está disponible en la lata de aluminio.</p>
+        <p>A través de nuestro proyecto deseamos concienciar sobre higiene dental: la importancia de la alimentación, buenos hábitos y del cepillado. Para contribuir a que nuestras rutinas diarias sean respetuosas con el medio ambiente, presentamos también cepillos de bambú, hilo dental biodegradable y sin plástico, portacepillos de bambú y raspador de lengua de cobre.</p>
+      </div>
+
+      <div class="editorial-media">
+        <div class="editorial-portrait-tall">
+          <img src="https://cdn.shopify.com/s/files/1/0979/1635/4944/files/WhatsApp_Image_2020-07-21_at_23.50.20.webp?v=1771975798" loading="lazy" alt="Minima Organics Story Portrait">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-nosotras">
+    <div class="nosotras-grid">
+      <div class="nosotras-media">
+        <div class="nosotras-image">
+          <img src="https://cdn.shopify.com/s/files/1/0979/1635/4944/files/juliana_andrea_minima_organics.webp?v=1771975798" loading="lazy" alt="Juliana and Andrea">
+        </div>
+      </div>
+      <div class="nosotras-content editorial-text">
+        <h2 class="about-story__heading" style="font-family:'Cormorant Garamond', serif; font-size:48px; margin-bottom:32px;">Nosotras</h2>
+        <p>Somos Andrea y Juliana, una periodista brasileña y una economista mexicana que se conocieron en Barcelona trabajando en una empresa de educación hace 10 años. Compartimos el buen humor, muchos valores y manera de ver la vida.</p>
+        <p>A lo largo de estos años hemos hecho muchos cambios en nuestros hábitos de consumo: reduciendo el consumo de cosas materiales, para dar espacio a una vida más plena. Nuestra mayor ilusión compartir y contribuir a un cambio de vida más sostenible.</p>
+        <p>Apoyamos el minimalismo, el consumo consciente, el valor del tiempo, las relaciones y cooperaciones.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="values-section">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <h2 style="font-family:'Cormorant Garamond', serif; font-size:48px; color:#F8F5F0; text-align:center; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:60px;">Propósito</h2>
+      
+      <div class="values-grid">
+        <div class="value-card">
+          <h4>Misión</h4>
+          <p>Ofrecer productos que hagan pensar el qué, cómo y porqué consumimos. Nuestros productos son naturales, seguros, veganos, ecológicos y sin plástico. Hacer un negocio sostenible en todos los ámbitos (social, ambiental y económico), capaz de regenerar y educar.</p>
+        </div>
+        <div class="value-card">
+          <h4>Visión</h4>
+          <p>Crear rutinas diarias sostenibles y amigables con el planeta con productos naturales, sin plástico y veganos. Trabajamos por la regeneración ambiental y somos parte de la transición necesaria para regenerar ecosistemas.</p>
+        </div>
+      </div>
+
+      <div class="values-grid" style="margin-top: 80px; border-top: 1px solid rgba(248, 245, 240, 0.1); padding-top: 60px;">
+        <div class="value-card"><h4>Regeneración</h4><p>Más allá de lo sostenible.</p></div>
+        <div class="value-card"><h4>Colaboración</h4><p>Todo se construye entre personas y nadie es una isla.</p></div>
+        <div class="value-card"><h4>Empatía</h4><p>Escuchamos y nos ponemos en los pies de los demás.</p></div>
+        <div class="value-card"><h4>Diversidad</h4><p>Las diferencias forman parte y enriquecen la realidad.</p></div>
+        <div class="value-card"><h4>Minimalismo</h4><p>Consumo sin acúmulo y desperdicio.</p></div>
+        <div class="value-card"><h4>Buen humor</h4><p>Todo con una sonrisa se hace mejor.</p></div>
+        <div class="value-card"><h4>Transparencia</h4><p>Honestas en todos los procesos.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
 
 {% schema %}
 {
-  "name": "Minima about story",
-  "tag": "section",
-  "class": "section",
-  "settings": [
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "hero_heading",
-      "label": "Hero heading",
-      "default": "HOLA, SOMOS MINIMA ORGANICS"
-    },
-    {
-      "type": "richtext",
-      "id": "hero_text",
-      "label": "Hero text",
-      "default": "<h3><strong>El problema:</strong></h3><p>Millones de tubos de pasta de dientes y de cepillos acaban en basureros y tardan hasta 400 anos en descomponerse. Nuestra conciencia nos invita a apostar ecologico y sin plastico en la cosmetica y en la cocina, pero cuando se trata de la higiene bucodental seguimos comprando el mismo tubo de dentifrico de toda la vida.</p><h3><strong>La solucion:</strong></h3><p>El dentifrico en polvo de Minima Organics es 100% natural y organico. Su envase de aluminio se puede reutilizar infinitas veces y podras comprar el producto en bolsas de papel compostable.</p><p>A traves de nuestro proyecto deseamos concienciar sobre higiene dental: la importancia de la alimentacion, buenos habitos y del cepillado.</p><p>Para contribuir a que nuestras rutinas sean respetuosas con el medio ambiente, presentamos tambien cepillos de bambu, hilo dental biodegradable y sin plastico, portacepillos de bambu y raspador de lengua de cobre.</p>"
-    },
-    {
-      "type": "image_picker",
-      "id": "hero_image",
-      "label": "Hero image"
-    },
-    {
-      "type": "text",
-      "id": "hero_image_external",
-      "label": "Hero image external URL",
-      "info": "Opcional. Sube la imagen a Shopify Files para mejor rendimiento."
-    },
-    {
-      "type": "video_url",
-      "id": "video_url",
-      "label": "Video URL",
-      "accept": [
-        "youtube",
-        "vimeo"
-      ],
-      "default": "https://www.youtube.com/watch?v=Qei6e5e2b0k"
-    },
-    {
-      "type": "text",
-      "id": "video_title",
-      "label": "Video title",
-      "default": "Minima Organics - Higiene Dental Natural"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "story_heading",
-      "label": "Story heading",
-      "default": "Nosotras"
-    },
-    {
-      "type": "richtext",
-      "id": "story_text",
-      "label": "Story text",
-      "default": "<p>Somos Andrea y Juliana, una periodista brasilena y una economista mexicana que se conocieron en Barcelona trabajando en una empresa de educacion hace 10 anos.</p><p>Compartimos valores y una forma de vida basada en el consumo consciente, el valor del tiempo, las relaciones y las cooperaciones.</p>"
-    },
-    {
-      "type": "image_picker",
-      "id": "story_image",
-      "label": "Story image"
-    },
-    {
-      "type": "text",
-      "id": "story_image_external",
-      "label": "Story image external URL",
-      "info": "Opcional. Sube la imagen a Shopify Files para mejor rendimiento."
-    },
-    {
-      "type": "inline_richtext",
-      "id": "values_heading",
-      "label": "Values heading",
-      "default": "Mision, vision y valores"
-    },
-    {
-      "type": "richtext",
-      "id": "values_text",
-      "label": "Values text",
-      "default": "<h3>Mision:</h3><p>Ofrecer productos que hagan pensar el que, como y porque consumimos. Nuestros productos son naturales, seguros, veganos, ecologicos y sin plastico.</p><p>Hacer un negocio sostenible en todos los ambitos (social, ambiental y economico), capaz de regenerar y educar.</p><h3>Vision:</h3><p>Crear rutinas diarias sostenibles y amigables con el planeta con productos naturales, sin plastico y veganos. Trabajamos por la regeneracion ambiental.</p><h3>Valores:</h3><p><em>Regeneracion</em> - mas alla de lo sostenible</p><p><em>Colaboracion</em> - todo se construye entre personas y nadie es una isla.</p><p><em>Empatia</em> - escuchamos y nos ponemos en los pies de los demas.</p><p><em>Diversidad</em> - las diferencias enriquecen la realidad.</p><p><em>Minimalismo</em> - concebimos el consumo sin acumulo y desperdicio.</p><p><em>Buen humor</em> - todo con una sonrisa se hace mejor.</p><p><em>Transparencia</em> - honestas en todos los procesos.</p>"
-    },
-    {
-      "type": "image_picker",
-      "id": "values_image",
-      "label": "Values image"
-    },
-    {
-      "type": "text",
-      "id": "values_image_external",
-      "label": "Values image external URL",
-      "info": "Opcional. Sube la imagen a Shopify Files para mejor rendimiento."
-    },
-    {
-      "type": "header",
-      "content": "Padding"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 140,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding top",
-      "default": 36
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 140,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding bottom",
-      "default": 72
-    }
-  ],
-  "presets": [
-    {
-      "name": "Minima about story"
-    }
-  ]
+  "name": "About Story Modern",
+  "settings": [],
+  "presets": [{ "name": "About Story Modern" }]
 }
 {% endschema %}

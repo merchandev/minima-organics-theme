@@ -1,100 +1,34 @@
 {
   "sections": {
-    "minima_hero": {
+    "hero": {
       "type": "minima-hero-editorial",
       "settings": {
-        "color_scheme": "scheme-1",
-        "heading_tag": "h1",
-        "eyebrow": "Env\u00edos GRATIS en pedidos superiores a 35\u20ac",
-        "heading": "La soluci\u00f3n definitiva para <em>eliminar el pl\u00e1stico<\/em> de la higiene dental",
-        "heading_size": "h0",
-        "badge_1": "100% NATURAL",
-        "badge_2": "VEGANO",
-        "badge_3": "ZERO WASTE",
-        "body": "<p>Minima Organics es la manera sostenible, natural, sin t\u00f3xicos y libre de pl\u00e1stico para modernizar la pasta dental que has usado toda la vida.<\/p>",
-        "features_line": "Natural \u00b7 Vegano \u00b7 Zero waste \u00b7 Hecho en Espa\u00f1a",
-        "button_label": "Descubre Minima Organics",
-        "button_link": "\/pages\/sobre-nosotras",
-        "button_style_secondary": false,
-        "padding_top": 60,
-        "padding_bottom": 48
+        "eyebrow": "100% Natural · Vegano · Zero Waste",
+        "heading": "La revolución de la <em>higiene dental</em>",
+        "text": "<p>En Minima Organics creemos en una limpieza profunda sin plásticos ni tóxicos. Cuidamos de tu sonrisa y del planeta.</p>",
+        "button_label": "Descubre la gama"
       }
     },
-    "product_slider": {
-      "type": "minima-product-carousel",
-      "settings": {
-        "collection": "all",
-        "products_to_show": 12,
-        "heading": "Productos destacados",
-        "heading_size": "h2",
-        "cards_per_desktop": 3,
-        "cards_per_tablet": "2",
-        "cards_per_mobile": "1",
-        "image_ratio": "landscape",
-        "text_alignment": "center",
-        "show_compare_at_price": true,
-        "badge_tag_prefix": "badge:",
-        "show_sale_badge": true,
-        "sale_badge_text": "Oferta",
-        "show_sold_out_badge": true,
-        "sold_out_badge_text": "Agotado",
-        "color_scheme": "scheme-1",
-        "padding_top": 16,
-        "padding_bottom": 56
-      }
-    },
-    "feature_split": {
+    "feature": {
       "type": "minima-feature-split",
       "settings": {
-        "color_scheme": "scheme-1",
-        "heading": "Queremos que tu higiene dental sea <em>libre de t\u00f3xicos y pl\u00e1stico<\/em>",
-        "heading_size": "h2",
-        "text": "<p>Nuestro primer producto es un dent\u00edfrico en polvo 100% natural y org\u00e1nico. Su envase de aluminio reciclable se reutiliza infinitas veces.<\/p>",
-        "button_label": "Ver m\u00e1s",
-        "button_link": "\/pages\/sobre-nosotras",
-        "button_style_secondary": false,
-        "padding_top": 56,
-        "padding_bottom": 56
-      }
-    },
-    "latest_posts": {
-      "type": "featured-blog",
-      "settings": {
-        "heading": "Art\u00edculos del blog",
-        "heading_size": "h2",
-        "blog": "news",
-        "post_limit": 3,
-        "columns_desktop": 3,
-        "color_scheme": "scheme-1",
-        "show_image": true,
-        "show_date": true,
-        "show_author": false,
-        "show_view_all": true,
-        "padding_top": 36,
-        "padding_bottom": 36
+        "image_position": "right",
+        "heading": "Higiene dental <em>sin plástico</em>",
+        "text": "<p>Nuestra misión es eliminar el plástico de tu rutina diaria con alternativas sostenibles y efectivas.</p>",
+        "button_label": "Nuestra historia"
       }
     },
     "newsletter": {
       "type": "minima-newsletter-pro",
       "settings": {
-        "color_scheme": "scheme-1",
-        "heading": "S\u00e9 el\/la primero\/a en leer nuestras novedades",
-        "heading_size": "h2",
-        "description": "<p>Recibe lanzamientos, promociones y consejos para una higiene dental m\u00e1s sostenible. Consigue un 5% de descuento al suscribirte.<\/p>",
-        "email_label": "Tu email *",
-        "consent_text": "Acepto el uso de mis datos personales con fines comerciales.",
-        "button_label": "Suscribirme",
-        "button_style_secondary": false,
-        "padding_top": 48,
-        "padding_bottom": 36
+        "heading": "Únete a la suscripción consciente",
+        "text": "<p>Recibe consejos de sostenibilidad y un 5% de descuento en tu primera compra.</p>"
       }
     }
   },
   "order": [
-    "minima_hero",
-    "product_slider",
-    "feature_split",
-    "latest_posts",
+    "hero",
+    "feature",
     "newsletter"
   ]
 }

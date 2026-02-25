@@ -1,12 +1,8 @@
-{{ 'component-price.css' | asset_url | stylesheet_tag }}
-{{ 'component-slider.css' | asset_url | stylesheet_tag }}
-
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
-
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
@@ -14,176 +10,201 @@
     }
   }
 
-  @media screen and (min-width: 990px) {
-    #shopify-section-{{ section.id }} .minima-product-carousel__slide {
-      width: calc((100% - ({{ section.settings.cards_per_desktop | minus: 1 }} * var(--mpc-gap))) / {{ section.settings.cards_per_desktop }});
-    }
+  .mpc-section { overflow: hidden; }
+
+  .mpc-heading-wrap {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    gap: 16px;
+  }
+  .mpc-heading {
+    font-family: var(--font-heading-family, 'Cormorant Garamond', serif);
+    font-size: clamp(24px, 3vw, 40px);
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-foreground, #1a2e1a);
+    letter-spacing: -0.01em;
+  }
+  .mpc-view-all {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-foreground, #1a2e1a);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-foreground, #1a2e1a);
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
-  @media screen and (min-width: 750px) and (max-width: 989px) {
-    #shopify-section-{{ section.id }} .minima-product-carousel__slide {
-      width: {% if section.settings.cards_per_tablet == 2 %}calc((100% - var(--mpc-gap)) / 2.16){% else %}calc((100% - var(--mpc-gap)) / 1.16){% endif %};
-    }
+  .mpc-grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.cards_per_desktop }}, 1fr);
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 
-  @media screen and (max-width: 749px) {
-    #shopify-section-{{ section.id }} .minima-product-carousel__slide {
-      width: {% if section.settings.cards_per_mobile == '2' %}calc((100% - var(--mpc-gap)) / 2.1){% else %}84%{% endif %};
-    }
+  .mpc-card {
+    background: transparent;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+    transition: transform 0.3s ease;
+  }
+  .mpc-card:hover { transform: translateY(-4px); }
+
+  .mpc-card__media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    background: rgba(26,46,26,0.04);
+    margin-bottom: 14px;
+  }
+  .mpc-card__image-wrap {
+    aspect-ratio: 4/5;
+    overflow: hidden;
+  }
+  .mpc-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+    display: block;
+  }
+  .mpc-card:hover .mpc-card__img { transform: scale(1.04); }
+
+  .mpc-card__badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--color-foreground, #1a2e1a);
+    color: var(--color-background, #f8f5f0);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    z-index: 1;
+  }
+
+  .mpc-card__title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-foreground, #1a2e1a);
+    margin: 0 0 6px;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+  }
+  .mpc-card__price {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-foreground, #1a2e1a);
+  }
+  .mpc-card__price s {
+    font-weight: 400;
+    opacity: 0.4;
+    margin-right: 6px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .mpc-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  }
+  @media screen and (max-width: 549px) {
+    .mpc-grid { grid-template-columns: 1fr; }
   }
 {%- endstyle -%}
 
 {%- liquid
-  assign products_to_display = section.settings.collection.all_products_count
-  if section.settings.collection.all_products_count > section.settings.products_to_show
-    assign products_to_display = section.settings.products_to_show
-  endif
-
-  assign cards_mobile_int = section.settings.cards_per_mobile | plus: 0
-  assign cards_desktop_int = section.settings.cards_per_desktop | plus: 0
-
-  assign show_mobile_slider = false
-  if products_to_display > cards_mobile_int
-    assign show_mobile_slider = true
-  endif
-
-  assign show_desktop_slider = false
-  if products_to_display > cards_desktop_int
-    assign show_desktop_slider = true
-  endif
+  assign products_source = section.settings.collection.products
+  assign limit = section.settings.products_to_show
 -%}
 
-<section class="minima-product-carousel color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+<section class="mpc-section color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
   <div class="page-width">
+
     {%- if section.settings.heading != blank -%}
-      <div class="title-wrapper title-wrapper--no-top-margin">
-        <h2 class="title inline-richtext {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+      <div class="mpc-heading-wrap">
+        <h2 class="mpc-heading">{{ section.settings.heading }}</h2>
+        {%- if section.settings.collection != blank -%}
+          <a href="{{ section.settings.collection.url }}" class="mpc-view-all">Ver todos</a>
+        {%- endif -%}
       </div>
     {%- endif -%}
 
-    <slider-component class="minima-product-carousel__slider">
-      <ul
-        id="Slider-{{ section.id }}"
-        class="minima-product-carousel__track slider"
-        role="list"
-        aria-label="{{ 'general.slider.name' | t }}"
-      >
-        {%- if section.settings.collection != blank and section.settings.collection.products.size > 0 -%}
-          {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
-            {%- liquid
-              assign badge_text = blank
-              if section.settings.show_sold_out_badge and product.available == false
-                assign badge_text = section.settings.sold_out_badge_text
-              endif
-
-              if badge_text == blank and section.settings.badge_tag_prefix != blank
-                for tag in product.tags
-                  assign prefix = tag | slice: 0, section.settings.badge_tag_prefix.size
-                  if prefix == section.settings.badge_tag_prefix
-                    assign badge_text = tag | remove_first: section.settings.badge_tag_prefix | strip
-                    break
-                  endif
-                endfor
-              endif
-
-              if badge_text == blank and section.settings.use_first_tag_as_badge and product.tags.size > 0
-                assign badge_text = product.tags.first
-              endif
-
-              if badge_text == blank and section.settings.show_sale_badge and product.compare_at_price > product.price and product.available
-                assign badge_text = section.settings.sale_badge_text
-              endif
-            -%}
-
-            <li id="Slide-{{ section.id }}-{{ forloop.index }}" class="minima-product-carousel__slide slider__slide">
-              <article class="minima-product-card">
-                <a href="{{ product.url }}" class="minima-product-card__link">
-                  <div class="minima-product-card__media">
-                    {%- if badge_text != blank -%}
-                      <span class="minima-product-card__badge">{{ badge_text | escape }}</span>
-                    {%- endif -%}
-                    <div class="minima-product-card__image-wrap">
-                      {%- if product.featured_media -%}
-                        {{
-                          product.featured_media
-                          | image_url: width: 1200
-                          | image_tag:
-                            loading: 'lazy',
-                            widths: '320, 480, 640, 840, 1200',
-                            sizes: '(min-width: 990px) 33vw, (min-width: 750px) 46vw, 84vw',
-                            class: 'minima-product-card__image',
-                            style: 'aspect-ratio: 4/3;',
-                            alt: product.featured_media.alt
-                        }}
-                      {%- else -%}
-                        {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg minima-product-card__image' }}
-                      {%- endif -%}
-                    </div>
-                  </div>
-                  <div class="minima-product-card__content" style="text-align: {{ section.settings.text_alignment }};">
-                    <h3 class="minima-product-card__title">{{ product.title | escape }}</h3>
-                    <div class="minima-product-card__price" style="display: flex; justify-content: {% if section.settings.text_alignment == 'center' %}center{% elsif section.settings.text_alignment == 'right' %}flex-end{% else %}flex-start{% endif %};">
-                      {% render 'price', product: product, show_compare_at_price: section.settings.show_compare_at_price %}
-                    </div>
-                  </div>
-                </a>
-              </article>
-            </li>
-          {%- endfor -%}
-        {%- else -%}
-          {%- for i in (1..section.settings.products_to_show) -%}
-            <li id="Slide-{{ section.id }}-{{ forloop.index }}" class="minima-product-carousel__slide slider__slide">
-              <article class="minima-product-card">
-                <div class="minima-product-card__media">
-                  <div class="minima-product-card__image-wrap">
-                    {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg minima-product-card__image' }}
-                  </div>
+    <ul class="mpc-grid" role="list">
+      {%- if section.settings.collection != blank and section.settings.collection.products.size > 0 -%}
+        {%- for product in products_source limit: limit -%}
+          {%- liquid
+            assign badge_text = ''
+            if product.available == false and section.settings.show_sold_out_badge
+              assign badge_text = section.settings.sold_out_badge_text
+            elsif product.compare_at_price > product.price and product.available and section.settings.show_sale_badge
+              assign badge_text = section.settings.sale_badge_text
+            endif
+          -%}
+          <li>
+            <a href="{{ product.url }}" class="mpc-card">
+              <div class="mpc-card__media">
+                {%- if badge_text != '' -%}
+                  <span class="mpc-card__badge">{{ badge_text | escape }}</span>
+                {%- endif -%}
+                <div class="mpc-card__image-wrap">
+                  {%- if product.featured_media -%}
+                    {{
+                      product.featured_media
+                      | image_url: width: 800
+                      | image_tag:
+                        class: 'mpc-card__img',
+                        loading: 'lazy',
+                        widths: '300, 400, 600, 800',
+                        sizes: '(min-width: 990px) 25vw, (min-width: 550px) 45vw, 90vw',
+                        alt: product.featured_media.alt | default: product.title
+                    }}
+                  {%- else -%}
+                    {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg mpc-card__img' }}
+                  {%- endif -%}
                 </div>
-                <div class="minima-product-card__content">
-                  <h3 class="minima-product-card__title">{{ 'onboarding.product_title' | t }}</h3>
-                  <div class="minima-product-card__price">{% render 'price', placeholder: true %}</div>
+              </div>
+              <h3 class="mpc-card__title">{{ product.title | escape }}</h3>
+              <div class="mpc-card__price">
+                {%- if product.compare_at_price > product.price and section.settings.show_compare_at_price -%}
+                  <s>{{ product.compare_at_price | money }}</s>
+                {%- endif -%}
+                {{ product.price | money }}
+              </div>
+            </a>
+          </li>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..limit) -%}
+          {%- if forloop.index > 4 -%}{%- break -%}{%- endif -%}
+          <li>
+            <div class="mpc-card">
+              <div class="mpc-card__media">
+                <div class="mpc-card__image-wrap">
+                  {{ 'product-apparel-1' | placeholder_svg_tag: 'placeholder-svg mpc-card__img' }}
                 </div>
-              </article>
-            </li>
-          {%- endfor -%}
-        {%- endif -%}
-      </ul>
-
-      {%- if show_mobile_slider or show_desktop_slider -%}
-        <div class="slider-buttons minima-product-carousel__controls">
-          <button
-            type="button"
-            class="slider-button slider-button--prev minima-product-carousel__arrow"
-            name="previous"
-            aria-label="{{ 'general.slider.previous_slide' | t }}"
-            aria-controls="Slider-{{ section.id }}"
-          >
-            <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
-          </button>
-          <div class="slider-counter caption">
-            <span class="slider-counter--current">1</span>
-            <span aria-hidden="true"> / </span>
-            <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
-            <span class="slider-counter--total">{{ products_to_display }}</span>
-          </div>
-          <button
-            type="button"
-            class="slider-button slider-button--next minima-product-carousel__arrow"
-            name="next"
-            aria-label="{{ 'general.slider.next_slide' | t }}"
-            aria-controls="Slider-{{ section.id }}"
-          >
-            <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
-          </button>
-        </div>
+              </div>
+              <h3 class="mpc-card__title">Producto de ejemplo</h3>
+              <div class="mpc-card__price">{{ 2900 | money }}</div>
+            </div>
+          </li>
+        {%- endfor -%}
       {%- endif -%}
-    </slider-component>
+    </ul>
+
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Minima product carousel",
+  "name": "Product Carousel",
   "tag": "section",
   "class": "section",
   "disabled_on": {
@@ -198,37 +219,17 @@
     {
       "type": "range",
       "id": "products_to_show",
-      "min": 3,
-      "max": 30,
+      "min": 2,
+      "max": 12,
       "step": 1,
-      "default": 12,
+      "default": 4,
       "label": "Products to show"
     },
     {
-      "type": "inline_richtext",
+      "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": ""
-    },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "options": [
-        {
-          "value": "h2",
-          "label": "Small"
-        },
-        {
-          "value": "h1",
-          "label": "Medium"
-        },
-        {
-          "value": "h0",
-          "label": "Large"
-        }
-      ],
-      "default": "h1",
-      "label": "Heading size"
+      "default": "Productos destacados"
     },
     {
       "type": "range",
@@ -236,80 +237,8 @@
       "min": 2,
       "max": 4,
       "step": 1,
-      "default": 3,
-      "label": "Cards per view on desktop"
-    },
-    {
-      "type": "select",
-      "id": "cards_per_tablet",
-      "options": [
-        {
-          "value": "1",
-          "label": "1"
-        },
-        {
-          "value": "2",
-          "label": "2"
-        }
-      ],
-      "default": "2",
-      "label": "Cards per view on tablet"
-    },
-    {
-      "type": "select",
-      "id": "cards_per_mobile",
-      "options": [
-        {
-          "value": "1",
-          "label": "1"
-        },
-        {
-          "value": "2",
-          "label": "2"
-        }
-      ],
-      "default": "1",
-      "label": "Cards per view on mobile"
-    },
-    {
-      "type": "select",
-      "id": "image_ratio",
-      "options": [
-        {
-          "value": "landscape",
-          "label": "Landscape"
-        },
-        {
-          "value": "square",
-          "label": "Square"
-        },
-        {
-          "value": "portrait",
-          "label": "Portrait"
-        }
-      ],
-      "default": "landscape",
-      "label": "Image ratio"
-    },
-    {
-      "type": "select",
-      "id": "text_alignment",
-      "options": [
-        {
-          "value": "left",
-          "label": "Left"
-        },
-        {
-          "value": "center",
-          "label": "Center"
-        },
-        {
-          "value": "right",
-          "label": "Right"
-        }
-      ],
-      "default": "center",
-      "label": "Text alignment"
+      "default": 4,
+      "label": "Columns on desktop"
     },
     {
       "type": "checkbox",
@@ -318,26 +247,10 @@
       "label": "Show compare-at price"
     },
     {
-      "type": "header",
-      "content": "Badge rules"
-    },
-    {
-      "type": "text",
-      "id": "badge_tag_prefix",
-      "label": "Tag prefix for badge",
-      "default": "badge:"
-    },
-    {
-      "type": "checkbox",
-      "id": "use_first_tag_as_badge",
-      "default": true,
-      "label": "Use first product tag if no prefixed tag is found"
-    },
-    {
       "type": "checkbox",
       "id": "show_sale_badge",
-      "default": false,
-      "label": "Show sale badge when compare-at price exists"
+      "default": true,
+      "label": "Show sale badge"
     },
     {
       "type": "text",
@@ -360,37 +273,33 @@
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
+      "label": "Color scheme",
       "default": "scheme-1"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
     },
     {
       "type": "range",
       "id": "padding_top",
       "min": 0,
-      "max": 140,
+      "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 16
+      "label": "Padding top",
+      "default": 48
     },
     {
       "type": "range",
       "id": "padding_bottom",
       "min": 0,
-      "max": 140,
+      "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 56
+      "label": "Padding bottom",
+      "default": 64
     }
   ],
   "presets": [
     {
-      "name": "Minima product carousel"
+      "name": "Product Carousel"
     }
   ]
 }

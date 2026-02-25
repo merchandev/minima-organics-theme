@@ -1,115 +1,30 @@
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
+  .minima-hero { background: #F8F5F0; padding: 60px 0; overflow: hidden; }
+  .minima-hero__inner { display: flex; align-items: center; max-width: 1260px; margin: 0 auto; padding: 0 32px; gap: 40px; }
+  .minima-hero__content { flex: 1; }
+  .minima-hero__eyebrow { font-size: 11px; font-weight: 600; text-transform: uppercase; color: #4a7c59; letter-spacing: 0.15em; display: block; margin-bottom: 20px; }
+  .minima-hero__heading { font-family: 'Cormorant Garamond', serif; font-size: 52px; font-weight: 600; line-height: 1.1; color: #1A2E1A; margin: 0 0 24px; }
+  .minima-hero__heading em { font-style: italic; color: #4a7c59; }
+  .minima-hero__text { font-size: 16px; line-height: 1.7; color: #1A2E1A; opacity: 0.8; margin-bottom: 30px; }
+  .minima-hero__button { display: inline-block; background: #1A2E1A; color: #F8F5F0; padding: 15px 35px; text-decoration: none; font-size: 12px; font-weight: 600; text-transform: uppercase; border-radius: 4px; letter-spacing: 0.1em; }
+  .minima-hero__image-wrap { flex: 1; min-height: 400px; background: #F0ECE4; border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .minima-hero__image-wrap svg { width: 50%; opacity: 0.1; }
+  @media (max-width: 989px) {
+    .minima-hero__inner { flex-direction: column; text-align: center; }
+    .minima-hero__heading { font-size: 36px; }
   }
 {%- endstyle -%}
 
-<section
-  class="minima-hero-editorial color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding"
-  aria-label="Hero editorial"
->
-  <div class="page-width">
-    <div class="minima-hero-editorial__container">
-
-      {%- comment -%} ── LEFT COLUMN: text content ── {%- endcomment -%}
-      <div class="minima-hero-editorial__content">
-
-        {%- if section.settings.eyebrow != blank -%}
-          <p class="minima-hero-editorial__eyebrow">{{ section.settings.eyebrow }}</p>
-        {%- endif -%}
-
-        {%- if section.settings.heading != blank -%}
-          {%- assign heading_tag = section.settings.heading_tag | default: 'h2' -%}
-          <{{ heading_tag }} class="minima-hero-editorial__heading">
-            {{ section.settings.heading }}
-          </{{ heading_tag }}>
-        {%- endif -%}
-
-        {%- if section.settings.badge_1 != blank or section.settings.badge_2 != blank or section.settings.badge_3 != blank or section.settings.badge_4 != blank -%}
-          <div class="minima-hero-editorial__badges" role="list" aria-label="Características">
-            {%- if section.settings.badge_1 != blank -%}
-              <span class="minima-hero-editorial__badge" role="listitem">{{ section.settings.badge_1 }}</span>
-            {%- endif -%}
-            {%- if section.settings.badge_2 != blank -%}
-              <span class="minima-hero-editorial__badge" role="listitem">{{ section.settings.badge_2 }}</span>
-            {%- endif -%}
-            {%- if section.settings.badge_3 != blank -%}
-              <span class="minima-hero-editorial__badge" role="listitem">{{ section.settings.badge_3 }}</span>
-            {%- endif -%}
-            {%- if section.settings.badge_4 != blank -%}
-              <span class="minima-hero-editorial__badge" role="listitem">{{ section.settings.badge_4 }}</span>
-            {%- endif -%}
-          </div>
-        {%- endif -%}
-
-        {%- if section.settings.body != blank -%}
-          <div class="minima-hero-editorial__body rte">
-            {{ section.settings.body }}
-          </div>
-        {%- endif -%}
-
-        {%- if section.settings.features_line != blank -%}
-          <p class="minima-hero-editorial__features">{{ section.settings.features_line }}</p>
-        {%- endif -%}
-
-        {%- if section.settings.button_label != blank -%}
-          <a
-            {% if section.settings.button_link == blank %}
-              role="link" aria-disabled="true"
-            {% else %}
-              href="{{ section.settings.button_link }}"
-            {% endif %}
-            class="minima-hero-editorial__cta{% if section.settings.button_style_secondary %} minima-hero-editorial__cta--secondary{% endif %}"
-          >
-            {{- section.settings.button_label | escape -}}
-          </a>
-        {%- endif -%}
-
-      </div>
-
-      {%- comment -%} ── RIGHT COLUMN: image ── {%- endcomment -%}
-      <div class="minima-hero-editorial__media">
-        {%- if section.settings.image != blank -%}
-          {%- assign image_height = section.settings.image.width | divided_by: section.settings.image.aspect_ratio -%}
-          {{
-            section.settings.image
-            | image_url: width: 2200
-            | image_tag:
-              loading: 'eager',
-              fetchpriority: 'high',
-              widths: '750, 1100, 1500, 2200',
-              sizes: '(min-width: 990px) 50vw, 100vw',
-              height: image_height,
-              class: 'minima-hero-editorial__image',
-              alt: section.settings.image.alt | default: section.settings.heading | strip_html | escape
-          }}
-        {%- elsif section.settings.external_image_url != blank -%}
-          {% comment %}theme-check-disable RemoteAsset{% endcomment %}
-          <img
-            src="{{ section.settings.external_image_url | escape }}"
-            alt="{{ section.settings.heading | strip_html | escape }}"
-            loading="eager"
-            fetchpriority="high"
-            class="minima-hero-editorial__image"
-            width="900"
-            height="900"
-          >
-          {% comment %}theme-check-enable RemoteAsset{% endcomment %}
-        {%- else -%}
-          <div class="minima-hero-editorial__image--placeholder">
-            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-          </div>
-        {%- endif -%}
-      </div>
-
+<section class="minima-hero">
+  <div class="minima-hero__inner">
+    <div class="minima-hero__content">
+      <span class="minima-hero__eyebrow">{{ section.settings.eyebrow }}</span>
+      <h1 class="minima-hero__heading">{{ section.settings.heading }}</h1>
+      <div class="minima-hero__text">{{ section.settings.text }}</div>
+      <a href="/collections/all" class="minima-hero__button">{{ section.settings.button_label }}</a>
+    </div>
+    <div class="minima-hero__image-wrap">
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
     </div>
   </div>
 </section>
@@ -117,145 +32,14 @@
 {% schema %}
 {
   "name": "Hero Editorial",
-  "tag": "section",
-  "class": "section",
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
   "settings": [
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "default": "scheme-1"
-    },
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow (texto pequeño superior)",
-      "default": "Envíos GRATIS en pedidos superiores a 35€"
-    },
-    {
-      "type": "select",
-      "id": "heading_tag",
-      "label": "Tag HTML del heading",
-      "info": "Usa h1 solo en la página de inicio. Usa h2 en todas las demás páginas.",
-      "options": [
-        { "value": "h1", "label": "H1 (página de inicio)" },
-        { "value": "h2", "label": "H2 (resto de páginas)" }
-      ],
-      "default": "h2"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "heading",
-      "label": "Heading principal",
-      "default": "La solución definitiva para <em>eliminar el plástico</em> de la higiene dental"
-    },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "options": [
-        { "value": "h2", "label": "Pequeño" },
-        { "value": "h1", "label": "Mediano" },
-        { "value": "h0", "label": "Grande" }
-      ],
-      "default": "h0",
-      "label": "Tamaño del heading"
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Imagen principal"
-    },
-    {
-      "type": "text",
-      "id": "external_image_url",
-      "label": "URL imagen externa (fallback)",
-      "info": "Solo si no has subido imagen arriba. Sube la imagen a Shopify para mejor rendimiento."
-    },
-    {
-      "type": "text",
-      "id": "badge_1",
-      "label": "Badge 1",
-      "default": "100% NATURAL"
-    },
-    {
-      "type": "text",
-      "id": "badge_2",
-      "label": "Badge 2",
-      "default": "VEGANO"
-    },
-    {
-      "type": "text",
-      "id": "badge_3",
-      "label": "Badge 3",
-      "default": "ZERO WASTE"
-    },
-    {
-      "type": "text",
-      "id": "badge_4",
-      "label": "Badge 4 (opcional)",
-      "default": ""
-    },
-    {
-      "type": "richtext",
-      "id": "body",
-      "label": "Cuerpo de texto",
-      "default": "<p>Mínima Organics es la manera sostenible, natural, sin tóxicos y libre de plástico para modernizar la pasta dental que has usado toda la vida.</p>"
-    },
-    {
-      "type": "text",
-      "id": "features_line",
-      "label": "Línea de características",
-      "default": "Natural · Vegana · Zero waste · Hecha en España · Opciones con y sin flúor"
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "Texto del botón",
-      "default": "Descubre Mínima Organics"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Enlace del botón"
-    },
-    {
-      "type": "checkbox",
-      "id": "button_style_secondary",
-      "label": "Estilo secundario (borde, sin fondo)",
-      "default": false
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 140,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 140,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 0
-    }
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "100% Natural · Vegano · Zero Waste" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "La revolución de la <em>higiene dental</em>" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>En Minima Organics creemos en una limpieza profunda sin plásticos ni tóxicos. Cuidamos de tu sonrisa y del planeta.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button Label", "default": "Descubre la gama" }
   ],
   "presets": [
-    {
-      "name": "Hero Editorial"
-    }
+    { "name": "Hero Editorial" }
   ]
 }
 {% endschema %}

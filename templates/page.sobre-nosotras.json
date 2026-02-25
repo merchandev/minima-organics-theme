@@ -3,23 +3,8 @@
     "minima_about_story": {
       "type": "minima-about-story",
       "settings": {
-        "color_scheme": "scheme-1",
-        "hero_heading": "HOLA, SOMOS MINIMA ORGANICS",
-        "hero_text": "<h3><strong>El problema:<\/strong><\/h3><p>Millones de tubos de pasta de dientes y de cepillos acaban en basureros y tardan hasta 400 anos en descomponerse. Nuestra conciencia nos invita a apostar ecologico y sin plastico en la cosmetica y en la cocina, pero cuando se trata de la higiene bucodental, seguimos comprando el mismo tubo de dentifrico de toda la vida sin cuestionarnos.<\/p><h3><strong>La solucion:<\/strong><\/h3><p>El dentifrico en polvo de Minima Organics es 100% natural y organico. Su envase de aluminio se puede reutilizar infinitas veces y podras comprar el producto en bolsas de papel compostable, disminuyendo la huella de carbono al simplificar su distribucion. La pasta de dientes bio, el mas nuevo lanzamiento de Minima Organics, esta disponible en lata de aluminio.<\/p><p>A traves de nuestro proyecto deseamos concienciar sobre higiene dental: la importancia de la alimentacion, buenos habitos y del cepillado.<\/p><p>Para contribuir a que nuestras rutinas diarias sean respetuosas con el medio ambiente, presentamos tambien cepillos de bambu, hilo dental biodegradable y sin plastico, portacepillos de bambu y raspador de lengua de cobre.<\/p>",
-        "hero_image": "",
-        "hero_image_external": "https://296ff7227e.clvaw-cdnwnd.com/2e96f3f86bd821507b09a11886c84266/200000103-5be3a5be3d/minima%20organics%20higiene%20oral.jpeg?ph=296ff7227e",
-        "video_url": "https://www.youtube.com/watch?v=Qei6e5e2b0k",
-        "video_title": "Minima Organics - Higiene Dental Natural",
-        "story_heading": "Nosotras",
-        "story_text": "<p>Somos Andrea y Juliana, una periodista brasilena y una economista mexicana que se conocieron en Barcelona trabajando en una empresa de educacion hace 10 anos. Compartimos el buen humor, muchos valores y manera de ver la vida. A lo largo de estos anos hemos hecho muchos cambios en nuestros habitos de consumo: reduciendo el consumo de cosas materiales, para dar espacio a una vida mas plena. Nuestra mayor ilusion: compartir y contribuir a un cambio de vida mas sostenible.<\/p><p>Apoyamos el minimalismo, el consumo consciente, el valor del tiempo, las relaciones y cooperaciones.<\/p>",
-        "story_image": "",
-        "story_image_external": "https://296ff7227e.clvaw-cdnwnd.com/2e96f3f86bd821507b09a11886c84266/200000016-831ec831ef/WhatsApp%20Image%202020-07-21%20at%2023.50.20.jpeg?ph=296ff7227e",
-        "values_heading": "Mision, vision y valores",
-        "values_text": "<h3>Mision:<\/h3><p>Ofrecer productos que hagan pensar el que, como y porque consumimos. Nuestros productos son naturales, seguros, veganos, ecologicos y sin plastico.<\/p><p>Hacer un negocio sostenible en todos los ambitos (social, ambiental y economico), capaz de regenerar y educar.<\/p><h3>Vision:<\/h3><p>Crear rutinas diarias sostenibles y amigables con el planeta con productos naturales, sin plastico y veganos. Trabajamos por la regeneracion ambiental y somos parte de la transicion necesaria para regenerar ecosistemas.<\/p><h3>Valores:<\/h3><p><em>Regeneracion<\/em> - mas alla de lo sostenible<\/p><p><em>Colaboracion<\/em> - todo se construye entre personas y nadie es una isla. Somos seres en constante aprendizaje<\/p><p><em>Empatia<\/em> - escuchamos y nos ponemos en los pies de los demas<\/p><p><em>Diversidad<\/em> - las diferencias forman parte y enriquecen la realidad<\/p><p><em>Minimalismo<\/em> - concebimos el consumo sin acumulo y desperdicio. Vivir bien no esta ligado a la capacidad de consumir<\/p><p><em>Buen humor<\/em> - todo con una sonrisa se hace mejor<\/p><p><em>Transparencia<\/em> - honestas en todos los procesos. No hay ingredientes secretos o raros en todo lo que hacemos.<\/p>",
-        "values_image": "",
-        "values_image_external": "https://296ff7227e.clvaw-cdnwnd.com/2e96f3f86bd821507b09a11886c84266/200000104-488ad488af/juliana%20andrea%20minima%20organics.jpeg?ph=296ff7227e",
-        "padding_top": 36,
-        "padding_bottom": 72
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     }
   },

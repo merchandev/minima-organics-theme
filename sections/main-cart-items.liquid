@@ -1,4 +1,5 @@
 {{ 'component-cart.css' | asset_url | stylesheet_tag }}
+{{ 'custom-cart-v2.css' | asset_url | stylesheet_tag }}
 {{ 'component-cart-items.css' | asset_url | stylesheet_tag }}
 {{ 'component-totals.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
@@ -15,6 +16,16 @@
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+    
+    .cart__contents {
+       display: flex !important;
+       flex-direction: row !important;
+       gap: 8rem !important;
+       align-items: flex-start !important;
+    }
+    .cart__items {
+       flex: 1 !important;
     }
   }
 {%- endstyle -%}

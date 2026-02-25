@@ -1,318 +1,230 @@
-{%- liquid
-  assign request_path = request.path | split: '?' | first | downcase
-  assign has_custom_logo = false
-  if settings.logo != blank
-    assign has_custom_logo = true
-  endif
-
-  assign tienda_link = section.settings.tienda_link
-  if tienda_link == blank
-    assign tienda_link = routes.all_products_collection_url
-  endif
-
-  assign sobre_link = section.settings.sobre_link
-  if sobre_link == blank
-    assign sobre_link = '/pages/sobre-nosotras'
-  endif
-
-  assign more_link_1 = section.settings.more_link_1_url
-  if more_link_1 == blank
-    assign more_link_1 = '/blogs/news'
-  endif
-
-  assign more_link_2 = section.settings.more_link_2_url
-  if more_link_2 == blank
-    assign more_link_2 = '/pages/dentistas'
-  endif
-
-  assign more_link_3 = section.settings.more_link_3_url
-  if more_link_3 == blank
-    assign more_link_3 = '/pages/contacto'
-  endif
-
-  assign is_tienda_active = false
-  if request.page_type == 'collection' or request_path contains '/collections'
-    assign is_tienda_active = true
-  endif
-
-  assign is_sobre_active = false
-  if request.page_type == 'page' and page.handle != blank
-    if page.handle == 'sobre-nosotras' or page.handle == 'about'
-      assign is_sobre_active = true
-    endif
-  endif
-
-  assign is_blog_active = false
-  if request.page_type == 'blog' or request.page_type == 'article' or request_path contains '/blogs/'
-    assign is_blog_active = true
-  endif
-
-  assign is_dentistas_active = false
-  if request.page_type == 'page' and page.handle == 'dentistas'
-    assign is_dentistas_active = true
-  endif
-
-  assign is_contact_active = false
-  if request.page_type == 'page' and page.handle != blank
-    if page.handle == 'contacto' or page.handle == 'contact'
-      assign is_contact_active = true
-    endif
-  endif
-
-  assign is_more_active = false
-  if is_blog_active or is_dentistas_active or is_contact_active
-    assign is_more_active = true
-  endif
--%}
-
 {%- style -%}
-  .section-{{ section.id }}-spacing {
-    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  .minima-header-wrap { position: relative; z-index: 100; font-family: 'Inter', sans-serif; }
+  .minima-announcement { background: #1A2E1A; color: #F8F5F0; text-align: center; padding: 10px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .minima-header { background: #F8F5F0; border-bottom: 1px solid rgba(26,46,26,0.1); padding: 16px 0; }
+  .minima-header__inner { display: flex; justify-content: space-between; align-items: center; max-width: 1260px; margin: 0 auto; padding: 0 32px; }
+  .minima-header__logo-link { display: block; line-height: 0; }
+  .minima-header__logo-img { height: 45px; width: auto; display: block; }
+  .minima-header__nav { display: flex; gap: 32px; list-style: none; margin: 0; padding: 0; }
+  .minima-header__nav a { font-size: 13px; font-weight: 500; text-transform: uppercase; text-decoration: none; color: #1A2E1A; opacity: 0.8; transition: opacity 0.2s; }
+  .minima-header__nav a:hover { opacity: 1; border-bottom: 1px solid #1A2E1A; }
+  .minima-header__actions { display: flex; gap: 20px; align-items: center; }
+  .minima-header__cart { 
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px; 
+    font-weight: 600; 
+    text-transform: uppercase; 
+    text-decoration: none; 
+    color: #1A2E1A; 
+    border: 1px solid #1A2E1A; 
+    padding: 8px 16px; 
+    border-radius: 4px; 
+    position: relative;
+    cursor: pointer;
   }
+  .minima-header__cart svg { width: 18px; height: 18px; }
+  .cart-count-bubble {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #1A2E1A;
+    color: #F8F5F0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  
+  /* CUSTOM MINI CART DRAWER */
+  .minima-cart-drawer {
+    position: fixed;
+    top: 0;
+    right: -450px;
+    width: 450px;
+    height: 100%;
+    background: #F8F5F0;
+    z-index: 1001;
+    box-shadow: -5px 0 30px rgba(0,0,0,0.1);
+    transition: right 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex;
+    flex-direction: column;
+    color: #1A2E1A;
+  }
+  .minima-cart-drawer.is-active { right: 0; }
+  .minima-cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+  }
+  .minima-cart-overlay.is-active { opacity: 1; visibility: visible; }
+  
+  .drawer-header { padding: 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(26,46,26,0.05); }
+  .drawer-title { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 500; margin: 0; }
+  .drawer-close { cursor: pointer; padding: 10px; opacity: 0.6; transition: 0.2s; }
+  .drawer-close:hover { opacity: 1; }
+  
+  .drawer-items { flex: 1; overflow-y: auto; padding: 40px; }
+  .drawer-item { display: flex; gap: 20px; margin-bottom: 30px; }
+  .drawer-item-img { width: 100px; height: 100px; object-fit: cover; border-radius: 4px; background: #fff; }
+  .drawer-item-info { flex: 1; }
+  .drawer-item-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; margin: 0 0 5px; }
+  .drawer-item-price { font-size: 1.4rem; font-weight: 500; opacity: 0.8; }
+  
+  .drawer-footer { padding: 40px; background: rgba(26,46,26,0.02); border-top: 1px solid rgba(26,46,26,0.05); }
+  .drawer-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; font-weight: 600; font-size: 1.8rem; }
+  .btn-checkout { 
+    display: block; width: 100%; padding: 18px; background: #1A2E1A; color: #F8F5F0; 
+    text-align: center; text-transform: uppercase; letter-spacing: 0.12em; 
+    font-size: 1.2rem; font-weight: 600; border-radius: 4px; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-checkout:hover { background: #2D4D2D; }
+  .empty-msg { text-align: center; margin-top: 50px; font-family: 'Cormorant Garamond', serif; font-size: 2rem; opacity: 0.7; }
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-spacing {
-      margin-bottom: {{ section.settings.margin_bottom }}px;
-    }
+  @media (max-width: 768px) { 
+    .minima-header__nav { display: none; } 
+    .minima-header__logo-img { height: 35px; }
+    .minima-cart-drawer { width: 100%; right: -100%; }
   }
 {%- endstyle -%}
 
-<header class="minima-header section-{{ section.id }}-spacing color-{{ section.settings.color_scheme }} gradient{% if section.settings.sticky_header %} minima-header--sticky{% endif %}">
-  {%- if section.settings.show_announcement and section.settings.announcement_text != blank -%}
-    <div class="minima-header__announcement">
-      <div class="page-width">
-        <p class="minima-header__announcement-line">{{ section.settings.announcement_text }}</p>
-        {%- if section.settings.announcement_subtext != blank -%}
-          <p class="minima-header__announcement-subline">{{ section.settings.announcement_subtext }}</p>
-        {%- endif -%}
+<div class="minima-header-wrap">
+  <div class="minima-announcement">Envíos GRATIS: pedidos superiores a 35 euros</div>
+  <header class="minima-header">
+    <div class="minima-header__inner">
+      <a href="/" class="minima-header__logo-link">
+        <img src="{{ 'minima.png' | asset_url }}" class="minima-header__logo-img" alt="Minima Organics" width="180" height="45">
+      </a>
+      <nav role="navigation">
+        <ul class="minima-header__nav">
+          <li><a href="/collections/all">Tienda</a></li>
+          <li><a href="/pages/sobre-nosotras">Sobre nosotras</a></li>
+          <li><a href="/blogs/news">Blog</a></li>
+          <li><a href="/pages/contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="minima-header__actions">
+        <div class="minima-header__cart" onclick="toggleCartDrawer()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>Cesta</span>
+          <div id="cart-dot" class="cart-count-bubble" style="display:none;">0</div>
+        </div>
       </div>
     </div>
-  {%- endif -%}
+  </header>
+</div>
 
-  <div class="page-width minima-header__main">
-    <a href="{{ routes.root_url }}" class="minima-header__brand link link--text focus-inset">
-      {%- if has_custom_logo -%}
-        <span class="minima-header__logo-wrap minima-header__logo-wrap--uploaded">
-          {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
-          {%- assign logo_width = settings.logo_width | at_least: 96 -%}
-          {%- assign logo_height = logo_width | divided_by: settings.logo.aspect_ratio -%}
-          {{
-            settings.logo
-            | image_url: width: 640
-            | image_tag:
-              class: 'minima-header__logo',
-              widths: '96, 140, 180, 240, 320, 420, 640',
-              height: logo_height,
-              width: logo_width,
-              alt: logo_alt,
-              sizes: '(min-width: 990px) min(28vw, 240px), 40vw'
-          }}
-        </span>
-      {%- else -%}
-        <span class="minima-header__logo-wrap minima-header__logo-wrap--fallback">
-          <img
-            src="{{ 'minima.png' | asset_url }}"
-            class="minima-header__logo"
-            alt="{{ section.settings.logo_text | default: shop.name | escape }}"
-            width="2200"
-            height="834"
-            loading="eager"
-          >
-        </span>
-      {%- endif -%}
-    </a>
-
-    <div class="minima-header__navigation-wrap">
-      <nav class="minima-header__nav" aria-label="Principal">
-        <a
-          href="{{ tienda_link }}"
-          class="minima-header__nav-link{% if is_tienda_active %} is-active{% endif %}"
-        >
-          {{ section.settings.tienda_label }}
-        </a>
-        <a
-          href="{{ sobre_link }}"
-          class="minima-header__nav-link{% if is_sobre_active %} is-active{% endif %}"
-        >
-          {{ section.settings.sobre_label }}
-        </a>
-        <details class="minima-header__more-menu">
-          <summary class="minima-header__nav-link minima-header__nav-link--summary{% if is_more_active %} is-active{% endif %}">
-            {{ section.settings.mas_label }}
-            <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
-          </summary>
-          <div class="minima-header__more-dropdown">
-            <a href="{{ more_link_1 }}" class="minima-header__dropdown-link{% if is_blog_active %} is-active{% endif %}">{{ section.settings.more_link_1_label }}</a>
-            <a href="{{ more_link_2 }}" class="minima-header__dropdown-link{% if is_dentistas_active %} is-active{% endif %}">{{ section.settings.more_link_2_label }}</a>
-            <a href="{{ more_link_3 }}" class="minima-header__dropdown-link{% if is_contact_active %} is-active{% endif %}">{{ section.settings.more_link_3_label }}</a>
-          </div>
-        </details>
-      </nav>
-
-      <div class="minima-header__utilities">
-        <form action="{{ routes.search_url }}" method="get" role="search" class="minima-header__search-form">
-          <input type="hidden" name="options[prefix]" value="last">
-          <label class="visually-hidden" for="MinimaHeaderSearch-{{ section.id }}">{{ 'general.search.search' | t }}</label>
-          <input
-            id="MinimaHeaderSearch-{{ section.id }}"
-            class="minima-header__search-input"
-            type="search"
-            name="q"
-            value="{{ search.terms | escape }}"
-            placeholder="{{ section.settings.search_placeholder }}"
-            autocorrect="off"
-            autocapitalize="off"
-            autocomplete="off"
-          >
-          <button type="submit" class="minima-header__search-button" aria-label="{{ 'general.search.search' | t }}">
-            <span class="svg-wrapper">{{ 'icon-search.svg' | inline_asset_content }}</span>
-          </button>
-        </form>
-
-        <a href="{{ routes.cart_url }}" class="minima-header__cart-link link link--text focus-inset" id="minima-header-cart">
-          <span class="minima-header__cart-label">{{ section.settings.cart_label }}</span>
-          {%- if cart == empty -%}
-            <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
-          {%- else -%}
-            <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
-          {%- endif -%}
-          {%- if cart.item_count > 0 -%}
-            <span class="minima-header__cart-badge">{{ cart.item_count }}</span>
-          {%- endif -%}
-        </a>
-      </div>
+<!-- FAILSAFE MINI CART COMPONENT -->
+<div id="minima-overlay" class="minima-cart-overlay" onclick="toggleCartDrawer()"></div>
+<div id="minima-drawer" class="minima-cart-drawer">
+  <div class="drawer-header">
+    <h2 class="drawer-title">Tu Cesta</h2>
+    <div class="drawer-close" onclick="toggleCartDrawer()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </div>
   </div>
-</header>
+  <div id="drawer-items-list" class="drawer-items">
+    <!-- Items will be injected here -->
+  </div>
+  <div id="drawer-footer-area" class="drawer-footer" style="display:none;">
+    <div class="drawer-total">
+      <span>Total</span>
+      <span id="drawer-total-price">€0,00</span>
+    </div>
+    <a href="/checkout" class="btn-checkout">Pagar Pedido</a>
+  </div>
+</div>
+
+<script>
+  function toggleCartDrawer() {
+    const drawer = document.getElementById('minima-drawer');
+    const overlay = document.getElementById('minima-overlay');
+    const isActive = drawer.classList.contains('is-active');
+    
+    if(!isActive) {
+      updateCartUI();
+      drawer.classList.add('is-active');
+      overlay.classList.add('is-active');
+      document.body.style.overflow = 'hidden';
+    } else {
+      drawer.classList.remove('is-active');
+      overlay.classList.remove('is-active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  async function updateCartUI() {
+    try {
+      const response = await fetch('/cart.js');
+      const cart = await response.json();
+      
+      const list = document.getElementById('drawer-items-list');
+      const footer = document.getElementById('drawer-footer-area');
+      const dot = document.getElementById('cart-dot');
+      const totalDisplay = document.getElementById('drawer-total-price');
+      
+      // Update count bubble in header
+      if(cart.item_count > 0) {
+        dot.textContent = cart.item_count;
+        dot.style.display = 'flex';
+      } else {
+        dot.style.display = 'none';
+      }
+
+      if(cart.item_count === 0) {
+        list.innerHTML = '<p class="empty-msg">Tu cesta está vacía</p>';
+        footer.style.display = 'none';
+        return;
+      }
+
+      footer.style.display = 'block';
+      totalDisplay.textContent = formatMoney(cart.total_price);
+      
+      let html = '';
+      cart.items.forEach(item => {
+        html += `
+          <div class="drawer-item">
+            <img src="${item.image}" alt="${item.title}" class="drawer-item-img">
+            <div class="drawer-item-info">
+              <h3 class="drawer-item-title">${item.product_title}</h3>
+              <div class="drawer-item-price">${item.quantity} x ${formatMoney(item.final_price)}</div>
+            </div>
+          </div>
+        `;
+      });
+      list.innerHTML = html;
+    } catch (e) { console.error('Error fetching cart:', e); }
+  }
+
+  function formatMoney(cents) {
+    return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(cents / 100);
+  }
+
+  // Initial call to set bubble on load
+  document.addEventListener('DOMContentLoaded', updateCartUI);
+</script>
 
 {% schema %}
 {
-  "name": "Minima header",
-  "class": "section-header",
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "sticky_header",
-      "label": "Sticky header",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_announcement",
-      "label": "Show announcement",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "announcement_text",
-      "label": "Announcement text",
-      "default": "Envios GRATIS: pedidos superiores a 35 euros"
-    },
-    {
-      "type": "text",
-      "id": "announcement_subtext",
-      "label": "Announcement subtext",
-      "default": "Registrate en la newsletter para conseguir 5% de descuento!"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "logo_text",
-      "label": "Logo text",
-      "default": "Minima Organics"
-    },
-    {
-      "type": "text",
-      "id": "tienda_label",
-      "label": "Store label",
-      "default": "Tienda"
-    },
-    {
-      "type": "url",
-      "id": "tienda_link",
-      "label": "Store link"
-    },
-    {
-      "type": "text",
-      "id": "sobre_label",
-      "label": "About label",
-      "default": "Sobre nosotras"
-    },
-    {
-      "type": "url",
-      "id": "sobre_link",
-      "label": "About link"
-    },
-    {
-      "type": "text",
-      "id": "mas_label",
-      "label": "More label",
-      "default": "Mas"
-    },
-    {
-      "type": "text",
-      "id": "more_link_1_label",
-      "label": "More link 1 label",
-      "default": "Blog"
-    },
-    {
-      "type": "url",
-      "id": "more_link_1_url",
-      "label": "More link 1 URL"
-    },
-    {
-      "type": "text",
-      "id": "more_link_2_label",
-      "label": "More link 2 label",
-      "default": "Dentistas"
-    },
-    {
-      "type": "url",
-      "id": "more_link_2_url",
-      "label": "More link 2 URL"
-    },
-    {
-      "type": "text",
-      "id": "more_link_3_label",
-      "label": "More link 3 label",
-      "default": "Contacto"
-    },
-    {
-      "type": "url",
-      "id": "more_link_3_url",
-      "label": "More link 3 URL"
-    },
-    {
-      "type": "text",
-      "id": "search_placeholder",
-      "label": "Search placeholder",
-      "default": "Estoy buscando..."
-    },
-    {
-      "type": "text",
-      "id": "cart_label",
-      "label": "Cart label",
-      "default": "Cesta"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-2"
-    },
-    {
-      "type": "header",
-      "content": "Spacing"
-    },
-    {
-      "type": "range",
-      "id": "margin_bottom",
-      "min": 0,
-      "max": 48,
-      "step": 4,
-      "unit": "px",
-      "label": "Bottom margin",
-      "default": 0
-    }
-  ]
+  "name": "Minima Header",
+  "settings": [],
+  "presets": [{ "name": "Minima Header" }]
 }
 {% endschema %}

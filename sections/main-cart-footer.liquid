@@ -1,4 +1,5 @@
 {{ 'component-cart.css' | asset_url | stylesheet_tag }}
+{{ 'custom-cart-v2.css' | asset_url | stylesheet_tag }}
 {{ 'component-totals.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 {{ 'component-discounts.css' | asset_url | stylesheet_tag }}
@@ -13,6 +14,35 @@
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+    
+    .cart__footer {
+       width: 450px !important;
+       padding: 4rem !important;
+       background: #FAFAFA !important;
+       border-radius: 12px !important;
+       flex-shrink: 0 !important;
+       margin-top: 5rem !important;
+       margin-left: auto !important; /* MOVE TO THE RIGHT */
+       margin-bottom: 8rem !important; /* SEPARATE FROM FOOTER */
+       box-shadow: 0 4px 15px rgba(0,0,0,0.03) !important;
+    }
+    
+    .totals {
+       display: flex !important;
+       justify-content: space-between !important;
+       align-items: center !important;
+       width: 100% !important;
+    }
+    
+    .totals__total-value {
+       font-weight: 600 !important;
+       margin: 0 !important;
+    }
+    
+    .tax-note {
+       text-align: right !important;
+       margin-top: 1rem !important;
     }
   }
 {%- endstyle -%}

@@ -1,0 +1,62 @@
+{% comment %}
+  Renders a vertical product media gallery inspired by Flourist.
+{% endcomment %}
+
+{%- liquid
+  assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src'
+  assign media_count = product.media.size
+  assign featured_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media
+-%}
+
+<div class="media-gallery-wrapper">
+  {%- if media_count > 1 -%}
+    <div class="thumbnail-list-vertical small-hide">
+      {%- for media in product.media -%}
+        <div class="thumbnail-vertical-item" data-media-id="{{ media.id }}">
+           {{ media.preview_image | image_url: width: 160 | image_tag: loading: 'lazy', class: '{% if media.id == featured_media.id %}is-active{% endif %}' }}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <div class="main-media-display" style="flex-grow: 1;">
+     <div class="product__media-item">
+       {{ featured_media | image_url: width: 1200 | image_tag: loading: 'eager', id: 'MainMediaDisplay' }}
+     </div>
+  </div>
+</div>
+
+<style>
+  .media-gallery-wrapper {
+    display: flex;
+    gap: 30px;
+  }
+  .thumbnail-list-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100px;
+    flex-shrink: 0;
+  }
+  .thumbnail-vertical-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  .thumbnail-vertical-item img.is-active {
+    border-color: #1A2E1A;
+  }
+  .main-media-display img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  @media screen and (max-width: 749px) {
+    .thumbnail-list-vertical {
+      display: none;
+    }
+  }
+</style>

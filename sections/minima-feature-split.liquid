@@ -1,233 +1,41 @@
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
+  .minima-split { padding: 80px 0; background: #F8F5F0; }
+  .minima-split__inner { display: flex; align-items: center; max-width: 1260px; margin: 0 auto; padding: 0 32px; gap: 64px; }
+  .minima-split__content { flex: 1; }
+  .minima-split__image-wrap { flex: 1; aspect-ratio: 4/5; background: #EEE; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .minima-split__image-wrap svg { width: 50%; opacity: 0.1; }
+  .minima-split__heading { font-family: 'Cormorant Garamond', serif; font-size: 36px; margin-bottom: 24px; color: #1A2E1A; }
+  .minima-split__text { font-size: 16px; line-height: 1.6; color: #1A2E1A; opacity: 0.8; margin-bottom: 32px; }
+  .minima-split--reversed .minima-split__inner { flex-direction: row-reverse; }
+  @media (max-width: 768px) {
+    .minima-split__inner { flex-direction: column; text-align: center; gap: 32px; }
+    .minima-split--reversed .minima-split__inner { flex-direction: column; }
   }
 {%- endstyle -%}
 
-<section class="minima-feature-split color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
-  <div class="page-width minima-feature-split__grid">
-    <div class="minima-feature-split__content">
-      {%- if section.settings.heading != blank -%}
-        <h2 class="minima-feature-split__heading inline-richtext {{ section.settings.heading_size }}">
-          {{ section.settings.heading }}
-        </h2>
-      {%- endif -%}
-
-      {%- if section.settings.text != blank -%}
-        <div class="minima-feature-split__text rte">
-          {{ section.settings.text }}
-        </div>
-      {%- endif -%}
-
-      {%- if section.settings.button_label != blank -%}
-        <a
-          {% if section.settings.button_link == blank %}
-            role="link" aria-disabled="true"
-          {% else %}
-            href="{{ section.settings.button_link }}"
-          {% endif %}
-          class="button{% if section.settings.button_style_secondary %} button--secondary{% else %} button--primary{% endif %} minima-feature-split__button"
-        >
-          {{ section.settings.button_label | escape }}
-        </a>
-      {%- endif -%}
+<section class="minima-split {% if section.settings.image_position == 'left' %}minima-split--reversed{% endif %}">
+  <div class="minima-split__inner">
+    <div class="minima-split__content">
+      <h2 class="minima-split__heading">{{ section.settings.heading }}</h2>
+      <div class="minima-split__text">{{ section.settings.text }}</div>
+      <a href="{{ section.settings.button_link }}" class="minima-hero__button">{{ section.settings.button_label }}</a>
     </div>
-
-    <div class="minima-feature-split__collage">
-      {%- for index in (1..4) -%}
-        {%- liquid
-          assign image_id = 'image_' | append: index
-          assign image = section.settings[image_id]
-          assign external_image_id = image_id | append: '_external_url'
-          assign external_image = section.settings[external_image_id]
-        -%}
-        <div class="minima-feature-split__item">
-          {%- if image != blank -%}
-            {%- assign image_height = image.width | divided_by: image.aspect_ratio -%}
-            {{
-              image
-              | image_url: width: 900
-              | image_tag:
-                loading: 'lazy',
-                widths: '360, 540, 720, 900',
-                sizes: '(min-width: 990px) 26vw, (min-width: 750px) 42vw, 88vw',
-                height: image_height,
-                class: 'minima-feature-split__image',
-                alt: image.alt | default: section.settings.heading | strip_html | escape
-            }}
-          {%- elsif external_image != blank -%}
-            {% comment %}theme-check-disable RemoteAsset{% endcomment %}
-            <img
-              src="{{ external_image | escape }}"
-              alt="{{ section.settings.heading | strip_html | escape }}"
-              loading="lazy"
-              class="minima-feature-split__image"
-            >
-            {% comment %}theme-check-enable RemoteAsset{% endcomment %}
-          {%- else -%}
-            <div class="minima-feature-split__image minima-feature-split__image--placeholder">
-              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
-            </div>
-          {%- endif -%}
-        </div>
-      {%- endfor -%}
+    <div class="minima-split__image-wrap">
+      {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
     </div>
   </div>
 </section>
 
 {% schema %}
 {
-  "name": "Minima feature split",
-  "tag": "section",
-  "class": "section",
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
+  "name": "Feature Split",
   "settings": [
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "default": "scheme-1"
-    },
-    {
-      "type": "inline_richtext",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Queremos que tu higiene dental sea libre de toxicos y plastico"
-    },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "options": [
-        {
-          "value": "h2",
-          "label": "Small"
-        },
-        {
-          "value": "h1",
-          "label": "Medium"
-        },
-        {
-          "value": "h0",
-          "label": "Large"
-        },
-        {
-          "value": "hxl",
-          "label": "Extra large"
-        }
-      ],
-      "default": "h0",
-      "label": "Heading size"
-    },
-    {
-      "type": "richtext",
-      "id": "text",
-      "label": "Text",
-      "default": "<p>Nuestro primer producto es un dentifrico en polvo 100% natural y organico. Su envase de aluminio 100% reciclable reutiliza infinitas veces.</p><p>Si prefieres el formato crema dental, puedes elegir entre opciones con o sin fluor.</p>"
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "Button label",
-      "default": "Ingredientes"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button link"
-    },
-    {
-      "type": "checkbox",
-      "id": "button_style_secondary",
-      "label": "Use secondary button style",
-      "default": false
-    },
-    {
-      "type": "header",
-      "content": "Collage images"
-    },
-    {
-      "type": "image_picker",
-      "id": "image_1",
-      "label": "Image 1"
-    },
-    {
-      "type": "text",
-      "id": "image_1_external_url",
-      "label": "Image 1 external URL",
-      "info": "Opcional. Sube las imagenes a Shopify para mejor rendimiento y CDN propio."
-    },
-    {
-      "type": "image_picker",
-      "id": "image_2",
-      "label": "Image 2"
-    },
-    {
-      "type": "text",
-      "id": "image_2_external_url",
-      "label": "Image 2 external URL",
-      "info": "Opcional. Sube las imagenes a Shopify para mejor rendimiento y CDN propio."
-    },
-    {
-      "type": "image_picker",
-      "id": "image_3",
-      "label": "Image 3"
-    },
-    {
-      "type": "text",
-      "id": "image_3_external_url",
-      "label": "Image 3 external URL",
-      "info": "Opcional. Sube las imagenes a Shopify para mejor rendimiento y CDN propio."
-    },
-    {
-      "type": "image_picker",
-      "id": "image_4",
-      "label": "Image 4"
-    },
-    {
-      "type": "text",
-      "id": "image_4_external_url",
-      "label": "Image 4 external URL",
-      "info": "Opcional. Sube las imagenes a Shopify para mejor rendimiento y CDN propio."
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 140,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 56
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 140,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 56
-    }
+    { "type": "select", "id": "image_position", "label": "Image Position", "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }], "default": "right" },
+    { "type": "inline_richtext", "id": "heading", "label": "Heading", "default": "Higiene dental <em>sin plástico</em>" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Nuestra misión es eliminar el plástico de tu rutina diaria con alternativas sostenibles y efectivas.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button Label", "default": "Nuestra historia" },
+    { "type": "url", "id": "button_link", "label": "Button Link" }
   ],
-  "presets": [
-    {
-      "name": "Minima feature split"
-    }
-  ]
+  "presets": [{ "name": "Feature Split" }]
 }
 {% endschema %}
